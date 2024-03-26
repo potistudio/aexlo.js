@@ -1,4 +1,8 @@
 
+# Ignore After Effects Plugin SDK According to Original License
+# original -> (https://developer.adobe.com/console/servicesandapis)
+lib/After Effects Plugin SDK/*
+
 # Dependency directories
 node_modules/
 
