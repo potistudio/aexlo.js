@@ -1,0 +1,22 @@
+
+# Auto detect
+*                      text=auto
+
+.gitattributes    text
+LICENSE           text
+
+package.json      text eol=lf
+
+# Sources
+*.cpp             text diff=cpp
+*.h               text diff=cpp
+
+*.js              text
+*.json            text
+*.ts              text
+
+# Apply override to all files in the directory
+*.md linguist-detectable diff=markdown
+
+# Fix syntax highlighting on GitHub to allow comments
+.vscode/*.json linguist-language=JSON-with-Comments
