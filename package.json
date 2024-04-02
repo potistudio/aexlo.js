@@ -1,0 +1,17 @@
+{
+  "name": "aexlo",
+  "description": "Load and Host After Effects Effect Plugin (.aex)",
+  "version": "0.0.1",
+  "repository": "https://github.com/potistudio/aexlo.js.git",
+  "author": {
+    "name": "POTI",
+    "email": "potistudio2022@gmail.com"
+  },
+  "license": "MIT",
+  "gypfile": true,
+  "main": "lib/index.js",
+  "scripts": {
+    "build": "node-gyp rebuild",
+    "test": "node test/test.js"
+  }
+}
