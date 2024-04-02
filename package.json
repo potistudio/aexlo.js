@@ -13,5 +13,12 @@
   "scripts": {
     "build": "node-gyp rebuild",
     "test": "node test/test.js"
+  },
+  "dependencies": {
+    "bindings": "^1.5.0",
+    "node-addon-api": "^8.0.0"
+  },
+  "devDependencies": {
+    "node-gyp": "^10.1.0"
   }
 }
