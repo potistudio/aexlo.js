@@ -7,4 +7,4 @@ lib/After Effects Plugin SDK/*
 node_modules/
 
 # Compiled binary addons
-build/Release
+build/
