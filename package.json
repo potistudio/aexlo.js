@@ -9,6 +9,7 @@
   },
   "license": "MIT",
   "gypfile": true,
+  "type": "commonjs",
   "main": "lib/index.js",
   "scripts": {
     "build": "node-gyp rebuild",
