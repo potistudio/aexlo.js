@@ -1,5 +1,6 @@
 
 #include <napi.h>
+#include <iostream>
 #include <windows.h>
 #include "AEXDef.cpp"
 
@@ -67,6 +68,16 @@ class Aexlo : public Napi::Addon<Aexlo> {
 				Napi::Error::New (env, "Failed to load AEX").ThrowAsJavaScriptException();
 				return env.Null();
 			}
+
+			PF_Cmd cmd = PF_Cmd_ABOUT;
+			PF_InData* inData = new PF_InData();
+			PF_OutData* outData = new PF_OutData();
+			PF_ParamDef* params = new PF_ParamDef();
+			PF_LayerDef* layer = new PF_LayerDef();
+
+			PF_Err err = entry (cmd, inData, outData, params, layer, NULL);
+			std::cout << err << std::endl;
+
 			return env.Null();
 		}
 };
