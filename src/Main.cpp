@@ -31,6 +31,38 @@ class AEXLoaderWrapper : public Napi::ObjectWrap<AEXLoaderWrapper> {
 		}
 };
 
+class AEXPlugin {
+	public:
+		HINSTANCE module;
+		EntryPointFunc entry;
+
+		AEXPlugin (std::string path) {
+			this->module = LoadLibrary (path.c_str());
+			if (this->module == NULL) {
+				throw std::runtime_error ("Failed to load AEX");
+			}
+
+			this->entry = (EntryPointFunc)GetProcAddress (module, "EntryPointFunc");
+			if (this->entry == NULL) {
+				throw std::runtime_error ("Failed to load AEX");
+			}
+		}
+
+		~AEXPlugin () {
+			if (this->module != NULL) {
+				FreeLibrary (this->module);
+			}
+		}
+
+		PF_Err Execute (PF_Cmd cmd, PF_InData *inData, PF_OutData *outData, PF_ParamDef *params, PF_LayerDef *layer) {
+			PF_Err err = PF_Err_NONE;
+
+			err = entry (cmd, inData, outData, params, layer, NULL);
+
+			return err;
+		}
+};
+
 // Main
 class Aexlo : public Napi::Addon<Aexlo> {
 	public:
@@ -58,26 +90,22 @@ class Aexlo : public Napi::Addon<Aexlo> {
 
 			std::string path = info[0].As<Napi::String>();
 
-			HINSTANCE module = LoadLibrary ("D:\\Library\\After Effects Plugins & Scripts\\F's Plugins\\F's Max.aex");
-			if (module == NULL) {
-				Napi::Error::New (env, "Failed to load AEX").ThrowAsJavaScriptException();
-				return env.Null();
-			}
-			EntryPointFunc entry = (EntryPointFunc)GetProcAddress (module, "EntryPointFunc");
-			if (entry == NULL) {
-				Napi::Error::New (env, "Failed to load AEX").ThrowAsJavaScriptException();
-				return env.Null();
-			}
-
 			PF_Cmd cmd = PF_Cmd_ABOUT;
 			PF_InData* inData = new PF_InData();
 			PF_OutData* outData = new PF_OutData();
 			PF_ParamDef* params = new PF_ParamDef();
 			PF_LayerDef* layer = new PF_LayerDef();
 
-			PF_Err err = entry (cmd, inData, outData, params, layer, NULL);
-			std::cout << err << std::endl;
+			AEXPlugin* plugin;
+			try {
+				plugin = new AEXPlugin ("D:\\Library\\After Effects Plugins & Scripts\\F's Plugins\\F's Max.aex");
+			} catch (...) {
+				Napi::Error::New (env, "Failed to load AEX").ThrowAsJavaScriptException();
+				return env.Null();
+			}
 
+			PF_Err err = plugin->Execute (cmd, inData, outData, params, layer);
+			std::cout << err << std::endl;
 			return env.Null();
 		}
 };
