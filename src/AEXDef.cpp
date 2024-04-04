@@ -1,4 +1,5 @@
 
+#define PF_FIRST_ERR                    512
 #define PF_MAX_EFFECT_MSG_LEN           255
 #define PF_MAX_EFFECT_NAME_LEN          31
 #define PF_MAX_EFFECT_PARAM_NAME_LEN    31
@@ -15,6 +16,18 @@ typedef char A_char;
 typedef unsigned char A_u_char;
 
 typedef A_long PF_Err;
+enum {
+	PF_Err_NONE = 0,
+	PF_Err_OUT_OF_MEMORY = 4,
+	PF_Err_INTERNAL_STRUCT_DAMAGED = PF_FIRST_ERR,
+	PF_Err_INVALID_INDEX,
+	PF_Err_UNRECOGNIZED_PARAM_TYPE,
+	PF_Err_INVALID_CALLBACK,
+	PF_Err_BAD_CALLBACK_PARAM,
+	PF_Interrupt_CANCEL,
+	PF_Err_CANNOT_PARSE_KEYFRAME_TEXT
+};
+
 typedef A_long PF_ParamIndex;
 
 typedef A_long PF_ChangeFlags;
