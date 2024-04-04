@@ -2,7 +2,7 @@
 #include <napi.h>
 #include <iostream>
 #include <windows.h>
-#include "AEXDef.cpp"
+#include "AEXDef.h"
 
 class AEXLoaderWrapper : public Napi::ObjectWrap<AEXLoaderWrapper> {
 	public:
