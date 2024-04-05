@@ -98,7 +98,7 @@ class Aexlo : public Napi::Addon<Aexlo> {
 
 			AEXPlugin* plugin;
 			try {
-				plugin = new AEXPlugin ("D:\\Library\\After Effects Plugins & Scripts\\F's Plugins\\F's Max.aex");
+				plugin = new AEXPlugin (path);
 			} catch (...) {
 				Napi::Error::New (env, "Failed to load AEX").ThrowAsJavaScriptException();
 				return env.Null();
