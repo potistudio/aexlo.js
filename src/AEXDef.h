@@ -203,6 +203,7 @@ typedef struct PF_PathDef {
 											path_idLu value will be PF_PathID_NONE.
 										 */
 } PF_PathDef;
+struct PF_ProgressInfo;
 typedef struct PF_ProgressInfo *PF_ProgPtr;
 //* Momentary Buttons
 typedef struct {
