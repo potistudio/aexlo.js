@@ -46,7 +46,7 @@ class AEXPlugin {
 			if (this->entry == NULL) {
 				this->entry = (EntryPointFunc)GetProcAddress (module, "EntryPointFunc");
 				if (this->entry == NULL)
-				throw std::runtime_error ("Failed to load AEX");
+					throw std::runtime_error ("Failed to load AEX");
 			}
 		}
 
@@ -80,6 +80,7 @@ class Aexlo : public Napi::Addon<Aexlo> {
 		Napi::Value LoadAEX (const Napi::CallbackInfo &info) {
 			Napi::Env env = info.Env();
 
+			//* Validate Arguments
 			if (info.Length() != 1) {
 				Napi::TypeError::New (env, "Wrong number of arguments").ThrowAsJavaScriptException();
 				return env.Null();
@@ -92,12 +93,14 @@ class Aexlo : public Napi::Addon<Aexlo> {
 
 			std::string path = info[0].As<Napi::String>();
 
+			//* Initialize Data
 			PF_Cmd cmd = PF_Cmd_ABOUT;
 			PF_InData* inData = new PF_InData();
 			PF_OutData* outData = new PF_OutData();
 			PF_ParamDef* params = new PF_ParamDef();
 			PF_LayerDef* layer = new PF_LayerDef();
 
+			//* Load Plugin
 			AEXPlugin* plugin;
 			try {
 				plugin = new AEXPlugin (path);
@@ -106,8 +109,10 @@ class Aexlo : public Napi::Addon<Aexlo> {
 				return env.Null();
 			}
 
+			//* Execute Plugin
 			PF_Err err = plugin->Execute (cmd, inData, outData, params, layer);
-			std::cout << err << std::endl;
+			std::cout << err << std::endl; // Expect 0 but 516
+
 			return env.Null();
 		}
 };
