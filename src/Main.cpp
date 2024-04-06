@@ -42,8 +42,10 @@ class AEXPlugin {
 				throw std::runtime_error ("Failed to load AEX");
 			}
 
-			this->entry = (EntryPointFunc)GetProcAddress (module, "EntryPointFunc");
+			this->entry = (EntryPointFunc)GetProcAddress (module, "EffectMain");
 			if (this->entry == NULL) {
+				this->entry = (EntryPointFunc)GetProcAddress (module, "EntryPointFunc");
+				if (this->entry == NULL)
 				throw std::runtime_error ("Failed to load AEX");
 			}
 		}
