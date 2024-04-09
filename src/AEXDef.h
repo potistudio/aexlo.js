@@ -25,7 +25,7 @@ typedef int32 SPErr;
 typedef int32 SPBoolean;
 typedef struct SPBasicSuite {
 	SPErr (*a)(const char* b, int32 c, const void** d);
-	SPErr (*b)(const char *name, int32 version, const void* suite);
+	SPErr (*AcquireSuite)(const char *name, int32 version, const void* suite);
 	SPErr (*ReleaseSuite)(const char *name, int32 version);
 	SPBoolean (*IsEqual)(const char *token1, const char *token2);
 	SPErr (*AllocateBlock)(size_t size, void **block);
