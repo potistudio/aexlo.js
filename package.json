@@ -10,7 +10,7 @@
   "license": "MIT",
   "gypfile": true,
   "type": "commonjs",
-  "main": "lib/index.js",
+  "main": "lib/aexlo/index.js",
   "scripts": {
     "build": "node-gyp rebuild",
     "test": "node test/test.js"
