@@ -1,6 +1,5 @@
 
 #include "Generic.h"
-#include "SuiteDef.h"
 
 #define PF_FIRST_ERR                    512
 #define PF_MAX_EFFECT_MSG_LEN           255
@@ -21,6 +20,19 @@ enum {
 	PF_Interrupt_CANCEL,
 	PF_Err_CANNOT_PARSE_KEYFRAME_TEXT
 };
+
+typedef int32 SPErr;
+typedef int32 SPBoolean;
+typedef struct SPBasicSuite {
+	SPErr (*a)(const char* b, int32 c, const void** d);
+	SPErr (*b)(const char *name, int32 version, const void* suite);
+	SPErr (*ReleaseSuite)(const char *name, int32 version);
+	SPBoolean (*IsEqual)(const char *token1, const char *token2);
+	SPErr (*AllocateBlock)(size_t size, void **block);
+	SPErr (*FreeBlock)(void *block);
+	SPErr (*ReallocateBlock)(void *block, size_t newSize, void **newblock);
+	SPErr (*Undefined)(void);
+} SPBasicSuite;
 
 typedef A_long PF_ParamIndex;
 
@@ -691,7 +703,7 @@ typedef struct {
 	A_long                      dur_sampL;
 	A_long                      total_sampL;
 	PF_SoundWorld               src_snd;
-	struct SPBasicSuite         *pica_basicP;
+	SPBasicSuite                *pica_basicP;
 	A_long                      pre_effect_source_origin_x;
 	A_long                      pre_effect_source_origin_y;
 	PF_Fixed                    shutter_phase;
