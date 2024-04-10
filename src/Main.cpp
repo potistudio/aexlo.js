@@ -65,6 +65,10 @@ class AEXPlugin {
 		}
 };
 
+SPErr AcquireSuite (const char *name, int32 version, const void **suite) {
+	return 0;
+}
+
 // Main
 class Aexlo : public Napi::Addon<Aexlo> {
 	public:
@@ -99,6 +103,8 @@ class Aexlo : public Napi::Addon<Aexlo> {
 			PF_OutData* outData = new PF_OutData();
 			PF_ParamDef* params = new PF_ParamDef();
 			PF_LayerDef* layer = new PF_LayerDef();
+			inData->pica_basicP = new SPBasicSuite();
+			inData->pica_basicP->AcquireSuite = &AcquireSuite;
 
 			//* Load Plugin
 			AEXPlugin* plugin;
@@ -111,7 +117,7 @@ class Aexlo : public Napi::Addon<Aexlo> {
 
 			//* Execute Plugin
 			PF_Err err = plugin->Execute (cmd, inData, outData, params, layer);
-			std::cout << err << std::endl; // Expect 0 but 516
+			std::cout << err << std::endl; // Expect 0
 
 			return env.Null();
 		}
