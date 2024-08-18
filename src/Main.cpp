@@ -33,6 +33,7 @@ class AEXLoaderWrapper : public Napi::ObjectWrap<AEXLoaderWrapper> {
 
 class AEXPlugin {
 	public:
+		// "HINSTANCE" is the handle to the loaded library
 		HINSTANCE module;
 		EntryPointFunc entry;
 
@@ -42,6 +43,7 @@ class AEXPlugin {
 				throw std::runtime_error ("Failed to load AEX");
 			}
 
+			// Cast the exported function address "EffectMain" or "EntryPointFunc" to a function pointer
 			this->entry = (EntryPointFunc)GetProcAddress (module, "EffectMain");
 			if (this->entry == NULL) {
 				this->entry = (EntryPointFunc)GetProcAddress (module, "EntryPointFunc");
@@ -59,7 +61,7 @@ class AEXPlugin {
 		PF_Err Execute (PF_Cmd cmd, PF_InData *inData, PF_OutData *outData, PF_ParamDef *params, PF_LayerDef *layer) {
 			PF_Err err = PF_Err_NONE;
 
-			err = entry (cmd, inData, outData, params, layer, NULL);
+			err = this->entry (cmd, inData, outData, params, layer, NULL);
 
 			return err;
 		}
@@ -68,6 +70,21 @@ class AEXPlugin {
 SPErr AcquireSuite (const char *name, int32 version, const void **suite) {
 	return 0;
 }
+
+int sprintf_m (A_char *buffer, const A_char *format, ...) {
+	va_list args;
+	va_start (args, format);
+
+	std::cout << "\n-------- begin About --------\n" << std::endl;
+
+	vsnprintf (buffer, 1024, format, args); // format
+	std::cout << buffer << std::endl; // content
+
+	std::cout << "\n-------- end About --------\n" << std::endl;
+
+	va_end (args);
+	return 0;
+};
 
 // Main
 class Aexlo : public Napi::Addon<Aexlo> {
@@ -103,8 +120,12 @@ class Aexlo : public Napi::Addon<Aexlo> {
 			PF_OutData* outData = new PF_OutData();
 			PF_ParamDef* params = new PF_ParamDef();
 			PF_LayerDef* layer = new PF_LayerDef();
-			inData->pica_basicP = new SPBasicSuite();
-			inData->pica_basicP->AcquireSuite = &AcquireSuite;
+
+			inData->utils = new _PF_UtilCallbacks();
+			inData->utils->ansi = PF_ANSICallbacks();
+			inData->utils->ansi.sprintf = &sprintf_m;
+			// inData->pica_basicP = new SPBasicSuite();
+			// inData->pica_basicP->AcquireSuite = &AcquireSuite;
 
 			//* Load Plugin
 			AEXPlugin* plugin;
@@ -115,9 +136,14 @@ class Aexlo : public Napi::Addon<Aexlo> {
 				return env.Null();
 			}
 
-			//* Execute Plugin
-			PF_Err err = plugin->Execute (cmd, inData, outData, params, layer);
-			std::cout << err << std::endl; // Expect 0
+			//* Execute Plugin (test)
+			try {
+				PF_Err err = plugin->Execute (cmd, inData, outData, params, layer);
+				std::cout << err << std::endl; // Expect 0
+			} catch (...) {
+				Napi::Error::New (env, "Failed to execute AEX").ThrowAsJavaScriptException();
+				return env.Null();
+			}
 
 			return env.Null();
 		}
