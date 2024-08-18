@@ -65,6 +65,32 @@ class AEXPlugin {
 
 			return err;
 		}
+
+		PF_Err ExecuteAbout (PF_InData *in_data, PF_OutData *out_data, PF_ParamDef *params, PF_LayerDef *layer) {
+			PF_Err error = PF_Err_NONE;
+
+			const int CMD = PF_Cmd_ABOUT;
+			error = this->Execute (CMD, in_data, out_data, params, layer);
+
+			return error;
+		}
+
+		PF_Err ExecuteGlobalSetup (PF_InData *in_data, PF_OutData *out_data, PF_ParamDef *params, PF_LayerDef *layer) {
+			PF_Err error = PF_Err_NONE;
+
+			const int CMD = PF_Cmd_GLOBAL_SETUP;
+			error = this->Execute (CMD, in_data, out_data, params, layer);
+
+			std::cout << "\n-------- begin Global Setup --------\n" << std::endl;
+
+			std::cout << "Version: " << out_data->my_version << std::endl;
+			std::cout << "Flags: " << out_data->out_flags << std::endl;
+			std::cout << "Flags2: " << out_data->out_flags2 << std::endl;
+
+			std::cout << "\n-------- end Global Setup --------\n" << std::endl;
+
+			return error;
+		}
 };
 
 SPErr AcquireSuite (const char *name, int32 version, const void **suite) {
@@ -115,7 +141,7 @@ class Aexlo : public Napi::Addon<Aexlo> {
 			std::string path = info[0].As<Napi::String>();
 
 			//* Initialize Data
-			PF_Cmd cmd = PF_Cmd_ABOUT;
+			PF_Cmd cmd = PF_Cmd_GLOBAL_SETUP;
 			PF_InData* inData = new PF_InData();
 			PF_OutData* outData = new PF_OutData();
 			PF_ParamDef* params = new PF_ParamDef();
@@ -138,7 +164,7 @@ class Aexlo : public Napi::Addon<Aexlo> {
 
 			//* Execute Plugin (test)
 			try {
-				PF_Err err = plugin->Execute (cmd, inData, outData, params, layer);
+				PF_Err err = plugin->ExecuteGlobalSetup (inData, outData, params, layer);
 				std::cout << err << std::endl; // Expect 0
 			} catch (...) {
 				Napi::Error::New (env, "Failed to execute AEX").ThrowAsJavaScriptException();
