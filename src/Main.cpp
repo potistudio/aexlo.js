@@ -31,6 +31,23 @@ class AEXLoaderWrapper : public Napi::ObjectWrap<AEXLoaderWrapper> {
 		}
 };
 
+PF_Err addParam (PF_ProgPtr effect_ref, PF_ParamIndex index, PF_ParamDefPtr def) {
+	std::cout << "Param Type: " << def->param_type << std::endl;
+	std::cout << "Param Name: " << def->name << std::endl;
+	std::cout << "Valid Min: " << def->u.fs_d.valid_min << std::endl;
+	std::cout << "Slider Min: " << def->u.fs_d.slider_min << std::endl;
+	std::cout << "Valid Max: " << def->u.fs_d.valid_max << std::endl;
+	std::cout << "Slider Max: " << def->u.fs_d.slider_max << std::endl;
+	std::cout << "Value: " << def->u.fs_d.value << std::endl;
+	std::cout << "Default: " << def->u.fs_d.dephault << std::endl;
+	std::cout << "Precision: " << def->u.fs_d.precision << std::endl;
+	std::cout << "Display Flags: " << def->u.fs_d.display_flags << std::endl;
+	std::cout << "Flags: " << def->u.fs_d.fs_flags << std::endl;
+	std::cout << "Curve Tolerance: " << def->u.fs_d.curve_tolerance << std::endl;
+	std::cout << "ID: " << def->uu.id << std::endl;
+	return PF_Err_NONE;
+}
+
 class AEXPlugin {
 	public:
 		// "HINSTANCE" is the handle to the loaded library
@@ -88,6 +105,26 @@ class AEXPlugin {
 			std::cout << "Flags2: " << out_data->out_flags2 << std::endl;
 
 			std::cout << "\n-------- end Global Setup --------\n" << std::endl;
+
+			return error;
+		}
+
+		PF_Err ExecuteParamsSetup (PF_InData *in_data, PF_OutData *out_data, PF_ParamDef *params, PF_LayerDef *layer) {
+			const int CMD = PF_Cmd_PARAMS_SETUP;
+			PF_Err error = PF_Err_NONE;
+
+			/* Arguments Setup */
+			in_data->inter = PF_InteractCallbacks();
+			in_data->inter.add_param = &addParam;
+
+			/* Execute */
+			std::cout << "\n-------- begin Parameters Setup --------\n" << std::endl;
+
+			error = this->Execute (CMD, in_data, out_data, params, layer);
+
+			std::cout << out_data->num_params << std::endl;
+
+			std::cout << "\n-------- end Parameters Setup --------\n" << std::endl;
 
 			return error;
 		}
@@ -164,7 +201,7 @@ class Aexlo : public Napi::Addon<Aexlo> {
 
 			//* Execute Plugin (test)
 			try {
-				PF_Err err = plugin->ExecuteGlobalSetup (inData, outData, params, layer);
+				PF_Err err = plugin->ExecuteParamsSetup (inData, outData, params, layer);
 				std::cout << err << std::endl; // Expect 0
 			} catch (...) {
 				Napi::Error::New (env, "Failed to execute AEX").ThrowAsJavaScriptException();
