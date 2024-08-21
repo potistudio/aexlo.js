@@ -1,11 +1,13 @@
 
 import aexlo from "aexlo";
 
-const aexLoader = new aexlo.AEXLoader(); // {}
+const instance = new aexlo.PluginInstance ("D:\\Projects\\Development\\Node\\aexlo.js\\lib\\test\\FXAA.aex");
+instance.about();
+
 //DONE: About
 //DONE: Global Setup
 //DONE: Params Setup
-//TODO: Render
+//DONE: Render
 //TODO: Smart Pre Render
 //TODO: Smart Render
-aexlo.loadAEX("D:\\Projects\\Development\\Node\\aexlo.js\\lib\\test\\SDK_Noise.aex"); // null
+// aexlo.loadAEX("D:\\Projects\\Development\\Node\\aexlo.js\\lib\\test\\SDK_Noise.aex"); // null

@@ -1,7 +1,4 @@
-
-export function loadAEX (path: string): null;
-
-export class AEXLoader {
+export class PluginInstance {
 	constructor();
-	load(): null;
+	about(): void;
 }
