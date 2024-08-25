@@ -75,7 +75,7 @@ class PluginInstanceWrapper : public Napi::ObjectWrap<PluginInstanceWrapper> {
 				return env.Null();
 			}
 
-			return env.Null();
+			return Napi::Number::New (env, error);
 		}
 
 		PluginInstance* plugin;

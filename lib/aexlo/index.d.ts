@@ -1,4 +1,4 @@
 export class PluginInstance {
 	constructor();
-	about(): void;
+	about(): number;
 }
