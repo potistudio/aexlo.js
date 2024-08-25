@@ -33,10 +33,50 @@ class PluginInstance {
 			}
 		}
 
-		int Execute (PF_Cmd cmd, PF_InData *inData, PF_OutData *outData, PF_ParamDef *params[], LayerParam *layer) {
+		int Execute (PF_Cmd cmd, PF_InData *in_data, PF_OutData *outData, PF_ParamDef *params[], LayerParam *layer) {
 			int err = 0;
 
-			err = this->entry (cmd, inData, outData, params, layer, NULL);
+			in_data->pica_basicP = new SPBasicSuite();
+			in_data->pica_basicP->AcquireSuite = [](const char *name, int version, const void **suite) -> int {
+				std::cout << "---- Acquiring Suite: " << name << ", ver." << version << std::endl;
+
+				if (strcmp(name, "PF Iterate8 Suite") == 0) {
+					PF_Iterate8Suite2 *i8s = new PF_Iterate8Suite2();
+					i8s->iterate = &iterate;
+					*suite = i8s;
+
+					return 0;
+				} else if (strcmp(name, "PF World Transform Suite") == 0) {
+					PF_WorldTransformSuite1 *wts = new PF_WorldTransformSuite1();
+					wts->copy = &copy;
+					*suite = wts;
+
+					return 0;
+				}
+
+				return -1; // Error
+			};
+
+			in_data->pica_basicP->ReleaseSuite = [](const char *name, int version) -> int {
+				std::cout << "---- Releasing Suite: " << name << ", ver." << version << std::endl;
+				return 0;
+			};
+
+			in_data->utils = new _PF_UtilCallbacks();
+			in_data->utils->ansi = PF_ANSICallbacks();
+
+			in_data->utils->ansi.sprintf = [](char *buffer, const char *format, ...) -> int {
+				va_list args;
+				va_start (args, format);
+
+				vsnprintf (buffer, 1024, format, args);
+				std::cout << buffer << std::endl;
+
+				va_end (args);
+				return 0;
+			};
+
+			err = this->entry (cmd, in_data, outData, params, layer, NULL);
 
 			return err;
 		}
@@ -44,10 +84,6 @@ class PluginInstance {
 		int ExecuteAbout (PF_InData *in_data, PF_OutData *out_data, PF_ParamDef *params[], LayerParam *layer) {
 
 			std::cout << "\n-------- begin About --------\n" << std::endl;
-
-			in_data->pica_basicP = new SPBasicSuite();
-			in_data->pica_basicP->AcquireSuite = &acquireSuite;
-			in_data->pica_basicP->ReleaseSuite = &releaseSuite;
 
 			const int CMD = PF_Cmd_ABOUT;
 			int error = 0;
@@ -105,10 +141,6 @@ class PluginInstance {
 			int error = 0;
 
 			std::cout << "\n-------- begin Render --------\n" << std::endl;
-
-			in_data->pica_basicP = new SPBasicSuite();
-			in_data->pica_basicP->AcquireSuite = &acquireSuite;
-			in_data->pica_basicP->ReleaseSuite = &releaseSuite;
 
 			params[1] = new PF_ParamDef();
 			params[1]->u.fs_d.value = 100;

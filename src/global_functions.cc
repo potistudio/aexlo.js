@@ -40,40 +40,4 @@ int copy (ProgressInfoPtr effect_ref, LayerParam *src, LayerParam *dst, PF_Rect 
 	return 0;
 }
 
-int acquireSuite (const char *name, int version, const void **suite) {
-	std::cout << "---- Acquiring Suite: " << name << ", ver." << version << std::endl;
-
-	if (strcmp(name, "PF Iterate8 Suite") == 0) {
-		PF_Iterate8Suite2 *i8s = new PF_Iterate8Suite2();
-		i8s->iterate = &iterate;
-		*suite = i8s;
-
-		return 0;
-	} else if (strcmp(name, "PF World Transform Suite") == 0) {
-		PF_WorldTransformSuite1 *wts = new PF_WorldTransformSuite1();
-		wts->copy = &copy;
-		*suite = wts;
-
-		return 0;
-	}
-
-	return -1; // Error
-}
-
-int releaseSuite (const char *name, int version) {
-	std::cout << "---- Releasing Suite: " << name << ", ver." << version << std::endl;
-	return 0;
-}
-
-int sprintf_m (char *buffer, const char *format, ...) {
-	va_list args;
-	va_start (args, format);
-
-	vsnprintf (buffer, 1024, format, args); // format
-	std::cout << buffer << std::endl; // content
-
-	va_end (args);
-	return 0;
-};
-
 #endif
