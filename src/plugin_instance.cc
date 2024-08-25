@@ -1,7 +1,10 @@
 #ifndef AEXLO_PLUGIN_INSTANCE_H_
 #define AEXLO_PLUGIN_INSTANCE_H_
 
+#include <windows.h>
+
 #include "./global_functions.cc"
+#include "./headers/entry_point.h"
 
 class PluginInstance {
 	public:
