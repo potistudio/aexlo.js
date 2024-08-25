@@ -66,7 +66,21 @@ class PluginInstanceWrapper : public Napi::ObjectWrap<PluginInstanceWrapper> {
 
 			inData->utils = new _PF_UtilCallbacks();
 			inData->utils->ansi = PF_ANSICallbacks();
-			inData->utils->ansi.sprintf = &sprintf_m;
+
+			//* USE POINTER *//
+			// inData->utils->ansi.sprintf = &sprintf_m;
+
+			//* USE LAMBDA *//
+			inData->utils->ansi.sprintf = [](char *buffer, const char *format, ...) -> int {
+				va_list args;
+				va_start (args, format);
+
+				vsnprintf (buffer, 1024, format, args); // format
+				std::cout << buffer << std::endl; // content
+
+				va_end (args);
+				return 0;
+			};
 
 			try {
 				int error = this->plugin->ExecuteAbout (inData, outData, params, layer);

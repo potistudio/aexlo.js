@@ -1,7 +1,7 @@
 
 import aexlo from "aexlo";
 
-const instance = new aexlo.PluginInstance ("D:\\Projects\\Development\\Node\\aexlo.js\\lib\\test\\FXAA.aex");
+const instance = new aexlo.PluginInstance ("D:\\Projects\\Development\\Node\\aexlo.js\\lib\\test\\SDK_Noise.aex");
 instance.about();
 
 //DONE: About
