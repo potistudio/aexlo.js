@@ -174,4 +174,13 @@ typedef struct PF_EffectUISuite1 {
 	int (*PF_SetOptionsButtonName)(void *, const char *);
 } PF_EffectUISuite1;
 
+typedef struct PF_HandleSuite1 {
+	void * (*HostNewHandle)(uint64_t);
+	void * (*HostLockHandle)(void *);
+	void (*HostUnlockHandle)(void *);
+	void (*HostDisposeHandle)(void *);
+	uint64_t (*HostGetHandleSize)(void *);
+	int (*HostResizeHandle)(uint64_t, void **);
+} PF_HandleSuite1;
+
 #endif

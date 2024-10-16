@@ -169,6 +169,22 @@ class PluginInstance {
 					*suite = eui;
 
 					return 0;
+				} else if (strcmp(name, "PF Handle Suite") == 0) {
+					PF_HandleSuite1 *hs = new PF_HandleSuite1();
+
+					hs->HostNewHandle = [](uint64_t size) -> void * {
+						std::cout << "New Handle: " << size << std::endl;
+						return 0;
+					};
+
+					hs->HostLockHandle = [](void *handle) -> void * {
+						std::cout << "Lock Handle: " << handle << std::endl;
+						return 0;
+					};
+
+					*suite = hs;
+
+					return 0;
 				}
 
 				return -1; // Error
