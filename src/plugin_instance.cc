@@ -158,6 +158,17 @@ class PluginInstance {
 					*suite = wts;
 
 					return 0;
+				} else if (strcmp(name, "PF Effect UI Suite") == 0) {
+					PF_EffectUISuite1 *eui = new PF_EffectUISuite1();
+
+					eui->PF_SetOptionsButtonName = [](void *effect_ref, const char *name) -> int {
+						std::cout << "Set Options Button Name: " << name << std::endl;
+						return 0;
+					};
+
+					*suite = eui;
+
+					return 0;
 				}
 
 				return -1; // Error

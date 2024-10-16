@@ -170,4 +170,8 @@ typedef struct PF_ANSICallbacksSuite {
 	char * (*strcpy)(char *, const char *);
 } PF_ANSICallbacksSuite;
 
+typedef struct PF_EffectUISuite1 {
+	int (*PF_SetOptionsButtonName)(void *, const char *);
+} PF_EffectUISuite1;
+
 #endif
