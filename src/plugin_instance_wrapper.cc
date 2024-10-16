@@ -65,16 +65,16 @@ class PluginInstanceWrapper : public Napi::ObjectWrap<PluginInstanceWrapper> {
 				return env.Null();
 			}
 
-			int error = 0;
+			int error_code = 0;
 
 			try {
-				error = this->plugin->ExecuteAbout (this->in_data, this->out_data, this->params, this->layer);
-			} catch (Napi::Error& error) {
-				Napi::Error::New (env, error.Message()).ThrowAsJavaScriptException();
+				error_code = this->plugin->ExecuteAbout (this->in_data, this->out_data, this->params, this->layer);
+			} catch (Napi::Error& exception) {
+				Napi::Error::New (env, exception.Message()).ThrowAsJavaScriptException();
 				return env.Null();
 			}
 
-			return Napi::Number::New (env, error);
+			return Napi::Number::New (env, error_code);
 		}
 
 		Napi::Value SetupGlobal (const Napi::CallbackInfo &info) {
@@ -85,16 +85,16 @@ class PluginInstanceWrapper : public Napi::ObjectWrap<PluginInstanceWrapper> {
 				return env.Null();
 			}
 
-			int error = 0;
+			int error_code = 0;
 
 			try {
-				error = this->plugin->ExecuteGlobalSetup (this->in_data, this->out_data, this->params, this->layer);
-			} catch (Napi::Error& error) {
-				Napi::Error::New (env, error.Message()).ThrowAsJavaScriptException();
+				error_code = this->plugin->ExecuteGlobalSetup (this->in_data, this->out_data, this->params, this->layer);
+			} catch (Napi::Error& exception) {
+				Napi::Error::New (env, exception.Message()).ThrowAsJavaScriptException();
 				return env.Null();
 			}
 
-			return Napi::Number::New (env, error);
+			return Napi::Number::New (env, error_code);
 		}
 
 		Napi::Value SetupParameters (const Napi::CallbackInfo &info) {
@@ -105,16 +105,16 @@ class PluginInstanceWrapper : public Napi::ObjectWrap<PluginInstanceWrapper> {
 				return env.Null();
 			}
 
-			int error = 0;
+			int error_code = 0;
 
 			try {
-				error = this->plugin->ExecuteParamsSetup (this->in_data, this->out_data, this->params, this->layer);
-			} catch (Napi::Error& error) {
-				Napi::Error::New (env, error.Message()).ThrowAsJavaScriptException();
+				error_code = this->plugin->ExecuteParamsSetup (this->in_data, this->out_data, this->params, this->layer);
+			} catch (Napi::Error& exception) {
+				Napi::Error::New (env, exception.Message()).ThrowAsJavaScriptException();
 				return env.Null();
 			}
 
-			return Napi::Number::New (env, error);
+			return Napi::Number::New (env, error_code);
 		}
 
 		Napi::Value Render (const Napi::CallbackInfo &info) {
@@ -125,16 +125,16 @@ class PluginInstanceWrapper : public Napi::ObjectWrap<PluginInstanceWrapper> {
 				return env.Null();
 			}
 
-			int error = 0;
+			int error_code = 0;
 
 			try {
-				error = this->plugin->ExecuteRender (this->in_data, this->out_data, this->params, this->layer);
-			} catch (Napi::Error& error) {
-				Napi::Error::New (env, error.Message()).ThrowAsJavaScriptException();
+				error_code = this->plugin->ExecuteRender (this->in_data, this->out_data, this->params, this->layer);
+			} catch (Napi::Error& exception) {
+				Napi::Error::New (env, exception.Message()).ThrowAsJavaScriptException();
 				return env.Null();
 			}
 
-			return Napi::Number::New (env, error);
+			return Napi::Number::New (env, error_code);
 		}
 
 		PluginInstance* plugin;
