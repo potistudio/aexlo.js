@@ -82,7 +82,6 @@ class PluginInstance {
 		}
 
 		int ExecuteAbout (PF_InData *in_data, PF_OutData *out_data, PF_ParamDef *params[], LayerParam *layer) {
-
 			std::cout << "\n-------- begin About --------\n" << std::endl;
 
 			const int CMD = PF_Cmd_ABOUT;
@@ -95,28 +94,28 @@ class PluginInstance {
 			}
 
 			std::cout << "\n-------- end About --------\n" << std::endl;
-
 			return error;
 		}
 
 		int ExecuteGlobalSetup (PF_InData *in_data, PF_OutData *out_data, PF_ParamDef *params[], LayerParam *layer) {
-			int error = 0;
-
-			const int CMD = PF_Cmd_GLOBAL_SETUP;
-			error = this->Execute (CMD, in_data, out_data, params, layer);
-
 			std::cout << "\n-------- begin Global Setup --------\n" << std::endl;
+
+			int error = 0;
+			const int CMD = PF_Cmd_GLOBAL_SETUP;
+
+			error = this->Execute (CMD, in_data, out_data, params, layer);
 
 			std::cout << "Version: " << out_data->my_version << std::endl;
 			std::cout << "Flags: " << out_data->out_flags << std::endl;
 			std::cout << "Flags2: " << out_data->out_flags2 << std::endl;
 
 			std::cout << "\n-------- end Global Setup --------\n" << std::endl;
-
 			return error;
 		}
 
 		int ExecuteParamsSetup (PF_InData *in_data, PF_OutData *out_data, PF_ParamDef *params[], LayerParam *layer) {
+			std::cout << "\n-------- begin Parameters Setup --------\n" << std::endl;
+
 			const int CMD = PF_Cmd_PARAMS_SETUP;
 			int error = 0;
 
@@ -125,29 +124,26 @@ class PluginInstance {
 			in_data->inter.add_param = &addParam;
 
 			/* Execute */
-			std::cout << "\n-------- begin Parameters Setup --------\n" << std::endl;
-
 			error = this->Execute (CMD, in_data, out_data, params, layer);
 
 			std::cout << out_data->num_params << std::endl;
 
 			std::cout << "\n-------- end Parameters Setup --------\n" << std::endl;
-
 			return error;
 		}
 
 		int ExecuteRender (PF_InData *in_data, PF_OutData *out_data, PF_ParamDef *params[], LayerParam *layer) {
+			std::cout << "\n-------- begin Render --------\n" << std::endl;
+
 			const int CMD = PF_Cmd_RENDER;
 			int error = 0;
 
-			std::cout << "\n-------- begin Render --------\n" << std::endl;
-
 			params[1] = new PF_ParamDef();
 			params[1]->u.fs_d.value = 100;
+
 			error = this->Execute (CMD, in_data, out_data, params, layer);
 
 			std::cout << "\n-------- end Render --------\n" << std::endl;
-
 			return error;
 		}
 };
