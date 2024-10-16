@@ -70,6 +70,12 @@ class PluginInstanceWrapper : public Napi::ObjectWrap<PluginInstanceWrapper> {
 
 			try {
 				error = this->plugin->ExecuteAbout (inData, outData, params, layer);
+				error = this->plugin->ExecuteGlobalSetup (inData, outData, params, layer);
+				error = this->plugin->ExecuteParamsSetup (inData, outData, params, layer);
+
+				params[1]->u.fs_d.value = 100;
+
+				error = this->plugin->ExecuteRender (inData, outData, params, layer);
 			} catch (Napi::Error& error) {
 				Napi::Error::New (env, error.Message()).ThrowAsJavaScriptException();
 				return env.Null();
