@@ -68,7 +68,7 @@ class PluginInstanceWrapper : public Napi::ObjectWrap<PluginInstanceWrapper> {
 			int error = 0;
 
 			try {
-				error = this->plugin->ExecuteAbout (this->inData, this->outData, this->params, this->layer);
+				error = this->plugin->ExecuteAbout (this->in_data, this->out_data, this->params, this->layer);
 			} catch (Napi::Error& error) {
 				Napi::Error::New (env, error.Message()).ThrowAsJavaScriptException();
 				return env.Null();
@@ -88,7 +88,7 @@ class PluginInstanceWrapper : public Napi::ObjectWrap<PluginInstanceWrapper> {
 			int error = 0;
 
 			try {
-				error = this->plugin->ExecuteGlobalSetup (this->inData, this->outData, this->params, this->layer);
+				error = this->plugin->ExecuteGlobalSetup (this->in_data, this->out_data, this->params, this->layer);
 			} catch (Napi::Error& error) {
 				Napi::Error::New (env, error.Message()).ThrowAsJavaScriptException();
 				return env.Null();
@@ -108,7 +108,7 @@ class PluginInstanceWrapper : public Napi::ObjectWrap<PluginInstanceWrapper> {
 			int error = 0;
 
 			try {
-				error = this->plugin->ExecuteParamsSetup (this->inData, this->outData, this->params, this->layer);
+				error = this->plugin->ExecuteParamsSetup (this->in_data, this->out_data, this->params, this->layer);
 			} catch (Napi::Error& error) {
 				Napi::Error::New (env, error.Message()).ThrowAsJavaScriptException();
 				return env.Null();
@@ -128,7 +128,7 @@ class PluginInstanceWrapper : public Napi::ObjectWrap<PluginInstanceWrapper> {
 			int error = 0;
 
 			try {
-				error = this->plugin->ExecuteRender (this->inData, this->outData, this->params, this->layer);
+				error = this->plugin->ExecuteRender (this->in_data, this->out_data, this->params, this->layer);
 			} catch (Napi::Error& error) {
 				Napi::Error::New (env, error.Message()).ThrowAsJavaScriptException();
 				return env.Null();
@@ -138,8 +138,8 @@ class PluginInstanceWrapper : public Napi::ObjectWrap<PluginInstanceWrapper> {
 		}
 
 		PluginInstance* plugin;
-		PF_InData* inData = new PF_InData();
-		PF_OutData* outData = new PF_OutData();
+		PF_InData* in_data = new PF_InData();
+		PF_OutData* out_data = new PF_OutData();
 		PF_ParamDef* params[1] = {};
 		LayerParam* layer = new LayerParam();
 };
