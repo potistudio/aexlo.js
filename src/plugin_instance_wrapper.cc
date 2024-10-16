@@ -17,8 +17,12 @@ class PluginInstanceWrapper : public Napi::ObjectWrap<PluginInstanceWrapper> {
 	public:
 		static Napi::Object Init (Napi::Env env, Napi::Object exports) {
 			Napi::Function func = DefineClass (env, "PluginInstance", {
-				InstanceMethod ("about", &PluginInstanceWrapper::About)
+				InstanceMethod ("about", &PluginInstanceWrapper::About),
+				InstanceMethod ("setupGlobal", &PluginInstanceWrapper::SetupGlobal),
+				InstanceMethod ("setupParameters", &PluginInstanceWrapper::SetupParameters),
+				InstanceMethod ("render", &PluginInstanceWrapper::Render),
 			});
+
 			Napi::FunctionReference *constructor = new Napi::FunctionReference();
 			*constructor = Napi::Persistent (func);
 
@@ -61,21 +65,70 @@ class PluginInstanceWrapper : public Napi::ObjectWrap<PluginInstanceWrapper> {
 				return env.Null();
 			}
 
-			PF_InData* inData = new PF_InData();
-			PF_OutData* outData = new PF_OutData();
-			PF_ParamDef* params[1] = {};
-			LayerParam* layer = new LayerParam();
+			int error = 0;
+
+			try {
+				error = this->plugin->ExecuteAbout (this->inData, this->outData, this->params, this->layer);
+			} catch (Napi::Error& error) {
+				Napi::Error::New (env, error.Message()).ThrowAsJavaScriptException();
+				return env.Null();
+			}
+
+			return Napi::Number::New (env, error);
+		}
+
+		Napi::Value SetupGlobal (const Napi::CallbackInfo &info) {
+			Napi::Env env = info.Env();
+
+			if (info.Length() != 0) {
+				Napi::TypeError::New (env, "Wrong number of arguments").ThrowAsJavaScriptException();
+				return env.Null();
+			}
 
 			int error = 0;
 
 			try {
-				error = this->plugin->ExecuteAbout (inData, outData, params, layer);
-				error = this->plugin->ExecuteGlobalSetup (inData, outData, params, layer);
-				error = this->plugin->ExecuteParamsSetup (inData, outData, params, layer);
+				error = this->plugin->ExecuteGlobalSetup (this->inData, this->outData, this->params, this->layer);
+			} catch (Napi::Error& error) {
+				Napi::Error::New (env, error.Message()).ThrowAsJavaScriptException();
+				return env.Null();
+			}
 
-				params[1]->u.fs_d.value = 100;
+			return Napi::Number::New (env, error);
+		}
 
-				error = this->plugin->ExecuteRender (inData, outData, params, layer);
+		Napi::Value SetupParameters (const Napi::CallbackInfo &info) {
+			Napi::Env env = info.Env();
+
+			if (info.Length() != 0) {
+				Napi::TypeError::New (env, "Wrong number of arguments").ThrowAsJavaScriptException();
+				return env.Null();
+			}
+
+			int error = 0;
+
+			try {
+				error = this->plugin->ExecuteParamsSetup (this->inData, this->outData, this->params, this->layer);
+			} catch (Napi::Error& error) {
+				Napi::Error::New (env, error.Message()).ThrowAsJavaScriptException();
+				return env.Null();
+			}
+
+			return Napi::Number::New (env, error);
+		}
+
+		Napi::Value Render (const Napi::CallbackInfo &info) {
+			Napi::Env env = info.Env();
+
+			if (info.Length() != 0) {
+				Napi::TypeError::New (env, "Wrong number of arguments").ThrowAsJavaScriptException();
+				return env.Null();
+			}
+
+			int error = 0;
+
+			try {
+				error = this->plugin->ExecuteRender (this->inData, this->outData, this->params, this->layer);
 			} catch (Napi::Error& error) {
 				Napi::Error::New (env, error.Message()).ThrowAsJavaScriptException();
 				return env.Null();
@@ -85,6 +138,10 @@ class PluginInstanceWrapper : public Napi::ObjectWrap<PluginInstanceWrapper> {
 		}
 
 		PluginInstance* plugin;
+		PF_InData* inData = new PF_InData();
+		PF_OutData* outData = new PF_OutData();
+		PF_ParamDef* params[1] = {};
+		LayerParam* layer = new LayerParam();
 };
 
 #endif
