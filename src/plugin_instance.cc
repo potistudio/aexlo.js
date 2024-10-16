@@ -40,7 +40,113 @@ class PluginInstance {
 			in_data->pica_basicP->AcquireSuite = [](const char *name, int version, const void **suite) -> int {
 				std::cout << "---- Acquiring Suite: " << name << ", ver." << version << std::endl;
 
-				if (strcmp(name, "PF Iterate8 Suite") == 0) {
+				if (strcmp(name, "PF ANSI Suite") == 0) {
+					PF_ANSICallbacksSuite *ansi = new PF_ANSICallbacksSuite();
+
+					ansi->sin = [](double x) -> double {
+						return sin (x);
+					};
+
+					ansi->cos = [](double x) -> double {
+						return cos (x);
+					};
+
+					ansi->tan = [](double x) -> double {
+						return tan (x);
+					};
+
+					ansi->asin = [](double x) -> double {
+						std::cout << "asin: " << x << std::endl;
+						return 0;
+					};
+
+					ansi->acos = [](double x) -> double {
+						std::cout << "acos: " << x << std::endl;
+						return 0;
+					};
+
+					ansi->atan = [](double x) -> double {
+						std::cout << "atan: " << x << std::endl;
+						return 0;
+					};
+
+					ansi->atan2 = [](double y, double x) -> double {
+						std::cout << "atan2: " << x << std::endl;
+						return 0;
+					};
+
+					ansi->log = [](double x) -> double {
+						std::cout << "log10: " << x << std::endl;
+						return 0;
+					};
+
+					ansi->log10 = [](double x) -> double {
+						std::cout << "log10: " << x << std::endl;
+						return 0;
+					};
+
+					ansi->ceil = [](double x) -> double {
+						std::cout << "ceil: " << x << std::endl;
+						return 0;
+					};
+
+					ansi->exp = [](double x) -> double {
+						std::cout << "exp: " << x << std::endl;
+						return 0;
+					};
+
+					ansi->fabs = [](double x) -> double {
+						std::cout << "fabs: " << x << std::endl;
+						return 0;
+					};
+
+					ansi->floor = [](double x) -> double {
+						std::cout << "floor: " << x << std::endl;
+						return 0;
+					};
+
+					ansi->fmod = [](double x, double y) -> double {
+						std::cout << "fmod: " << x << std::endl;
+						return 0;
+					};
+
+					ansi->hypot = [](double x, double y) -> double {
+						std::cout << "hypot: " << x << std::endl;
+						return 0;
+					};
+
+					ansi->pow = [](double x, double y) -> double {
+						std::cout << "pow: " << x << std::endl;
+						return 0;
+					};
+
+					ansi->sqrt = [](double x) -> double {
+						std::cout << "sqrt: " << x << std::endl;
+						return 0;
+					};
+
+					ansi->sprintf = [](char *buffer, const char *format, ...) -> int {
+						va_list args;
+						va_start (args, format);
+
+						vsnprintf (buffer, 1024, format, args);
+						std::cout << buffer << std::endl;
+
+						va_end (args);
+						return 0;
+					};
+
+					ansi->strcpy = [](char *dest, const char *src) -> char * {
+						strcpy (dest, src);
+						std::cout << dest << std::endl;
+
+						return 0;
+					};
+
+					*suite = ansi;
+
+					return 0;
+				} else if (strcmp(name, "PF Iterate8 Suite") == 0) {
 					PF_Iterate8Suite2 *i8s = new PF_Iterate8Suite2();
 					i8s->iterate = &iterate;
 					*suite = i8s;
@@ -138,8 +244,7 @@ class PluginInstance {
 			const int CMD = PF_Cmd_RENDER;
 			int error = 0;
 
-			params[1] = new PF_ParamDef();
-			params[1]->u.fs_d.value = 100;
+			std::cout << "\n-------- begin Render --------\n" << std::endl;
 
 			error = this->Execute (CMD, in_data, out_data, params, layer);
 

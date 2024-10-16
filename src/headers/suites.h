@@ -144,4 +144,30 @@ typedef struct PF_WorldTransformSuite1 {
 		LayerParam			*dst_world);
 } PF_WorldTransformSuite1;
 
+typedef struct PF_ANSICallbacksSuite {
+	double (*sin)(double);
+	double (*cos)(double);
+	double (*tan)(double);
+
+	double (*asin)(double);
+	double (*acos)(double);
+	double (*atan)(double);
+	double (*atan2)(double y, double x);
+
+	double (*log)(double);
+	double (*log10)(double);
+
+	double (*ceil)(double);
+	double (*exp)(double);
+	double (*fabs)(double);
+	double (*floor)(double);
+	double (*fmod)(double x, double y);
+	double (*hypot)(double x, double y);
+	double (*pow)(double x, double y);
+	double (*sqrt)(double);
+
+	int (*sprintf)(char *, const char *, ...);
+	char * (*strcpy)(char *, const char *);
+} PF_ANSICallbacksSuite;
+
 #endif
