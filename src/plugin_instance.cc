@@ -26,6 +26,24 @@ class PluginInstance {
 				if (this->entry == NULL)
 					throw std::runtime_error ("Failed to load AEX");
 			}
+
+			auto resource = FindResourceA (this->module, MAKEINTRESOURCEA(16000), TEXT("PiPL"));
+
+			if (resource == NULL) {
+				throw std::runtime_error ("Failed to locate resources");
+			}
+
+			auto handle = LoadResource (this->module, resource);
+
+			if (handle == NULL) {
+				throw std::runtime_error ("Failed to load resources");
+			}
+
+			auto lock = LockResource (handle);
+
+			if (lock == NULL) {
+				throw std::runtime_error ("Failed to lock resources");
+			}
 		}
 
 		~PluginInstance () {
