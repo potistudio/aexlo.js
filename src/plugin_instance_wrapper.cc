@@ -17,6 +17,7 @@ class PluginInstanceWrapper : public Napi::ObjectWrap<PluginInstanceWrapper> {
 	public:
 		static Napi::Object Init (Napi::Env env, Napi::Object exports) {
 			Napi::Function func = DefineClass (env, "PluginInstance", {
+				InstanceMethod ("loadResources", &PluginInstanceWrapper::LoadResources),
 				InstanceMethod ("about", &PluginInstanceWrapper::About),
 				InstanceMethod ("setupGlobal", &PluginInstanceWrapper::SetupGlobal),
 				InstanceMethod ("setupParameters", &PluginInstanceWrapper::SetupParameters),
@@ -56,6 +57,18 @@ class PluginInstanceWrapper : public Napi::ObjectWrap<PluginInstanceWrapper> {
 		}
 
 	private:
+		Napi::Value LoadResources (const Napi::CallbackInfo &info) {
+			Napi::Env env = info.Env();
+
+			if (info.Length() != 0) {
+				Napi::TypeError::New (env, "Wrong number of arguments").ThrowAsJavaScriptException();
+				return env.Null();
+			}
+
+			std::string resources = this->plugin->LoadResources ();
+			return Napi::String::New (env, resources);
+		}
+
 		Napi::Value About (const Napi::CallbackInfo &info) {
 			Napi::Env env = info.Env();
 

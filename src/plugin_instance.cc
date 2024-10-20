@@ -26,7 +26,15 @@ class PluginInstance {
 				if (this->entry == NULL)
 					throw std::runtime_error ("Failed to load AEX");
 			}
+		}
 
+		~PluginInstance () {
+			if (this->module != NULL) {
+				FreeLibrary (this->module);
+			}
+		}
+
+		std::string LoadResources () {
 			auto resource = FindResourceA (this->module, MAKEINTRESOURCEA(16000), TEXT("PiPL"));
 
 			if (resource == NULL) {
@@ -44,12 +52,11 @@ class PluginInstance {
 			if (lock == NULL) {
 				throw std::runtime_error ("Failed to lock resources");
 			}
-		}
 
-		~PluginInstance () {
-			if (this->module != NULL) {
-				FreeLibrary (this->module);
-			}
+			char* buffer = static_cast<char*>(lock);
+			auto size = SizeofResource (this->module, resource);
+			std::string result (buffer, size);
+			return result;
 		}
 
 		int Execute (PF_Cmd cmd, PF_InData *in_data, PF_OutData *outData, PF_ParamDef *params[], LayerParam *layer) {
