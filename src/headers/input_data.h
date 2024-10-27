@@ -9,69 +9,15 @@
 #include "./parameters/union.h"
 
 typedef struct {
-	int (*checkout_param) (
-		ProgressInfoPtr    effect_ref,
-		int                index,
-		int                what_time,
-		int                time_step,
-		unsigned int       time_scale,
-		PF_ParamDef        *param
-	);
-
-	int (*checkin_param) (
-		ProgressInfoPtr    effect_ref,
-		PF_ParamDef        *param
-	);
-
-	int (*add_param) (
-		ProgressInfoPtr    effect_ref,
-		int                index,
-		PF_ParamDefPtr     def
-	);
-
-	int (*abort) (
-		ProgressInfoPtr    effect_ref
-	);
-
-	int (*progress) (
-		ProgressInfoPtr    effect_ref,
-		int                current,
-		int                total
-	);
-
-	int (*register_ui) (
-		ProgressInfoPtr    effect_ref,
-		PF_CustomUIInfo    *cust_info
-	);
-
-	int (*checkout_layer_audio) (
-		ProgressInfoPtr    effect_ref,
-		int                index,
-		int                start_time,
-		int                duration,
-		unsigned int       time_scale,
-		unsigned int       rate,
-		int                bytes_per_sample,
-		int                num_channels,
-		int                fmt_signed,
-		PF_LayerAudio      *audio
-	);
-
-	int (*checkin_layer_audio) (
-		ProgressInfoPtr    effect_ref,
-		PF_LayerAudio      audio
-	);
-
-	int (*get_audio_data) (
-		ProgressInfoPtr    effect_ref,
-		PF_LayerAudio      audio,
-		PF_SndSamplePtr    *data0,
-		int                *num_samples0,
-		unsigned int       *rate0,
-		int                *bytes_per_sample0,
-		int                *num_channels0,
-		int                *fmt_signed0
-	);
+	int (*checkout_param) (ProgressInfoPtr, int, int, int, unsigned int, PF_ParamDef *);
+	int (*checkin_param) (ProgressInfoPtr, PF_ParamDef *);
+	int (*add_param) (ProgressInfoPtr, int, PF_ParamDefPtr);
+	int (*abort) (ProgressInfoPtr);
+	int (*progress) (ProgressInfoPtr, int, int);
+	int (*register_ui) (ProgressInfoPtr, PF_CustomUIInfo *);
+	int (*checkout_layer_audio) (ProgressInfoPtr, int, int, int, unsigned int, unsigned int, int, int, int, PF_LayerAudio *);
+	int (*checkin_layer_audio) (ProgressInfoPtr, PF_LayerAudio);
+	int (*get_audio_data) (ProgressInfoPtr, PF_LayerAudio, PF_SndSamplePtr *, int *, unsigned int *, int *, int *, int *);
 
 	void    *reserved_str[3];
 	void    *reserved[10];

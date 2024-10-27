@@ -5,6 +5,7 @@
 
 #include "./global_functions.cc"
 #include "./headers/entry_point.h"
+#include "interact_callbacks_factory.h"
 
 class PluginInstance {
 	public:
@@ -198,6 +199,7 @@ class PluginInstance {
 			in_data->utils = new _PF_UtilCallbacks();
 			in_data->utils->ansi = PF_ANSICallbacks();
 
+			in_data->inter = (new InteractCallbackFactory())->Create();
 			in_data->utils->ansi.sprintf = [](char *buffer, const char *format, ...) -> int {
 				va_list args;
 				va_start (args, format);
@@ -251,10 +253,6 @@ class PluginInstance {
 
 			const int CMD = PF_Cmd_PARAMS_SETUP;
 			int error = 0;
-
-			/* Arguments Setup */
-			in_data->inter = PF_InteractCallbacks();
-			in_data->inter.add_param = &addParam;
 
 			/* Execute */
 			error = this->Execute (CMD, in_data, out_data, params, layer);
