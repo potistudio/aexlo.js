@@ -1,7 +1,7 @@
 
 #include <napi.h>
 
-#include "./plugin_instance_wrapper.cc"
+#include "plugin_instance_wrapper.hh"
 
 // Main
 class Aexlo : public Napi::Addon<Aexlo> {
