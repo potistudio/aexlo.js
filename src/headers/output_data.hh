@@ -1,7 +1,7 @@
 #ifndef AEXLO_OUTPUT_DATA_H_
 #define AEXLO_OUTPUT_DATA_H_
 
-#include "./basic.h"
+#include "./basic.hh"
 
 typedef struct {
 	unsigned int         my_version;

@@ -1,8 +1,8 @@
 #ifndef AEXLO_PARAM_DATA_H_
 #define AEXLO_PARAM_DATA_H_
 
-#include "./basic.h"
-#include "./parameters/union.h"
+#include "./basic.hh"
+#include "./parameters/union.hh"
 
 typedef struct {
 	union {

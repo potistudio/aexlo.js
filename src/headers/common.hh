@@ -1,9 +1,9 @@
 #ifndef AEXLO_AEXDEF_H_
 #define AEXLO_AEXDEF_H_
 
-#include "./macros.h"
-#include "./basic.h"
-#include "./layer_data.h"
+#include "./macros.hh"
+#include "./basic.hh"
+#include "./layer_data.hh"
 
 
 

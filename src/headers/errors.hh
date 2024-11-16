@@ -1,7 +1,7 @@
 #ifndef AEXLO_ERROR_H_
 #define AEXLO_ERROR_H_
 
-#include "./macros.h"
+#include "./macros.hh"
 
 enum {
 	Err_NONE = 0,

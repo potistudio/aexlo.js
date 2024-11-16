@@ -4,12 +4,12 @@
 #include <iostream>
 #include <napi.h>
 
-#include "./headers/basic.h"
-#include "./headers/commands.h"
-#include "./headers/input_data.h"
-#include "./headers/output_data.h"
-#include "./headers/param_data.h"
-#include "./headers/layer_data.h"
+#include "./headers/basic.hh"
+#include "./headers/commands.hh"
+#include "./headers/input_data.hh"
+#include "./headers/output_data.hh"
+#include "./headers/param_data.hh"
+#include "./headers/layer_data.hh"
 
 #include "plugin_instance.hh"
 

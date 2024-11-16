@@ -1,7 +1,7 @@
 #ifndef AEXLO_PARAM_LAYER_DATA_H_
 #define AEXLO_PARAM_LAYER_DATA_H_
 
-#include "./basic.h"
+#include "./basic.hh"
 
 typedef struct LayerParam {
 	void                *reserved0;

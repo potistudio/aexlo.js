@@ -1,12 +1,12 @@
 #ifndef AEXLO_INPUT_DATA_H_
 #define AEXLO_INPUT_DATA_H_
 
-#include "./common.h"
-#include "./basic.h"
-#include "./layer_data.h"
-#include "./param_data.h"
-#include "./basic_suite.h"
-#include "./parameters/union.h"
+#include "./common.hh"
+#include "./basic.hh"
+#include "./layer_data.hh"
+#include "./param_data.hh"
+#include "./basic_suite.hh"
+#include "./parameters/union.hh"
 
 typedef struct {
 	int (*checkout_param) (ProgressInfoPtr, int, int, int, unsigned int, PF_ParamDef *);

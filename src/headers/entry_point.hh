@@ -1,12 +1,12 @@
 #ifndef AEXLO_ENTRYPOINTDEF_H_
 #define AEXLO_ENTRYPOINTDEF_H_
 
-#include "./basic.h"
-#include "./commands.h"
-#include "./input_data.h"
-#include "./output_data.h"
-#include "./param_data.h"
-#include "./layer_data.h"
+#include "./basic.hh"
+#include "./commands.hh"
+#include "./input_data.hh"
+#include "./output_data.hh"
+#include "./param_data.hh"
+#include "./layer_data.hh"
 
 typedef int (*EntryPointFunc) (
 	PF_Cmd,

@@ -1,19 +1,19 @@
 #ifndef AEXLO_PARAM_UNION_H_
 #define AEXLO_PARAM_UNION_H_
 
-#include "../layer_data.h"
-#include "./slider.h"
-#include "./fixed_slider.h"
-#include "./angle.h"
-#include "./checkbox.h"
-#include "./color.h"
-#include "./point.h"
-#include "./popup.h"
-#include "./float_slider.h"
-#include "./arbitrary.h"
-#include "./path.h"
-#include "./button.h"
-#include "./point_3d.h"
+#include "../layer_data.hh"
+#include "./slider.hh"
+#include "./fixed_slider.hh"
+#include "./angle.hh"
+#include "./checkbox.hh"
+#include "./color.hh"
+#include "./point.hh"
+#include "./popup.hh"
+#include "./float_slider.hh"
+#include "./arbitrary.hh"
+#include "./path.hh"
+#include "./button.hh"
+#include "./point_3d.hh"
 
 typedef union {
 	LayerParam          ld;

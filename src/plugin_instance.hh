@@ -4,8 +4,8 @@
 #include <windows.h>
 #include <string>
 
-#include "./headers/suites.h"
-#include "./headers/entry_point.h"
+#include "./headers/suites.hh"
+#include "./headers/entry_point.hh"
 #include "interact_callbacks_factory.hh"
 
 class PluginInstance {

@@ -3,10 +3,10 @@
 
 #include <stdint.h>
 
-#include "./basic.h"
-#include "./input_data.h"
-#include "./param_data.h"
-#include "./basic.h"
+#include "./basic.hh"
+#include "./input_data.hh"
+#include "./param_data.hh"
+#include "./basic.hh"
 
 typedef struct PF_Iterate8Suite2 {
 	int (*iterate) (
