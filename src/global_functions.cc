@@ -1,6 +1,8 @@
 #ifndef AEXLO_GLOBAL_FUNCTIONS_H_
 #define AEXLO_GLOBAL_FUNCTIONS_H_
 
+#include <iostream>
+
 #include "./headers/basic.h"
 #include "./headers/suites.h"
 #include "./headers/input_data.h"

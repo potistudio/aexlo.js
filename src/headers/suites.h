@@ -1,6 +1,8 @@
 #ifndef AEXLO_Suites_H_
 #define AEXLO_Suites_H_
 
+#include <stdint.h>
+
 #include "./basic.h"
 #include "./input_data.h"
 #include "./param_data.h"

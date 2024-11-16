@@ -10,8 +10,7 @@
 #include "./headers/param_data.h"
 #include "./headers/layer_data.h"
 
-#include "./global_functions.cc"
-#include "./plugin_instance.cc"
+#include "plugin_instance.hh"
 
 class PluginInstanceWrapper : public Napi::ObjectWrap<PluginInstanceWrapper> {
 	public:
@@ -65,7 +64,7 @@ class PluginInstanceWrapper : public Napi::ObjectWrap<PluginInstanceWrapper> {
 				return env.Null();
 			}
 
-			std::string resources = this->plugin->LoadResources ();
+			std::string resources = this->plugin->ExtractResources ();
 			return Napi::String::New (env, resources);
 		}
 

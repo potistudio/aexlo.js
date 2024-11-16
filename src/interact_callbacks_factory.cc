@@ -1,4 +1,4 @@
-#include "interact_callbacks_factory.h"
+#include "interact_callbacks_factory.hh"
 
 InteractCallbackFactory::InteractCallbackFactory() {}
 InteractCallbackFactory::~InteractCallbackFactory() {}
