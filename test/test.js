@@ -28,3 +28,13 @@ url: ${url}`);
 //DONE: Render
 //TODO: Smart Pre Render
 //TODO: Smart Render
+
+//DONE: FXAA - About
+//DONE: FXAA - Global Setup
+//DONE: FXAA - Params Setup
+//TODO: FXAA - Render
+
+//TODO: QCA3 - About
+//TODO: QCA3 - Global Setup
+//TODO: QCA3 - Params Setup
+//TODO: QCA3 - Render
