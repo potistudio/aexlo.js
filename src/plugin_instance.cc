@@ -223,20 +223,9 @@ int PluginInstance::Execute (PF_Cmd cmd, PF_InData *in_data, PF_OutData *outData
 		return 0;
 	};
 
-	in_data->utils = new _PF_UtilCallbacks();
-	in_data->utils->ansi = PF_ANSICallbacks();
+	in_data->utils = ((new UtilityCallbackFactory())->Create());
 
 	in_data->inter = (new InteractCallbackFactory())->Create();
-	in_data->utils->ansi.sprintf = [](char *buffer, const char *format, ...) -> int {
-		va_list args;
-		va_start (args, format);
-
-		vsnprintf (buffer, 1024, format, args);
-		std::cout << buffer << std::endl;
-
-		va_end (args);
-		return 0;
-	};
 
 	err = this->entry (cmd, in_data, outData, params, layer, NULL);
 

@@ -7,6 +7,7 @@
 #include "./headers/suites.hh"
 #include "./headers/entry_point.hh"
 #include "interact_callbacks_factory.hh"
+#include "utility_callbacks_factory.hh"
 
 class PluginInstance {
 	public:
