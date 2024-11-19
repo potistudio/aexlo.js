@@ -10,8 +10,12 @@ PluginInstance::PluginInstance (std::string path) {
 	this->entry = (EntryPointFunc)GetProcAddress (module, "EffectMain");
 	if (this->entry == NULL) {
 		this->entry = (EntryPointFunc)GetProcAddress (module, "EntryPointFunc");
-		if (this->entry == NULL)
-			throw std::runtime_error ("Failed to load AEX");
+		if (this->entry == NULL) {
+			this->entry = (EntryPointFunc)GetProcAddress (module, "entryPointFunc");  //FIXME: Legacy Entry Point
+			if (this->entry == NULL) {
+				throw std::runtime_error ("Failed to cast entry point");
+			}
+		}
 	}
 }
 
