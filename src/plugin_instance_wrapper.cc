@@ -23,18 +23,20 @@ PluginInstanceWrapper::PluginInstanceWrapper (const Napi::CallbackInfo &info) : 
 
 	/* VALIDATE ARGUMENTS */
 	if (info.Length() != 1) {
-		Napi::TypeError::New (env, "Wrong number of arguments").ThrowAsJavaScriptException();
-		return;
+		throw Napi::TypeError::New (env, "Wrong number of arguments");
 	}
 
 	if (!info[0].IsString()) {
-		Napi::TypeError::New (env, "Wrong argument type with arg 0").ThrowAsJavaScriptException();
-		return;
+		throw Napi::TypeError::New (env, "Wrong argument type with arg 0");
 	}
 
 	std::string path = info[0].As<Napi::String>();
 
-	this->plugin = new PluginInstance (path);
+	try {
+		this->plugin = new PluginInstance (path);
+	} catch (std::runtime_error& exception) {
+		throw Napi::Error::New (env, exception.what());
+	}
 }
 
 PluginInstanceWrapper::~PluginInstanceWrapper() {
@@ -43,13 +45,18 @@ PluginInstanceWrapper::~PluginInstanceWrapper() {
 
 Napi::Value PluginInstanceWrapper::LoadResources (const Napi::CallbackInfo &info) {
 	Napi::Env env = info.Env();
+	std::string resources;
 
 	if (info.Length() != 0) {
-		Napi::TypeError::New (env, "Wrong number of arguments").ThrowAsJavaScriptException();
-		return env.Null();
+		throw Napi::TypeError::New (env, "Wrong number of arguments");
 	}
 
-	std::string resources = this->plugin->ExtractResources ();
+	try {
+		resources = this->plugin->ExtractResources();
+	} catch (std::runtime_error& exception) {
+		throw Napi::Error::New (env, exception.what());
+	}
+
 	return Napi::String::New (env, resources);
 }
 
@@ -58,17 +65,15 @@ Napi::Value PluginInstanceWrapper::About (const Napi::CallbackInfo &info) {
 
 	/* VALIDATE ARGUMENTS */
 	if (info.Length() != 0) {
-		Napi::TypeError::New (env, "Wrong number of arguments").ThrowAsJavaScriptException();
-		return env.Null();
+		throw Napi::TypeError::New (env, "Wrong number of arguments");
 	}
 
 	int error_code = 0;
 
 	try {
 		error_code = this->plugin->ExecuteAbout (this->in_data, this->out_data, this->params, this->layer);
-	} catch (Napi::Error& exception) {
-		Napi::Error::New (env, exception.Message()).ThrowAsJavaScriptException();
-		return env.Null();
+	} catch (std::runtime_error& exception) {
+		Napi::Error::New (env, exception.what());
 	}
 
 	return Napi::Number::New (env, error_code);
@@ -78,17 +83,15 @@ Napi::Value PluginInstanceWrapper::SetupGlobal (const Napi::CallbackInfo &info) 
 	Napi::Env env = info.Env();
 
 	if (info.Length() != 0) {
-		Napi::TypeError::New (env, "Wrong number of arguments").ThrowAsJavaScriptException();
-		return env.Null();
+		throw Napi::TypeError::New (env, "Wrong number of arguments");
 	}
 
 	int error_code = 0;
 
 	try {
 		error_code = this->plugin->ExecuteGlobalSetup (this->in_data, this->out_data, this->params, this->layer);
-	} catch (Napi::Error& exception) {
-		Napi::Error::New (env, exception.Message()).ThrowAsJavaScriptException();
-		return env.Null();
+	} catch (std::runtime_error& exception) {
+		throw Napi::Error::New (env, exception.what());
 	}
 
 	return Napi::Number::New (env, error_code);
@@ -98,17 +101,15 @@ Napi::Value PluginInstanceWrapper::SetupParameters (const Napi::CallbackInfo &in
 	Napi::Env env = info.Env();
 
 	if (info.Length() != 0) {
-		Napi::TypeError::New (env, "Wrong number of arguments").ThrowAsJavaScriptException();
-		return env.Null();
+		throw Napi::TypeError::New (env, "Wrong number of arguments");
 	}
 
 	int error_code = 0;
 
 	try {
 		error_code = this->plugin->ExecuteParamsSetup (this->in_data, this->out_data, this->params, this->layer);
-	} catch (Napi::Error& exception) {
-		Napi::Error::New (env, exception.Message()).ThrowAsJavaScriptException();
-		return env.Null();
+	} catch (std::runtime_error& exception) {
+		throw Napi::Error::New (env, exception.what());
 	}
 
 	return Napi::Number::New (env, error_code);
@@ -118,17 +119,15 @@ Napi::Value PluginInstanceWrapper::Render (const Napi::CallbackInfo &info) {
 	Napi::Env env = info.Env();
 
 	if (info.Length() != 0) {
-		Napi::TypeError::New (env, "Wrong number of arguments").ThrowAsJavaScriptException();
-		return env.Null();
+		throw Napi::TypeError::New (env, "Wrong number of arguments");
 	}
 
 	int error_code = 0;
 
 	try {
 		error_code = this->plugin->ExecuteRender (this->in_data, this->out_data, this->params, this->layer);
-	} catch (Napi::Error& exception) {
-		Napi::Error::New (env, exception.Message()).ThrowAsJavaScriptException();
-		return env.Null();
+	} catch (std::runtime_error& exception) {
+		throw Napi::Error::New (env, exception.what());
 	}
 
 	return Napi::Number::New (env, error_code);
