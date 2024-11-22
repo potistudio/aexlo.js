@@ -7,7 +7,7 @@ Load and Host "After Effects Effect Plugin (.aex)"
 
 "Adobe After Effects (AE)" is currently the most widely used Video Editor in the world.  
 There are many plugins for AE available on the internet.  
-However, almost all of them are made to work only with AE.  
+However, almost all of them are made to work **only** with AE.  
 (Even if it's a very good effect)
 
 So I wondered if I could make these work on another platform.  
