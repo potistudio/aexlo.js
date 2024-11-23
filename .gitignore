@@ -18,3 +18,4 @@ build/
 !.yarn/sdks
 !.yarn/versions
 lib/test
+test/plugins
