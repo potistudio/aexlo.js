@@ -11,7 +11,7 @@ However, almost all of them are made to work **only** with AE.
 (Even if it's a very good effect)
 
 So I wondered if I could make these work on another platform.  
-What I ended up doing was **creating a wrapper for the AE Plugin SDK.**
+What I ended up doing was **creating a emulator for the AE Plugin SDK.**
 
 (These may run into some kind of copyright issue.)
 
