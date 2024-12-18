@@ -1,7 +1,12 @@
 
+import path from "node:path";
 import aexlo from "aexlo";
 
-const instance = new aexlo.PluginInstance ("D:\\Projects\\Development\\Node\\aexlo.js\\lib\\test\\OLMColorKey.aex");
+const AE_PLUGIN_DIRECTORY = "C:/Program Files/Adobe/Adobe After Effects 2025/Support Files/Plug-ins/Effects";
+const PROJECT_PLUGIN_DIRECTORY = "D:/Projects/Development/Node/aexlo.js/test/plugins";
+const PLUGIN_NAME = "FillColor.aex";
+
+const instance = new aexlo.PluginInstance (path.resolve(PROJECT_PLUGIN_DIRECTORY, PLUGIN_NAME));
 
 loadResources();
 executeAll();
