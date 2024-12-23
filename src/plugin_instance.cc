@@ -289,8 +289,6 @@ int PluginInstance::ExecuteRender (PF_InData *in_data, PF_OutData *out_data, PF_
 	const int CMD = PF_Cmd_RENDER;
 	int error = 0;
 
-	std::cout << "\n-------- begin Render --------\n" << std::endl;
-
 	error = this->Execute (CMD, in_data, out_data, params, layer);
 
 	std::cout << "\n-------- end Render --------\n" << std::endl;
