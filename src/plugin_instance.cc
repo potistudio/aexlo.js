@@ -356,6 +356,21 @@ int PluginInstance::ExecuteRender (PF_InData *in_data, PF_OutData *out_data, PF_
 	return error;
 }
 
+int PluginInstance::ExecuteSmartPreRender (PF_InData *in_data, PF_OutData *out_data, PF_ParamDef *params[], LayerParam *layer) {
+	std::cout << "\n-------- begin Smart Pre Render --------\n" << std::endl;
+
+	const int CMD = PF_Cmd_SMART_PRE_RENDER;
+	int error = 0;
+
+	PF_PreRenderExtra *extra = new PF_PreRenderExtra();
+	extra->input = new PF_PreRenderInput();
+
+	error = this->Execute (CMD, in_data, out_data, params, layer, extra);
+
+	std::cout << "\n-------- end Smart Pre Render --------\n" << std::endl;
+	return error;
+}
+
 int PluginInstance::ExecuteSmartRender (PF_InData *in_data, PF_OutData *out_data, PF_ParamDef *params[], LayerParam *layer) {
 	std::cout << "\n-------- begin Smart Render --------\n" << std::endl;
 
