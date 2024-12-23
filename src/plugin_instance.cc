@@ -53,7 +53,7 @@ std::string PluginInstance::ExtractResources() {
 	return result;
 }
 
-int PluginInstance::Execute (PF_Cmd cmd, PF_InData *in_data, PF_OutData *outData, PF_ParamDef *params[], LayerParam *layer) {
+int PluginInstance::Execute (PF_Cmd cmd, PF_InData *in_data, PF_OutData *outData, PF_ParamDef *params[], LayerParam *layer, void *extra) {
 	int err = 0;
 
 	/** Initialize InData **/
@@ -289,11 +289,10 @@ int PluginInstance::Execute (PF_Cmd cmd, PF_InData *in_data, PF_OutData *outData
 		return 0;
 	};
 
-	in_data->utils = ((new UtilityCallbackFactory())->Create());
-
+	in_data->utils = (new UtilityCallbackFactory())->Create();
 	in_data->inter = (new InteractCallbackFactory())->Create();
 
-	err = this->entry (cmd, in_data, outData, params, layer, NULL);
+	err = this->entry (cmd, in_data, outData, params, layer, extra);
 
 	return err;
 }
@@ -305,7 +304,7 @@ int PluginInstance::ExecuteAbout (PF_InData *in_data, PF_OutData *out_data, PF_P
 	int error = 0;
 
 	try {
-		error = this->Execute (CMD, in_data, out_data, params, layer);
+		error = this->Execute (CMD, in_data, out_data, params, layer, NULL);
 	} catch (std::exception &e) {
 		throw std::runtime_error (e.what());
 	}
@@ -320,7 +319,7 @@ int PluginInstance::ExecuteGlobalSetup (PF_InData *in_data, PF_OutData *out_data
 	int error = 0;
 	const int CMD = PF_Cmd_GLOBAL_SETUP;
 
-	error = this->Execute (CMD, in_data, out_data, params, layer);
+	error = this->Execute (CMD, in_data, out_data, params, layer, NULL);
 
 	std::cout << "Version: " << out_data->my_version << std::endl;
 	std::cout << "Flags: " << out_data->out_flags << std::endl;
@@ -337,7 +336,7 @@ int PluginInstance::ExecuteParamsSetup (PF_InData *in_data, PF_OutData *out_data
 	int error = 0;
 
 	/* Execute */
-	error = this->Execute (CMD, in_data, out_data, params, layer);
+	error = this->Execute (CMD, in_data, out_data, params, layer, NULL);
 
 	std::cout << out_data->num_params << std::endl;
 
@@ -351,20 +350,23 @@ int PluginInstance::ExecuteRender (PF_InData *in_data, PF_OutData *out_data, PF_
 	const int CMD = PF_Cmd_RENDER;
 	int error = 0;
 
-	error = this->Execute (CMD, in_data, out_data, params, layer);
+	error = this->Execute (CMD, in_data, out_data, params, layer, NULL);
 
 	std::cout << "\n-------- end Render --------\n" << std::endl;
 	return error;
 }
 
 int PluginInstance::ExecuteSmartRender (PF_InData *in_data, PF_OutData *out_data, PF_ParamDef *params[], LayerParam *layer) {
-	std::cout << "\n-------- begin Render --------\n" << std::endl;
+	std::cout << "\n-------- begin Smart Render --------\n" << std::endl;
 
 	const int CMD = PF_Cmd_SMART_RENDER;
 	int error = 0;
 
-	error = this->Execute (CMD, in_data, out_data, params, layer);
+	PF_PreRenderExtra *extra = new PF_PreRenderExtra();
+	extra->input = new PF_PreRenderInput();
 
-	std::cout << "\n-------- end Render --------\n" << std::endl;
+	error = this->Execute (CMD, in_data, out_data, params, layer, extra);
+
+	std::cout << "\n-------- end Smart Render --------\n" << std::endl;
 	return error;
 }

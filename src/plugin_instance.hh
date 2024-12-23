@@ -4,8 +4,9 @@
 #include <windows.h>
 #include <string>
 
-#include "./headers/suites.hh"
-#include "./headers/entry_point.hh"
+#include "headers/suites.hh"
+#include "headers/entry_point.hh"
+#include "headers/smart_fx.hh"
 #include "interact_callbacks_factory.hh"
 #include "utility_callbacks_factory.hh"
 
@@ -15,7 +16,7 @@ class PluginInstance {
 		~PluginInstance();
 
 		std::string ExtractResources();
-		int Execute (PF_Cmd cmd, PF_InData *in_data, PF_OutData *out_data, PF_ParamDef *params[], LayerParam *layer);
+		int Execute (PF_Cmd cmd, PF_InData *in_data, PF_OutData *out_data, PF_ParamDef *params[], LayerParam *layer, void *);
 		int ExecuteAbout (PF_InData *in_data, PF_OutData *out_data, PF_ParamDef *params[], LayerParam *layer);
 		int ExecuteGlobalSetup (PF_InData *in_data, PF_OutData *out_data, PF_ParamDef *params[], LayerParam *layer);
 		int ExecuteParamsSetup (PF_InData *in_data, PF_OutData *out_data, PF_ParamDef *params[], LayerParam *layer);
