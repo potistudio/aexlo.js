@@ -53,6 +53,22 @@ std::string PluginInstance::ExtractResources() {
 int PluginInstance::Execute (PF_Cmd cmd, PF_InData *in_data, PF_OutData *outData, PF_ParamDef *params[], LayerParam *layer) {
 	int err = 0;
 
+	/** Initialize InData **/
+	in_data->version = PF_SpecVersion();
+	in_data->version.major = 13;
+	in_data->version.minor = 28;
+
+	in_data->serial_num = -2147483648;
+	in_data->appl_id = 1180193859;
+
+	in_data->what_cpu = 3;
+
+	in_data->extent_hint = PF_LRect();
+	in_data->extent_hint.left = 32760;
+	in_data->extent_hint.top = -186403897;
+	in_data->extent_hint.right = 32761;
+	in_data->extent_hint.bottom = -417837312;
+
 	in_data->pica_basicP = new SPBasicSuite();
 	in_data->pica_basicP->AcquireSuite = [](const char *name, int version, const void **suite) -> int {
 		std::cout << "---- Acquiring Suite: " << name << ", ver." << version << std::endl;
