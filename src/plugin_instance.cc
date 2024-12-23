@@ -233,6 +233,24 @@ int PluginInstance::Execute (PF_Cmd cmd, PF_InData *in_data, PF_OutData *outData
 				return 0;
 			};
 
+			hs->HostUnlockHandle = [](void *handle) -> void {
+				std::cout << "Unlock Handle: " << handle << std::endl;
+			};
+
+			hs->HostDisposeHandle = [](void *handle) -> void {
+				std::cout << "Dispose Handle: " << handle << std::endl;
+			};
+
+			hs->HostGetHandleSize = [](void *handle) -> uint64_t {
+				std::cout << "Get Handle Size: " << handle << std::endl;
+				return 0;
+			};
+
+			hs->HostResizeHandle = [](uint64_t size, void **handle) -> int {
+				std::cout << "Resize Handle: " << size << std::endl;
+				return 0;
+			};
+
 			*suite = hs;
 
 			return 0;
