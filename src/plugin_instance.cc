@@ -239,7 +239,32 @@ int PluginInstance::Execute (PF_Cmd cmd, PF_InData *in_data, PF_OutData *outData
 	};
 
 	in_data->pica_basicP->ReleaseSuite = [](const char *name, int version) -> int {
-		std::cout << "---- Releasing Suite: " << name << ", ver." << version << std::endl;
+		std::cout << "Called ---- SPBasicSuite.ReleaseSuite (" << name << ", ver." << version << std::endl;
+		return 0;
+	};
+
+	in_data->pica_basicP->IsEqual = [](const char *token1, const char *token2) -> int {
+		std::cout << "Called ---- SPBasicSuite.IsEqual(" << token1 << ", " << token2 << ") ---- " << std::endl;
+		return 0;
+	};
+
+	in_data->pica_basicP->AllocateBlock = [](size_t size, void **block) -> int {
+		std::cout << "---- AllocateBlock: " << size << std::endl;
+		return 0;
+	};
+
+	in_data->pica_basicP->FreeBlock = [](void *block) -> int {
+		std::cout << "---- FreeBlock: " << block << std::endl;
+		return 0;
+	};
+
+	in_data->pica_basicP->ReallocateBlock = [](void *block, size_t newSize, void **newblock) -> int {
+		std::cout << "---- ReallocateBlock: " << block << ", " << newSize << std::endl;
+		return 0;
+	};
+
+	in_data->pica_basicP->Undefined = [](void) -> int {
+		std::cout << "---- Undefined" << std::endl;
 		return 0;
 	};
 
