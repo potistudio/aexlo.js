@@ -13,7 +13,10 @@ PluginInstance::PluginInstance (std::string path) {
 		if (this->entry == NULL) {
 			this->entry = (EntryPointFunc)GetProcAddress (module, "entryPointFunc");  //FIXME: Legacy Entry Point
 			if (this->entry == NULL) {
-				throw std::runtime_error ("Failed to cast entry point");
+				this->entry = (EntryPointFunc)GetProcAddress (module, "EffectMainExtra");
+				if (this->entry == NULL) {
+					throw std::runtime_error ("Failed to cast entry point");
+				}
 			}
 		}
 	}
