@@ -338,3 +338,15 @@ int PluginInstance::ExecuteRender (PF_InData *in_data, PF_OutData *out_data, PF_
 	std::cout << "\n-------- end Render --------\n" << std::endl;
 	return error;
 }
+
+int PluginInstance::ExecuteSmartRender (PF_InData *in_data, PF_OutData *out_data, PF_ParamDef *params[], LayerParam *layer) {
+	std::cout << "\n-------- begin Render --------\n" << std::endl;
+
+	const int CMD = PF_Cmd_SMART_RENDER;
+	int error = 0;
+
+	error = this->Execute (CMD, in_data, out_data, params, layer);
+
+	std::cout << "\n-------- end Render --------\n" << std::endl;
+	return error;
+}

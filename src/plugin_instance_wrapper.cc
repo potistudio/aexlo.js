@@ -7,6 +7,7 @@ Napi::Object PluginInstanceWrapper::Init (Napi::Env env, Napi::Object exports) {
 		InstanceMethod ("setupGlobal", &PluginInstanceWrapper::SetupGlobal),
 		InstanceMethod ("setupParameters", &PluginInstanceWrapper::SetupParameters),
 		InstanceMethod ("render", &PluginInstanceWrapper::Render),
+		InstanceMethod ("smartRender", &PluginInstanceWrapper::SmartRender),
 	});
 
 	Napi::FunctionReference *constructor = new Napi::FunctionReference();
@@ -126,6 +127,24 @@ Napi::Value PluginInstanceWrapper::Render (const Napi::CallbackInfo &info) {
 
 	try {
 		error_code = this->plugin->ExecuteRender (this->in_data, this->out_data, this->params, this->layer);
+	} catch (std::runtime_error& exception) {
+		throw Napi::Error::New (env, exception.what());
+	}
+
+	return Napi::Number::New (env, error_code);
+}
+
+Napi::Value PluginInstanceWrapper::SmartRender (const Napi::CallbackInfo &info) {
+	Napi::Env env = info.Env();
+
+	if (info.Length() != 0) {
+		throw Napi::TypeError::New (env, "Wrong number of arguments");
+	}
+
+	int error_code = 0;
+
+	try {
+		error_code = this->plugin->ExecuteSmartRender (this->in_data, this->out_data, this->params, this->layer);
 	} catch (std::runtime_error& exception) {
 		throw Napi::Error::New (env, exception.what());
 	}

@@ -33,6 +33,7 @@ function executeAll() {
 	console.log (instance.setupGlobal());
 	console.log (instance.setupParameters());
 	console.log (instance.render());
+	console.log (instance.smartRender());
 }
 
 //DONE: About
