@@ -4,6 +4,7 @@
 #include <stdint.h>
 
 #include "basic.hh"
+#include "layer_data.hh"
 
 enum {
 	PF_ChannelMask_ALPHA = 0x1,
@@ -93,5 +94,38 @@ typedef struct {
 	PF_PreRenderOutput       *output;
 	PF_PreRenderCallbacks    *callbacks;
 } PF_PreRenderExtra;
+
+/** ---- Smart Render Extra ---- **/
+typedef struct {
+	PF_RenderRequest    output_request;
+	short               bitdepth;
+	void                *pre_render_data;
+	const void			*gpu_data;
+	PF_GPU_Framework    what_gpu;
+	uint32_t            device_index;
+} PF_SmartRenderInput;
+
+typedef struct {
+	int32_t (*checkout_layer_pixels) (
+		ProgressInfoPtr    effect_ref,
+		int32_t            checkout_idL,
+		LayerParam         **pixels
+	);
+
+	int32_t (*checkin_layer_pixels) (
+		ProgressInfoPtr    effect_ref,
+		int32_t            checkout_idL
+	);
+
+	int32_t (*checkout_output) (
+		ProgressInfoPtr    effect_ref,
+		LayerParam         **output
+	);
+} PF_SmartRenderCallbacks;
+
+typedef struct {
+	PF_SmartRenderInput        *input;
+ 	PF_SmartRenderCallbacks    *callbacks;
+} PF_SmartRenderExtra;
 
 #endif
