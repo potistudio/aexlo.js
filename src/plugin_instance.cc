@@ -357,7 +357,7 @@ int PluginInstance::ExecuteRender (PF_InData *in_data, PF_OutData *out_data, PF_
 	return error;
 }
 
-int PluginInstance::ExecuteSmartPreRender (PF_InData *in_data, PF_OutData *out_data, PF_ParamDef *params[], LayerParam *layer) {
+PF_PreRenderOutput PluginInstance::ExecuteSmartPreRender (PF_InData *in_data, PF_OutData *out_data, PF_ParamDef *params[], LayerParam *layer) {
 	std::cout << "\n-------- begin Smart Pre Render --------\n" << std::endl;
 
 	const int CMD = PF_Cmd_SMART_PRE_RENDER;
@@ -427,27 +427,8 @@ int PluginInstance::ExecuteSmartPreRender (PF_InData *in_data, PF_OutData *out_d
 
 	error = this->Execute (CMD, in_data, out_data, params, layer, extra);
 
-	std::cout << "-------- Smart Pre Render Output --------" << std::endl;
-	std::cout << "Result Rect: " << std::endl;
-	std::cout << "    Left: " << extra->output->result_rect.left << std::endl;
-	std::cout << "    Top: " << extra->output->result_rect.top << std::endl;
-	std::cout << "    Right: " << extra->output->result_rect.right << std::endl;
-	std::cout << "    Bottom: " << extra->output->result_rect.bottom << std::endl;
-	std::cout << "-----------------------------------------" << std::endl;
-	std::cout << "Max Result Rect: " << std::endl;
-	std::cout << "    Left: " << extra->output->max_result_rect.left << std::endl;
-	std::cout << "    Top: " << extra->output->max_result_rect.top << std::endl;
-	std::cout << "    Right: " << extra->output->max_result_rect.right << std::endl;
-	std::cout << "    Bottom: " << extra->output->max_result_rect.bottom << std::endl;
-	std::cout << "-----------------------------------------" << std::endl;
-	std::cout << "Solid: " << extra->output->solid << std::endl;
-	std::cout << "Reserved: " << extra->output->reserved << std::endl;
-	std::cout << "Flags: " << extra->output->flags << std::endl;
-	std::cout << "Pre Render Data: 0x" << extra->output->pre_render_data << std::endl;
-	std::cout << "-----------------------------------------\n" << std::endl;
-
 	std::cout << "\n-------- end Smart Pre Render --------\n" << std::endl;
-	return error;
+	return *extra->output;
 }
 
 int PluginInstance::ExecuteSmartRender (PF_InData *in_data, PF_OutData *out_data, PF_ParamDef *params[], LayerParam *layer) {
