@@ -1,7 +1,7 @@
 #include "plugin_instance.hh"
 
 PluginInstance::PluginInstance (std::string path) {
-	this->module = LoadLibrary (path.c_str());
+	this->module = LoadLibraryA ((LPCSTR)path.c_str());
 	if (this->module == NULL) {
 		throw std::runtime_error ("Failed to load AEX");
 	}
@@ -29,7 +29,7 @@ PluginInstance::~PluginInstance () {
 }
 
 std::string PluginInstance::ExtractResources() {
-	auto resource = FindResourceA (this->module, MAKEINTRESOURCEA(16000), TEXT("PiPL"));
+	auto resource = FindResourceA (this->module, MAKEINTRESOURCEA(16000), (CHAR*)TEXT("PiPL"));
 
 	if (resource == NULL) {
 		throw std::runtime_error ("Failed to locate resources");
@@ -53,7 +53,7 @@ std::string PluginInstance::ExtractResources() {
 	return result;
 }
 
-int PluginInstance::Execute (PF_Cmd cmd, PF_InData *in_data, PF_OutData *outData, PF_ParamDef *params[], LayerParam *layer) {
+int PluginInstance::Execute (PF_Cmd cmd, PF_InData *in_data, PF_OutData *outData, PF_ParamDef *params[], LayerParam *layer, void *extra) {
 	int err = 0;
 
 	/** Initialize InData **/
@@ -225,11 +225,30 @@ int PluginInstance::Execute (PF_Cmd cmd, PF_InData *in_data, PF_OutData *outData
 
 			hs->HostNewHandle = [](uint64_t size) -> void * {
 				std::cout << "New Handle: " << size << std::endl;
-				return 0;
+				PF_Handle *handle = new PF_Handle();
+				return handle;
 			};
 
 			hs->HostLockHandle = [](void *handle) -> void * {
 				std::cout << "Lock Handle: " << handle << std::endl;
+				return new PF_Handle();
+			};
+
+			hs->HostUnlockHandle = [](void *handle) -> void {
+				std::cout << "Unlock Handle: " << handle << std::endl;
+			};
+
+			hs->HostDisposeHandle = [](void *handle) -> void {
+				std::cout << "Dispose Handle: " << handle << std::endl;
+			};
+
+			hs->HostGetHandleSize = [](void *handle) -> uint64_t {
+				std::cout << "Get Handle Size: " << handle << std::endl;
+				return 0;
+			};
+
+			hs->HostResizeHandle = [](uint64_t size, void **handle) -> int {
+				std::cout << "Resize Handle: " << size << std::endl;
 				return 0;
 			};
 
@@ -271,11 +290,10 @@ int PluginInstance::Execute (PF_Cmd cmd, PF_InData *in_data, PF_OutData *outData
 		return 0;
 	};
 
-	in_data->utils = ((new UtilityCallbackFactory())->Create());
-
+	in_data->utils = (new UtilityCallbackFactory())->Create();
 	in_data->inter = (new InteractCallbackFactory())->Create();
 
-	err = this->entry (cmd, in_data, outData, params, layer, NULL);
+	err = this->entry (cmd, in_data, outData, params, layer, extra);
 
 	return err;
 }
@@ -287,7 +305,7 @@ int PluginInstance::ExecuteAbout (PF_InData *in_data, PF_OutData *out_data, PF_P
 	int error = 0;
 
 	try {
-		error = this->Execute (CMD, in_data, out_data, params, layer);
+		error = this->Execute (CMD, in_data, out_data, params, layer, NULL);
 	} catch (std::exception &e) {
 		throw std::runtime_error (e.what());
 	}
@@ -302,7 +320,7 @@ int PluginInstance::ExecuteGlobalSetup (PF_InData *in_data, PF_OutData *out_data
 	int error = 0;
 	const int CMD = PF_Cmd_GLOBAL_SETUP;
 
-	error = this->Execute (CMD, in_data, out_data, params, layer);
+	error = this->Execute (CMD, in_data, out_data, params, layer, NULL);
 
 	std::cout << "Version: " << out_data->my_version << std::endl;
 	std::cout << "Flags: " << out_data->out_flags << std::endl;
@@ -319,7 +337,7 @@ int PluginInstance::ExecuteParamsSetup (PF_InData *in_data, PF_OutData *out_data
 	int error = 0;
 
 	/* Execute */
-	error = this->Execute (CMD, in_data, out_data, params, layer);
+	error = this->Execute (CMD, in_data, out_data, params, layer, NULL);
 
 	std::cout << out_data->num_params << std::endl;
 
@@ -333,8 +351,127 @@ int PluginInstance::ExecuteRender (PF_InData *in_data, PF_OutData *out_data, PF_
 	const int CMD = PF_Cmd_RENDER;
 	int error = 0;
 
-	error = this->Execute (CMD, in_data, out_data, params, layer);
+	error = this->Execute (CMD, in_data, out_data, params, layer, NULL);
 
 	std::cout << "\n-------- end Render --------\n" << std::endl;
+	return error;
+}
+
+PF_PreRenderOutput PluginInstance::ExecuteSmartPreRender (PF_InData *in_data, PF_OutData *out_data, PF_ParamDef *params[], LayerParam *layer) {
+	std::cout << "\n-------- begin Smart Pre Render --------\n" << std::endl;
+
+	const int CMD = PF_Cmd_SMART_PRE_RENDER;
+	int error = 0;
+
+	PF_PreRenderExtra *extra = new PF_PreRenderExtra();
+	extra->input = new PF_PreRenderInput();
+	extra->output = new PF_PreRenderOutput();
+	extra->callbacks = new PF_PreRenderCallbacks();
+
+	// PF_PreRenderInput
+	extra->input->output_request = PF_RenderRequest();
+	extra->input->output_request.rect = PF_LRect();
+	extra->input->output_request.rect.left = -192;
+	extra->input->output_request.rect.top = -108;
+	extra->input->output_request.rect.right = 2112;
+	extra->input->output_request.rect.bottom = 1188;
+	extra->input->output_request.channel_mask = 15;
+	extra->input->bitdepth = 8;
+	extra->input->device_index = 4294967295;
+
+	// PF_PreRenderOutput
+	extra->output->delete_pre_render_data_func = [](void *pre_render_data) -> void {
+		std::cout << "---- delete_pre_render_data_func: " << pre_render_data << std::endl;
+	};
+
+	// PF_PreRenderCallbacks
+	extra->callbacks->checkout_layer = [](
+		ProgressInfoPtr           effect_ref,
+		int32_t                   index,
+		int32_t                   checkout_idL,
+		const PF_RenderRequest    *req,
+		int32_t                   what_time,
+		int32_t                   time_step,
+		uint32_t                  time_scale,
+		PF_CheckoutResult         *checkout_result
+	) -> int32_t {
+		std::cout << "Called ---- PreRenderCallbacks.checkout_layer()" << std::endl;
+		checkout_result->result_rect.left = 0;
+		checkout_result->result_rect.top = 0;
+		checkout_result->result_rect.right = 1920;
+		checkout_result->result_rect.bottom = 1080;
+
+		checkout_result->max_result_rect.left = 0;
+		checkout_result->max_result_rect.top = 0;
+		checkout_result->max_result_rect.right = 1920;
+		checkout_result->max_result_rect.bottom = 1080;
+
+		checkout_result->par.num = 1;
+		checkout_result->par.den = 1;
+		checkout_result->solid = 1;
+
+		checkout_result->ref_width = 1920;
+		checkout_result->ref_height = 1080;
+
+		return 0;
+	};
+
+	extra->callbacks->GuidMixInPtr = [](
+		ProgressInfoPtr    effect_ref,
+		uint32_t           buf_sizeLu,
+		const void         *buf
+	) -> int32_t {
+		std::cout << "Called ---- PreRenderCallbacks.GuidMixInPtr()" << std::endl;
+		return 0;
+	};
+
+	error = this->Execute (CMD, in_data, out_data, params, layer, extra);
+
+	std::cout << "\n-------- end Smart Pre Render --------\n" << std::endl;
+	return *extra->output;
+}
+
+int PluginInstance::ExecuteSmartRender (PF_InData *in_data, PF_OutData *out_data, PF_ParamDef *params[], LayerParam *layer) {
+	std::cout << "\n-------- begin Smart Render --------\n" << std::endl;
+
+	const int CMD = PF_Cmd_SMART_RENDER;
+	int error = 0;
+
+	PF_SmartRenderExtra *extra = new PF_SmartRenderExtra();
+	extra->input = new PF_SmartRenderInput();
+	extra->callbacks = new PF_SmartRenderCallbacks();
+
+
+	extra->input->bitdepth = 8;
+	extra->input->device_index = 4294967295;
+
+	extra->callbacks->checkout_layer_pixels = [](
+		ProgressInfoPtr    effect_ref,
+		int32_t            checkout_idL,
+		LayerParam         **pixels
+	) -> int32_t {
+		std::cout << "Called ---- SmartRenderCallbacks.checkout_layer_pixels()" << std::endl;
+		return 0;
+	};
+
+	extra->callbacks->checkin_layer_pixels = [](
+		ProgressInfoPtr    effect_ref,
+		int32_t            checkout_idL
+	) -> int32_t {
+		std::cout << "Called ---- SmartRenderCallbacks.checkin_layer_pixels()" << std::endl;
+		return 0;
+	};
+
+	extra->callbacks->checkout_output = [](
+		ProgressInfoPtr    effect_ref,
+		LayerParam         **output
+	) -> int32_t {
+		std::cout << "Called ---- SmartRenderCallbacks.checkout_output()" << std::endl;
+		return 0;
+	};
+
+	error = this->Execute (CMD, in_data, out_data, params, layer, extra);
+
+	std::cout << "\n-------- end Smart Render --------\n" << std::endl;
 	return error;
 }

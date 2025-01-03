@@ -5,4 +5,6 @@ export class PluginInstance {
 	setupGlobal(): number;
 	setupParameters(): number;
 	render(): number;
+	smartPreRender(): number;
+	smartRender(): number;
 }

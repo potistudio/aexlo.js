@@ -19,3 +19,4 @@ build/
 !.yarn/versions
 lib/test
 test/plugins
+src/map.txt
