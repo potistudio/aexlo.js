@@ -3,6 +3,7 @@
 
 #include <windows.h>
 #include <string>
+#include <math.h>
 
 #include "headers/suites.hh"
 #include "headers/entry_point.hh"
