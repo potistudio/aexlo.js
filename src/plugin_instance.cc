@@ -1,7 +1,7 @@
 #include "plugin_instance.hh"
 
 PluginInstance::PluginInstance (std::string path) {
-	this->module = LoadLibrary (path.c_str());
+	this->module = LoadLibraryA ((LPCSTR)path.c_str());
 	if (this->module == NULL) {
 		throw std::runtime_error ("Failed to load AEX");
 	}
@@ -29,7 +29,7 @@ PluginInstance::~PluginInstance () {
 }
 
 std::string PluginInstance::ExtractResources() {
-	auto resource = FindResourceA (this->module, MAKEINTRESOURCEA(16000), TEXT("PiPL"));
+	auto resource = FindResourceA (this->module, MAKEINTRESOURCEA(16000), (CHAR*)TEXT("PiPL"));
 
 	if (resource == NULL) {
 		throw std::runtime_error ("Failed to locate resources");
