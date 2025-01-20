@@ -13,7 +13,8 @@
   "main": "lib/aexlo/index.js",
   "exports": "./lib/aexlo/index.js",
   "scripts": {
-    "build": "node-gyp rebuild",
+    "build": "node-gyp build",
+    "rebuild": "node-gyp rebuild",
     "test": "node test/test.js"
   },
   "dependencies": {
