@@ -151,15 +151,15 @@ int PluginInstance::Execute (PF_Cmd cmd, PF_InData *in_data, PF_OutData *outData
 				return 0;
 			};
 
-			ansi->pow = [](double x, double y) -> double {
-				std::cout << "pow: " << x << std::endl;
-				return 0;
-			};
+			// ansi->pow = [](double x, double y) -> double {
+			// 	std::cout << "pow: " << x << std::endl;
+			// 	return 0;
+			// };
 
-			ansi->sqrt = [](double x) -> double {
-				std::cout << "sqrt: " << x << std::endl;
-				return 0;
-			};
+			// ansi->sqrt = [](double x) -> double {
+			// 	std::cout << "sqrt: " << x << std::endl;
+			// 	return 0;
+			// };
 
 			ansi->sprintf = [](char *buffer, const char *format, ...) -> int {
 				va_list args;
