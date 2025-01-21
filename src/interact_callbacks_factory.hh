@@ -2,6 +2,7 @@
 #define AEXLO_INTERACT_CALLBACKS_FACTORY_H_
 
 #include <iostream>
+#include "../lib/nameof/nameof.hpp"
 
 #include "logger/logger.hh"
 #include "./headers/input_data.hh"

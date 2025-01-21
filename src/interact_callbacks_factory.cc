@@ -1,4 +1,5 @@
 #include "interact_callbacks_factory.hh"
+#include "headers/param_data.hh"
 
 InteractCallbackFactory::InteractCallbackFactory() {}
 InteractCallbackFactory::~InteractCallbackFactory() {}
@@ -21,7 +22,7 @@ PF_InteractCallbacks InteractCallbackFactory::Create() {
 
 		LOG_INFO ("  ==> ID: " << def->uu.id);
 		LOG_INFO ("  ==> Param Name: " << def->name);
-		LOG_INFO ("  ==> Param Type: " << def->param_type);
+		LOG_INFO ("  ==> Param Type: " << NAMEOF_ENUM(def->param_type));
 
 		LOG_INFO ("  ==> Valid Min: " << def->u.fs_d.valid_min);
 		LOG_INFO ("  ==> Valid Max: " << def->u.fs_d.valid_max);
