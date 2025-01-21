@@ -6,16 +6,20 @@ UtilityCallbackFactory::~UtilityCallbackFactory() {}
 _PF_UtilCallbacks * UtilityCallbackFactory::Create() {
 	_PF_UtilCallbacks *product = new _PF_UtilCallbacks();
 
+	//* Call this routine before you plan to perform a large number of image resamplings.
+	//* Depending on platform, this routine could start up the DSP chip, compute an index table to each scanline of the buffer, or whatever might be needed to speed up image resampling.
 	product->begin_sampling = [](
 		ProgressInfoPtr effect_ref,
 		int qual,
 		PF_ModeFlags mf,
 		PF_SampPB *params
 	) -> int {
-		std::cout << "Called \"_PF_UtilCallbacks.begin_sampling\"" << std::endl;
+		LOG_INFO ("Called: UtilityCallbacks::begin_sampling (" << qual << ", " << mf << ")");
 		return 0;
 	};
 
+	//* Use this to interpolate the appropriate alpha weighted mix of colors at a non-integral point in a source image, in high quality.
+	//*	Nearest neighbor sample is used in low quality.
 	product->subpixel_sample = [](
 		ProgressInfoPtr effect_ref,
 		PF_Fixed x,
@@ -23,10 +27,13 @@ _PF_UtilCallbacks * UtilityCallbackFactory::Create() {
 		const PF_SampPB *params,
 		Pixel *dst_pixel
 	) -> int {
-		std::cout << "Called \"_PF_UtilCallbacks.subpixel_sample\"" << std::endl;
+		LOG_INFO ("Called: UtilityCallbacks::subpixel_sample (" << x << ", " << y << ")");
 		return 0;
 	};
 
+	//* Use this to calculate the appropriate alpha weighted average of an axis-aligned non-integral rectangle of color in a source image, in high quality.
+	//* Nearest neighbor in low quality.
+	//* Because of overflow issues, this can only average a maximum of a 256 pixel by 256 pixel area (ie. x and y range < 128 pixels).
 	product->area_sample = [](
 		ProgressInfoPtr effect_ref,
 		PF_Fixed x,
@@ -34,7 +41,7 @@ _PF_UtilCallbacks * UtilityCallbackFactory::Create() {
 		const PF_SampPB *params,
 		Pixel *dst_pixel
 	) -> int {
-		std::cout << "Called \"_PF_UtilCallbacks.area_sample\"" << std::endl;
+		LOG_INFO ("Called: UtilityCallbacks::area_sample (" << x << ", " << y << ")");
 		return 0;
 	};
 
@@ -44,7 +51,7 @@ _PF_UtilCallbacks * UtilityCallbackFactory::Create() {
 		PF_ModeFlags mf,
 		PF_SampPB *params
 	) -> int {
-		std::cout << "Called \"_PF_UtilCallbacks.end_sampling\"" << std::endl;
+		LOG_INFO ("Called \"_PF_UtilCallbacks.end_sampling\"");
 		return 0;
 	};
 
@@ -59,7 +66,7 @@ _PF_UtilCallbacks * UtilityCallbackFactory::Create() {
 		PF_XferMode xfer_mode,
 		LayerParam *dest_wld
 	) -> int {
-		std::cout << "Called \"_PF_UtilCallbacks.composite_rect\"" << std::endl;
+		LOG_INFO ("Called \"_PF_UtilCallbacks.composite_rect\"");
 		return 0;
 	};
 
@@ -70,7 +77,7 @@ _PF_UtilCallbacks * UtilityCallbackFactory::Create() {
 		PF_Fixed ratio,
 		LayerParam *dst
 	) -> int {
-		std::cout << "Called \"_PF_UtilCallbacks.blend\"" << std::endl;
+		LOG_INFO ("Called \"_PF_UtilCallbacks.blend\"");
 		return 0;
 	};
 
@@ -86,7 +93,7 @@ _PF_UtilCallbacks * UtilityCallbackFactory::Create() {
 		void *b_kernel,
 		LayerParam *dst
 	) -> int {
-		std::cout << "Called \"_PF_UtilCallbacks.convolve\"" << std::endl;
+		LOG_INFO ("Called \"_PF_UtilCallbacks.convolve\"");
 		return 0;
 	};
 
@@ -97,7 +104,7 @@ _PF_UtilCallbacks * UtilityCallbackFactory::Create() {
 		PF_Rect *src_rect,
 		PF_Rect *dst_rect
 	) -> int {
-		std::cout << "Called \"_PF_UtilCallbacks.copy\"" << std::endl;
+		LOG_INFO ("Called \"_PF_UtilCallbacks.copy\"");
 		return 0;
 	};
 
@@ -107,7 +114,7 @@ _PF_UtilCallbacks * UtilityCallbackFactory::Create() {
 		const PF_Rect *destination_rect,
 		LayerParam *world
 	) -> int {
-		std::cout << "Called \"_PF_UtilCallbacks.fill\"" << std::endl;
+		LOG_INFO ("Called \"_PF_UtilCallbacks.fill\"");
 		return 0;
 	};
 
@@ -119,7 +126,7 @@ _PF_UtilCallbacks * UtilityCallbackFactory::Create() {
 		int *diameter,
 		void *kernel
 	) -> int {
-		std::cout << "Called \"_PF_UtilCallbacks.gaussian_kernel\"" << std::endl;
+		LOG_INFO ("Called \"_PF_UtilCallbacks.gaussian_kernel\"");
 		return 0;
 	};
 
@@ -133,7 +140,7 @@ _PF_UtilCallbacks * UtilityCallbackFactory::Create() {
 		PF_IteratePixel8Func pixel_function,
 		LayerParam *dst
 	) -> int {
-		std::cout << "Called \"_PF_UtilCallbacks.iterate\"" << std::endl;
+		LOG_INFO ("Called \"_PF_UtilCallbacks.iterate\"");
 		return 0;
 	};
 
@@ -142,7 +149,7 @@ _PF_UtilCallbacks * UtilityCallbackFactory::Create() {
 		int forward,
 		LayerParam *dst
 	) -> int {
-		std::cout << "Called \"_PF_UtilCallbacks.premultiply\"" << std::endl;
+		LOG_INFO ("Called \"_PF_UtilCallbacks.premultiply\"");
 		return 0;
 	};
 
@@ -153,7 +160,7 @@ _PF_UtilCallbacks * UtilityCallbackFactory::Create() {
 		int forward,
 		LayerParam *dst
 	) -> int {
-		std::cout << "Called \"_PF_UtilCallbacks.premultiply_color\"" << std::endl;
+		LOG_INFO ("Called \"_PF_UtilCallbacks.premultiply_color\"");
 		return 0;
 	};
 
@@ -164,7 +171,7 @@ _PF_UtilCallbacks * UtilityCallbackFactory::Create() {
 		PF_NewWorldFlags flags,
 		LayerParam *world
 	) -> int {
-		std::cout << "Called \"_PF_UtilCallbacks.new_world\"" << std::endl;
+		LOG_INFO ("Called \"_PF_UtilCallbacks.new_world\"");
 		return 0;
 	};
 
@@ -172,7 +179,7 @@ _PF_UtilCallbacks * UtilityCallbackFactory::Create() {
 		ProgressInfoPtr effect_ref,
 		LayerParam *world
 	) -> int {
-		std::cout << "Called \"_PF_UtilCallbacks.dispose_world\"" << std::endl;
+		LOG_INFO ("Called \"_PF_UtilCallbacks.dispose_world\"");
 		return 0;
 	};
 
@@ -187,7 +194,7 @@ _PF_UtilCallbacks * UtilityCallbackFactory::Create() {
 		PF_IteratePixel8Func pix_fn,
 		LayerParam *dst
 	) -> int {
-		std::cout << "Called \"_PF_UtilCallbacks.iterate_origin\"" << std::endl;
+		LOG_INFO ("Called \"_PF_UtilCallbacks.iterate_origin\"");
 		return 0;
 	};
 
@@ -203,7 +210,7 @@ _PF_UtilCallbacks * UtilityCallbackFactory::Create() {
 		unsigned char *b_lut0,
 		LayerParam *dst
 	) -> int {
-		std::cout << "Called \"_PF_UtilCallbacks.iterate_lut\"" << std::endl;
+		LOG_INFO ("Called \"_PF_UtilCallbacks.iterate_lut\"");
 		return 0;
 	};
 
@@ -220,7 +227,7 @@ _PF_UtilCallbacks * UtilityCallbackFactory::Create() {
 		int dest_y,
 		LayerParam *dst_world
 	) -> int {
-		std::cout << "Called \"_PF_UtilCallbacks.transfer_rect\"" << std::endl;
+		LOG_INFO ("Called \"_PF_UtilCallbacks.transfer_rect\"");
 		return 0;
 	};
 
@@ -238,34 +245,34 @@ _PF_UtilCallbacks * UtilityCallbackFactory::Create() {
 		const PF_Rect *dest_rect,
 		LayerParam *dst_world
 	) -> int {
-		std::cout << "Called \"_PF_UtilCallbacks.transform_world\"" << std::endl;
+		LOG_INFO ("Called \"_PF_UtilCallbacks.transform_world\"");
 		return 0;
 	};
 
 	product->host_new_handle = [](
 		A_u_longlong size
 	) -> PF_Handle {
-		std::cout << "Called \"_PF_UtilCallbacks.host_new_handle\"" << std::endl;
+		LOG_INFO ("Called \"_PF_UtilCallbacks.host_new_handle\"");
 		return NULL;
 	};
 
 	product->host_lock_handle = [](
 		PF_Handle pf_handle
 	) -> void * {
-		std::cout << "Called \"_PF_UtilCallbacks.host_lock_handle\"" << std::endl;
+		LOG_INFO ("Called \"_PF_UtilCallbacks.host_lock_handle\"");
 		return NULL;
 	};
 
 	product->host_unlock_handle = [](
 		PF_Handle pf_handle
 	) -> void {
-		std::cout << "Called \"_PF_UtilCallbacks.host_lock_handle\"" << std::endl;
+		LOG_INFO ("Called \"_PF_UtilCallbacks.host_lock_handle\"");
 	};
 
 	product->host_dispose_handle = [](
 		PF_Handle pf_handle
 	) -> void {
-		std::cout << "Called \"_PF_UtilCallbacks.host_lock_handle\"" << std::endl;
+		LOG_INFO ("Called \"_PF_UtilCallbacks.host_lock_handle\"");
 	};
 
 	product->get_callback_addr = [](
@@ -275,7 +282,7 @@ _PF_UtilCallbacks * UtilityCallbackFactory::Create() {
 		PF_CallbackID which_callback,
 		PF_CallbackFunc *fn_ptr
 	) -> int {
-		std::cout << "Called \"_PF_UtilCallbacks.get_callback_addr\"" << std::endl;
+		LOG_INFO ("Called \"_PF_UtilCallbacks.get_callback_addr\"");
 		return 0;
 	};
 
@@ -284,7 +291,7 @@ _PF_UtilCallbacks * UtilityCallbackFactory::Create() {
 		int,
 		...
 	) -> int {
-		std::cout << "Called \"_PF_UtilCallbacks.app\"" << std::endl;
+		LOG_INFO ("Called \"_PF_UtilCallbacks.app\"");
 		return 0;
 	};
 
@@ -303,72 +310,72 @@ _PF_UtilCallbacks * UtilityCallbackFactory::Create() {
 	};
 
 	product->ansi.asin = [](double x) -> double {
-		std::cout << "asin: " << x << std::endl;
+		LOG_INFO ("asin: " << x);
 		return 0;
 	};
 
 	product->ansi.acos = [](double x) -> double {
-		std::cout << "acos: " << x << std::endl;
+		LOG_INFO ("acos: " << x);
 		return 0;
 	};
 
 	product->ansi.atan = [](double x) -> double {
-		std::cout << "atan: " << x << std::endl;
+		LOG_INFO ("atan: " << x);
 		return 0;
 	};
 
 	product->ansi.atan2 = [](double y, double x) -> double {
-		std::cout << "atan2: " << x << std::endl;
+		LOG_INFO ("atan2: " << x);
 		return 0;
 	};
 
 	product->ansi.log = [](double x) -> double {
-		std::cout << "log10: " << x << std::endl;
+		LOG_INFO ("log10: " << x);
 		return 0;
 	};
 
 	product->ansi.log10 = [](double x) -> double {
-		std::cout << "log10: " << x << std::endl;
+		LOG_INFO ("log10: " << x);
 		return 0;
 	};
 
 	product->ansi.ceil = [](double x) -> double {
-		std::cout << "ceil: " << x << std::endl;
+		LOG_INFO ("ceil: " << x);
 		return 0;
 	};
 
 	product->ansi.exp = [](double x) -> double {
-		std::cout << "exp: " << x << std::endl;
+		LOG_INFO ("exp: " << x);
 		return 0;
 	};
 
 	product->ansi.fabs = [](double x) -> double {
-		std::cout << "fabs: " << x << std::endl;
+		LOG_INFO ("fabs: " << x);
 		return 0;
 	};
 
 	product->ansi.floor = [](double x) -> double {
-		std::cout << "floor: " << x << std::endl;
+		LOG_INFO ("floor: " << x);
 		return 0;
 	};
 
 	product->ansi.fmod = [](double x, double y) -> double {
-		std::cout << "fmod: " << x << std::endl;
+		LOG_INFO ("fmod: " << x);
 		return 0;
 	};
 
 	product->ansi.hypot = [](double x, double y) -> double {
-		std::cout << "hypot: " << x << std::endl;
+		LOG_INFO ("hypot: " << x);
 		return 0;
 	};
 
 	product->ansi.pow = [](double x, double y) -> double {
-		std::cout << "pow: " << x << ", " << y << std::endl;
+		LOG_INFO ("pow: " << x << ", " << y);
 		return pow (x, y);
 	};
 
 	product->ansi.sqrt = [](double x) -> double {
-		std::cout << "sqrt: " << x << std::endl;
+		LOG_INFO ("sqrt: " << x);
 		return 0;
 	};
 
@@ -377,7 +384,7 @@ _PF_UtilCallbacks * UtilityCallbackFactory::Create() {
 		va_start (args, format);
 
 		vsnprintf (buffer, 1024, format, args);
-		std::cout << buffer << std::endl;
+		LOG_INFO (buffer);
 
 		va_end (args);
 		return 0;
@@ -385,7 +392,7 @@ _PF_UtilCallbacks * UtilityCallbackFactory::Create() {
 
 	product->ansi.strcpy = [](char *dest, const char *src) -> char * {
 		strcpy (dest, src);
-		std::cout << dest << std::endl;
+		LOG_INFO (dest);
 
 		return 0;
 	};
@@ -397,7 +404,7 @@ _PF_UtilCallbacks * UtilityCallbackFactory::Create() {
 		Pixel *rgb,
 		PF_HLS_Pixel hls
 	) -> int {
-		std::cout << "Called \"PF_ColorCallbacks.RGBtoHLS\"" << std::endl;
+		LOG_INFO ("Called \"PF_ColorCallbacks.RGBtoHLS\"");
 		return 0;
 	};
 
@@ -406,7 +413,7 @@ _PF_UtilCallbacks * UtilityCallbackFactory::Create() {
 		PF_HLS_Pixel hls,
 		Pixel *rgb
 	) -> int {
-		std::cout << "Called \"PF_ColorCallbacks.HLStoRGB\"" << std::endl;
+		LOG_INFO ("Called \"PF_ColorCallbacks.HLStoRGB\"");
 		return 0;
 	};
 
@@ -415,7 +422,7 @@ _PF_UtilCallbacks * UtilityCallbackFactory::Create() {
 		Pixel *rgb,
 		PF_YIQ_Pixel yiq
 	) -> int {
-		std::cout << "Called \"PF_ColorCallbacks.RGBtoYIQ\"" << std::endl;
+		LOG_INFO ("Called \"PF_ColorCallbacks.RGBtoYIQ\"");
 		return 0;
 	};
 
@@ -424,7 +431,7 @@ _PF_UtilCallbacks * UtilityCallbackFactory::Create() {
 		PF_YIQ_Pixel yiq,
 		Pixel *rgb
 	) -> int {
-		std::cout << "Called \"PF_ColorCallbacks.YIQtoRGB\"" << std::endl;
+		LOG_INFO ("Called \"PF_ColorCallbacks.YIQtoRGB\"");
 		return 0;
 	};
 
@@ -433,7 +440,7 @@ _PF_UtilCallbacks * UtilityCallbackFactory::Create() {
 		Pixel *rgb,
 		int *lum100
 	) -> int {
-		std::cout << "Called \"PF_ColorCallbacks.Luminance\"" << std::endl;
+		LOG_INFO ("Called \"PF_ColorCallbacks.Luminance\"");
 		return 0;
 	};
 
@@ -442,7 +449,7 @@ _PF_UtilCallbacks * UtilityCallbackFactory::Create() {
 		Pixel *rgb,
 		int *hue
 	) -> int {
-		std::cout << "Called \"PF_ColorCallbacks.Hue\"" << std::endl;
+		LOG_INFO ("Called \"PF_ColorCallbacks.Hue\"");
 		return 0;
 	};
 
@@ -451,7 +458,7 @@ _PF_UtilCallbacks * UtilityCallbackFactory::Create() {
 		Pixel *rgb,
 		int *lightness
 	) -> int {
-		std::cout << "Called \"PF_ColorCallbacks.Lightness\"" << std::endl;
+		LOG_INFO ("Called \"PF_ColorCallbacks.Lightness\"");
 		return 0;
 	};
 
@@ -460,7 +467,7 @@ _PF_UtilCallbacks * UtilityCallbackFactory::Create() {
 		Pixel *rgb,
 		int *saturation
 	) -> int {
-		std::cout << "Called \"PF_ColorCallbacks.Saturation\"" << std::endl;
+		LOG_INFO ("Called \"PF_ColorCallbacks.Saturation\"");
 		return 0;
 	};
 
@@ -469,14 +476,17 @@ _PF_UtilCallbacks * UtilityCallbackFactory::Create() {
 		PF_PlatDataID which,
 		void *data
 	) -> int {
-		std::cout << "Called \"PF_InteractCallbacks.get_platform_data\"" << std::endl;
+		LOG_INFO ("Called: PF_InteractCallbacks::get_platform_data (" << which << ")");
+		data = (void *)"D:/Projects/Development/Node/aexlo.js/test/plugins/DeepGlow2.aex";
+		LOG_INFO ("  ==> " << data);
+
 		return 0;
 	};
 
 	product->host_get_handle_size = [](
 		PF_Handle pf_handle
 	) -> A_u_longlong {
-		std::cout << "Called \"PF_InteractCallbacks.host_get_handle_size\"" << std::endl;
+		LOG_INFO ("Called \"PF_InteractCallbacks.host_get_handle_size\"");
 		return 0;
 	};
 
@@ -491,7 +501,7 @@ _PF_UtilCallbacks * UtilityCallbackFactory::Create() {
 		PF_IteratePixel8Func pix_fn,
 		LayerParam *dst
 	) -> int {
-		std::cout << "Called \"PF_InteractCallbacks.iterate_origin_non_clip_src\"" << std::endl;
+		LOG_INFO ("Called \"PF_InteractCallbacks.iterate_origin_non_clip_src\"");
 		return 0;
 	};
 
@@ -503,7 +513,7 @@ _PF_UtilCallbacks * UtilityCallbackFactory::Create() {
 					   int i,
 					   int iterationsL)
 	) -> int {
-		std::cout << "Called \"PF_InteractCallbacks.iterate_generic\"" << std::endl;
+		LOG_INFO ("Called \"PF_InteractCallbacks.iterate_generic\"");
 		return 0;
 	};
 
@@ -511,7 +521,7 @@ _PF_UtilCallbacks * UtilityCallbackFactory::Create() {
 		A_u_longlong new_sizeL, /* >> */
 		PF_Handle *handlePH
 	) -> int {
-		std::cout << "Called \"PF_InteractCallbacks.host_resize_handle\"" << std::endl;
+		LOG_INFO ("Called \"PF_InteractCallbacks.host_resize_handle\"");
 		return 0;
 	};
 
@@ -522,7 +532,7 @@ _PF_UtilCallbacks * UtilityCallbackFactory::Create() {
 		const PF_SampPB *params,
 		PF_Pixel16 *dst_pixel
 	) -> int {
-		std::cout << "Called \"PF_InteractCallbacks.subpixel_sample16\"" << std::endl;
+		LOG_INFO ("Called \"PF_InteractCallbacks.subpixel_sample16\"");
 		return 0;
 	};
 
@@ -533,7 +543,7 @@ _PF_UtilCallbacks * UtilityCallbackFactory::Create() {
 		const PF_SampPB *params,
 		PF_Pixel16 *dst_pixel
 	) -> int {
-		std::cout << "Called \"PF_InteractCallbacks.area_sample16\"" << std::endl;
+		LOG_INFO ("Called \"PF_InteractCallbacks.area_sample16\"");
 		return 0;
 	};
 
@@ -543,7 +553,7 @@ _PF_UtilCallbacks * UtilityCallbackFactory::Create() {
 		const PF_Rect *dst_rect, /* pass NULL for whole world */
 		LayerParam *world
 	) -> int {
-		std::cout << "Called \"PF_InteractCallbacks.fill16\"" << std::endl;
+		LOG_INFO ("Called \"PF_InteractCallbacks.fill16\"");
 		return 0;
 	};
 
@@ -554,7 +564,7 @@ _PF_UtilCallbacks * UtilityCallbackFactory::Create() {
 		int forward,			 /* TRUE means convert non-premul to premul, FALSE mean reverse */
 		LayerParam *dst
 	) -> int {
-		std::cout << "Called \"PF_InteractCallbacks.premultiply_color16\"" << std::endl;
+		LOG_INFO ("Called \"PF_InteractCallbacks.premultiply_color16\"");
 		return 0;
 	};
 
@@ -568,7 +578,7 @@ _PF_UtilCallbacks * UtilityCallbackFactory::Create() {
 		PF_IteratePixel16Func pix_fn,
 		LayerParam *dst
 	) -> int {
-		std::cout << "Called \"PF_InteractCallbacks.iterate16\"" << std::endl;
+		LOG_INFO ("Called \"PF_InteractCallbacks.iterate16\"");
 		return 0;
 	};
 
@@ -583,7 +593,7 @@ _PF_UtilCallbacks * UtilityCallbackFactory::Create() {
 		PF_IteratePixel16Func pix_fn,
 		LayerParam *dst
 	) -> int {
-		std::cout << "Called \"PF_InteractCallbacks.iterate_origin16\"" << std::endl;
+		LOG_INFO ("Called \"PF_InteractCallbacks.iterate_origin16\"");
 		return 0;
 	};
 
@@ -598,7 +608,7 @@ _PF_UtilCallbacks * UtilityCallbackFactory::Create() {
 		PF_IteratePixel16Func pix_fn,
 		LayerParam *dst
 	) -> int {
-		std::cout << "Called \"PF_InteractCallbacks.iterate_origin_non_clip_src16\"" << std::endl;
+		LOG_INFO ("Called \"PF_InteractCallbacks.iterate_origin_non_clip_src16\"");
 		return 0;
 	};
 
@@ -607,7 +617,7 @@ _PF_UtilCallbacks * UtilityCallbackFactory::Create() {
 		PF_PixelPtr pixelsP0, // NULL to use data in LayerParam
 		Pixel **pixPP
 	) -> int {
-		std::cout << "Called \"PF_InteractCallbacks.get_pixel_data8\"" << std::endl;
+		LOG_INFO ("Called \"PF_InteractCallbacks.get_pixel_data8\"");
 		return 0;
 	};
 
@@ -616,7 +626,7 @@ _PF_UtilCallbacks * UtilityCallbackFactory::Create() {
 		PF_PixelPtr pixelsP0, // NULL to use data in LayerParam
 		PF_Pixel16 **pixPP
 	) -> int {
-		std::cout << "Called \"PF_InteractCallbacks.get_pixel_data16\"" << std::endl;
+		LOG_INFO ("Called \"PF_InteractCallbacks.get_pixel_data16\"");
 		return 0;
 	};
 

@@ -2,6 +2,8 @@
 #define AEXLO_INTERACT_CALLBACKS_FACTORY_H_
 
 #include <iostream>
+
+#include "logger/logger.hh"
 #include "./headers/input_data.hh"
 
 // #### Factory Process ####

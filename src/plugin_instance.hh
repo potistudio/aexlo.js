@@ -11,6 +11,8 @@
 #include "interact_callbacks_factory.hh"
 #include "utility_callbacks_factory.hh"
 
+#include "logger/logger.hh"
+
 class PluginInstance {
 	public:
 		PluginInstance (std::string path);
