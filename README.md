@@ -1,4 +1,7 @@
-![aexlo.js](https://count.getloli.com/@aexlo.js)
+<div align=center>
+	<img src="https://count.getloli.com/@aexlo.js" alt="aexlo.js" />
+</div>
+
 # aexlo.js
 
 Load and Host "After Effects Effect Plugin (.aex)"
