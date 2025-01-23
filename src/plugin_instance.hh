@@ -11,6 +11,8 @@
 #include "interact_callbacks_factory.hh"
 #include "utility_callbacks_factory.hh"
 
+#include "./headers/suites/channel_suite_1.hh"
+
 #include "logger/logger.hh"
 
 class PluginInstance {
