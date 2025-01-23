@@ -14,21 +14,6 @@ typedef int PF_ParamType;
 typedef int PF_ParamFlags;
 typedef int PF_WorldFlags;
 
-
-
-
-
-enum {
-	int_NONE = 0,
-	int_OUT_OF_MEMORY = 4,
-	int_INTERNAL_STRUCT_DAMAGED = PF_FIRST_ERR,
-	int_INVALID_INDEX,
-	int_UNRECOGNIZED_PARAM_TYPE,
-	int_INVALID_CALLBACK,
-	int_BAD_CALLBACK_PARAM,
-	PF_Interrupt_CANCEL,
-	int_CANNOT_PARSE_KEYFRAME_TEXT
-};
 //* Slider Def
 typedef int PF_ParamValue;
 
@@ -452,5 +437,46 @@ typedef int (*PF_IteratePixel8Func)	(	void* refconP,					/* >> see comment above
 											int yL,						/* >> */
 											Pixel *inP,					/* <> */
 											Pixel *outP);				/* <> */
+
+typedef int32_t AE_ParamIndex;
+typedef int32_t AE_ChannelIndex;
+typedef int32_t AE_DataType;
+
+/**
+ * @brief (A_Long PF_ChannelIndex)
+ * @brief for enumerating over all the channels
+ */
+typedef int32_t AE_ChannelType;
+
+/**
+ * @struct AE_ChannelRef
+ * @brief (PF_ChannelRef)
+ * @brief the opaque type representing the channel data
+ */
+typedef struct {
+	intptr_t opaque[8];
+} AE_ChannelRef, *AE_ChannelRefPtr;
+
+/**
+ * @struct AE_ChannelDescription
+ * @brief (PF_ChannelDesc)
+ */
+typedef struct {
+	AE_ChannelType channel_type;
+	char           name[64];
+	AE_DataType    data_type;
+	int32_t        dimension;  // the number of data per pixel
+} AE_ChannelDescription;
+
+typedef struct {
+	AE_ChannelRef channel_ref;
+	int32_t       widthL;
+	int32_t       heightL;
+	int32_t       dimensionL;
+	int32_t       row_bytesL;
+	AE_DataType   data_type;
+	PF_Handle     dataH;
+	void          *dataPV;
+} AE_ChannelChunk;
 
 #endif
