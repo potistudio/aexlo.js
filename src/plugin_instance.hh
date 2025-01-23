@@ -12,6 +12,7 @@
 #include "utility_callbacks_factory.hh"
 
 #include "./headers/suites/channel_suite_1.hh"
+#include "./factories/channel_suite_1_factory.cc"
 
 #include "logger/logger.hh"
 
