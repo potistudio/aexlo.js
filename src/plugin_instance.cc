@@ -377,6 +377,25 @@ int PluginInstance::ExecuteGlobalSetup (PF_InData *in_data, PF_OutData *out_data
 	return error;
 }
 
+int PluginInstance::ExecuteSequenceSetup (PF_InData *in_data, PF_OutData *out_data, PF_ParamDef *params[], LayerParam *layer) {
+	LOG_INFO ("-------- begin Global Setup --------");
+
+	int error = 0;
+	const int CMD = PF_Cmd_SEQUENCE_SETUP;
+
+	LOG_DEBUG ("Execute Plugin with Code: " << CMD);
+	error = this->Execute (CMD, in_data, out_data, params, layer, NULL);
+	LOG_DEBUG ("Execute Successful\n");
+
+	LOG_INFO ("  ==> Version: " << out_data->my_version);
+	LOG_INFO ("  ==> Flags: " << out_data->out_flags);
+	LOG_INFO ("  ==> Flags2: " << out_data->out_flags2);
+
+	LOG_INFO ("-------- end Global Setup --------");
+
+	return error;
+}
+
 int PluginInstance::ExecuteParamsSetup (PF_InData *in_data, PF_OutData *out_data, PF_ParamDef *params[], LayerParam *layer) {
 	LOG_INFO ("-------- begin Parameters Setup --------");
 

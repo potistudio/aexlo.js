@@ -5,6 +5,7 @@ Napi::Object PluginInstanceWrapper::Init (Napi::Env env, Napi::Object exports) {
 		InstanceMethod ("loadResources", &PluginInstanceWrapper::LoadResources),
 		InstanceMethod ("about", &PluginInstanceWrapper::About),
 		InstanceMethod ("setupGlobal", &PluginInstanceWrapper::SetupGlobal),
+		InstanceMethod ("setupSequence", &PluginInstanceWrapper::SetupSequence),
 		InstanceMethod ("setupParameters", &PluginInstanceWrapper::SetupParameters),
 		InstanceMethod ("render", &PluginInstanceWrapper::Render),
 		InstanceMethod ("smartPreRender", &PluginInstanceWrapper::SmartPreRender),
@@ -92,6 +93,24 @@ Napi::Value PluginInstanceWrapper::SetupGlobal (const Napi::CallbackInfo &info) 
 
 	try {
 		error_code = this->plugin->ExecuteGlobalSetup (this->in_data, this->out_data, this->params, this->layer);
+	} catch (std::runtime_error& exception) {
+		throw Napi::Error::New (env, exception.what());
+	}
+
+	return Napi::Number::New (env, error_code);
+}
+
+Napi::Value PluginInstanceWrapper::SetupSequence (const Napi::CallbackInfo &info) {
+	Napi::Env env = info.Env();
+
+	if (info.Length() != 0) {
+		throw Napi::TypeError::New (env, "Wrong number of arguments");
+	}
+
+	int error_code = 0;
+
+	try {
+		error_code = this->plugin->ExecuteSequenceSetup (this->in_data, this->out_data, this->params, this->layer);
 	} catch (std::runtime_error& exception) {
 		throw Napi::Error::New (env, exception.what());
 	}

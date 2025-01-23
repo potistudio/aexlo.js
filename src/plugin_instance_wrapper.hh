@@ -23,6 +23,7 @@ class PluginInstanceWrapper : public Napi::ObjectWrap<PluginInstanceWrapper> {
 		Napi::Value LoadResources (const Napi::CallbackInfo &info);
 		Napi::Value About (const Napi::CallbackInfo &info);
 		Napi::Value SetupGlobal (const Napi::CallbackInfo &info);
+		Napi::Value SetupSequence (const Napi::CallbackInfo &info);
 		Napi::Value SetupParameters (const Napi::CallbackInfo &info);
 		Napi::Value Render (const Napi::CallbackInfo &info);
 		Napi::Value SmartPreRender (const Napi::CallbackInfo &info);

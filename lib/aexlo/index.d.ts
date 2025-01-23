@@ -3,6 +3,7 @@ export class PluginInstance {
 	loadResources(): string;
 	about(): number;
 	setupGlobal(): number;
+	setupSequence(): number;
 	setupParameters(): number;
 	render(): number;
 	smartPreRender(): number;
