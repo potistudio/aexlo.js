@@ -14,21 +14,6 @@ typedef int PF_ParamType;
 typedef int PF_ParamFlags;
 typedef int PF_WorldFlags;
 
-
-
-
-
-enum {
-	int_NONE = 0,
-	int_OUT_OF_MEMORY = 4,
-	int_INTERNAL_STRUCT_DAMAGED = PF_FIRST_ERR,
-	int_INVALID_INDEX,
-	int_UNRECOGNIZED_PARAM_TYPE,
-	int_INVALID_CALLBACK,
-	int_BAD_CALLBACK_PARAM,
-	PF_Interrupt_CANCEL,
-	int_CANNOT_PARSE_KEYFRAME_TEXT
-};
 //* Slider Def
 typedef int PF_ParamValue;
 
