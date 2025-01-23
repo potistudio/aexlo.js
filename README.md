@@ -1,3 +1,6 @@
+<div align=center>
+	<img src="https://count.getloli.com/@aexlo.js" alt="aexlo.js" />
+</div>
 
 # aexlo.js
 
