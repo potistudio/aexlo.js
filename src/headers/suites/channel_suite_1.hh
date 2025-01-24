@@ -10,7 +10,7 @@
  * @struct AE_ChannelSuite1
  * @brief (PF_ChannelSuite1) frozen in AE 5.0
  */
-typedef struct AE_ChannelSuite1 {
+struct AE_ChannelSuite1 {
 	/**
 	 * @brief use this to find the number of channels associated with a given source layer Most likely use is to get number of channels for iteration purposes.
 	 *
