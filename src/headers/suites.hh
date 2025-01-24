@@ -9,15 +9,29 @@
 #include "./basic.hh"
 
 typedef struct PF_Iterate8Suite2 {
+	/**
+	 * @brief iterate
+	 *
+	 * @param in_data in
+	 * @param progress_base in
+	 * @param progress_final in
+	 * @param src in - source image
+	 * @param area in - area to iterate over (pass NULL for all pixels)
+	 * @param refcon in - parameter to pass to pix_fn
+	 * @param pix_fn in - function to call for each pixel
+	 * @param dst out - destination image
+	 *
+	 * @return Error code
+	 */
 	int (*iterate) (
-		PF_InData      *in_data,
-		int         progress_base,
-		int         progress_final,
-		LayerParam *src,
-		const PF_Rect  *area, // pass NULL for all pixels
-		void           *refcon,
-		int (*pix_fn)(void* refcon, int x, int y, Pixel* in, Pixel* out),
-		LayerParam *dst
+		PF_InData     *in_data,
+		int           progress_base,
+		int           progress_final,
+		LayerParam    *src,
+		const PF_Rect *area,  // pass NULL for all pixels
+		void          *refcon,
+		int           (*pix_fn)(void* refcon, int x, int y, Pixel* in, Pixel* out),
+		LayerParam    *dst
 	);
 
 	int (*iterate_origin) (
