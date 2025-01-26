@@ -1,5 +1,4 @@
-#ifndef AEXLO_COMMANDS_H_
-#define AEXLO_COMMANDS_H_
+#pragma once
 
 typedef int PF_Cmd;
 
@@ -40,5 +39,3 @@ enum {
 	PF_Cmd_GPU_DEVICE_SETDOWN,
 	PF_Cmd_NUM_CMDS,
 };
-
-#endif

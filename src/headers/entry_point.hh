@@ -1,5 +1,4 @@
-#ifndef AEXLO_ENTRYPOINTDEF_H_
-#define AEXLO_ENTRYPOINTDEF_H_
+#pragma once
 
 #include "./basic.hh"
 #include "./commands.hh"
@@ -16,5 +15,3 @@ typedef int (*EntryPointFunc) (
 	LayerParam *,
 	void *
 );
-
-#endif

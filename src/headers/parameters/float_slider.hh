@@ -1,3 +1,5 @@
+#pragma once
+
 typedef struct {
 	double value;
 	double phase;

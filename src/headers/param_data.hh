@@ -1,5 +1,4 @@
-#ifndef AEXLO_PARAM_DATA_H_
-#define AEXLO_PARAM_DATA_H_
+#pragma once
 
 #include "./basic.hh"
 #include "./parameters/union.hh"
@@ -44,5 +43,3 @@ typedef struct {
 	int                 unused;
 	PF_ParamDefUnion    u;
 } PF_ParamDef, *PF_ParamDefPtr, **PF_ParamDefH;
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef AEXLO_INTERACT_CALLBACKS_FACTORY_H_
-#define AEXLO_INTERACT_CALLBACKS_FACTORY_H_
+#pragma once
 
 #include <iostream>
 #include "../lib/nameof/nameof.hpp"
@@ -27,5 +26,3 @@ class InteractCallbackFactory {
 
 		PF_InteractCallbacks Create();
 };
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef AEXLO_PARAM_COLOR_H_
-#define AEXLO_PARAM_COLOR_H_
+#pragma once
 
 #include "../basic.hh"
 
@@ -7,5 +6,3 @@ typedef struct {
 	Pixel value;
 	Pixel dephault;
 } ColorParam;
-
-#endif

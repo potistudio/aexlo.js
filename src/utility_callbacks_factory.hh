@@ -1,5 +1,4 @@
-#ifndef AEXLO_UTILITY_CALLBACK_FACTORY_H_
-#define AEXLO_UTILITY_CALLBACK_FACTORY_H_
+#pragma once
 
 #include <iostream>
 #include <stdarg.h>
@@ -16,5 +15,3 @@ class UtilityCallbackFactory {
 
 		_PF_UtilCallbacks * Create();
 };
-
-#endif

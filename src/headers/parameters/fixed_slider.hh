@@ -1,5 +1,4 @@
-#ifndef AEXLO_PARAM_FIXED_SLIDER_H_
-#define AEXLO_PARAM_FIXED_SLIDER_H_
+#pragma once
 
 typedef struct {
 	/* PARAMETER VALUE */
@@ -14,5 +13,3 @@ typedef struct {
 	short precision;  // decimal places to display
 	short display_flags;  // set bit to 1 to enable special display: --> bit 0 == append percent sign
 } PF_FixedSliderDef;
-
-#endif

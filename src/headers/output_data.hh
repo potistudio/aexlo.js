@@ -1,5 +1,4 @@
-#ifndef AEXLO_OUTPUT_DATA_H_
-#define AEXLO_OUTPUT_DATA_H_
+#pragma once
 
 #include "./basic.hh"
 
@@ -21,5 +20,3 @@ typedef struct {
 	PF_SoundWorld    dest_snd;
 	PF_OutFlags2     out_flags2;
 } PF_OutData;
-
-#endif

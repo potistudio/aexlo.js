@@ -1,5 +1,4 @@
-#ifndef AEXLO_AEXDEF_H_
-#define AEXLO_AEXDEF_H_
+#pragma once
 
 #include "./macros.hh"
 #include "./basic.hh"
@@ -478,5 +477,3 @@ typedef struct {
 	PF_Handle     dataH;
 	void          *dataPV;
 } AE_ChannelChunk;
-
-#endif

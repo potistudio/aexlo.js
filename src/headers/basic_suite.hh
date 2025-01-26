@@ -1,5 +1,4 @@
-#ifndef AEXLO_BASIC_SUITE_H_
-#define AEXLO_BASIC_SUITE_H_
+#pragma once
 
 typedef struct SPBasicSuite {
 	int (*AcquireSuite)(const char *name, int version, const void** suite);
@@ -10,5 +9,3 @@ typedef struct SPBasicSuite {
 	int (*ReallocateBlock)(void *block, size_t newSize, void **newblock);
 	int (*Undefined)(void);
 } SPBasicSuite;
-
-#endif

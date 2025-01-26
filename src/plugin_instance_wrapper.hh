@@ -1,5 +1,4 @@
-#ifndef AEXLO_PLUGIN_INSTANCE_WRAPPER_H_
-#define AEXLO_PLUGIN_INSTANCE_WRAPPER_H_
+#pragma once
 
 #include <iostream>
 #include <napi.h>
@@ -36,5 +35,3 @@ class PluginInstanceWrapper : public Napi::ObjectWrap<PluginInstanceWrapper> {
 		PF_ParamDef* params[1] = {};
 		LayerParam* layer = new LayerParam();
 };
-
-#endif

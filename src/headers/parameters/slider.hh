@@ -1,5 +1,4 @@
-#ifndef AEXLO_PARAM_SLIDER_H_
-#define AEXLO_PARAM_SLIDER_H_
+#pragma once
 
 typedef struct {
 	/* PARAMETER VALUE */
@@ -12,5 +11,3 @@ typedef struct {
 	int	slider_min, slider_max;  // range represented by width of slider
 	int	dephault;
 } PF_SliderDef;
-
-#endif

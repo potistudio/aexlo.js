@@ -1,5 +1,4 @@
-#ifndef AEXLO_Suites_H_
-#define AEXLO_Suites_H_
+#pragma once
 
 #include <stdint.h>
 
@@ -196,5 +195,3 @@ typedef struct PF_HandleSuite1 {
 	uint64_t (*HostGetHandleSize)(void *);
 	int (*HostResizeHandle)(uint64_t, void **);
 } PF_HandleSuite1;
-
-#endif

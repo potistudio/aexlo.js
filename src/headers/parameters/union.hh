@@ -1,5 +1,4 @@
-#ifndef AEXLO_PARAM_UNION_H_
-#define AEXLO_PARAM_UNION_H_
+#pragma once
 
 #include "../layer_data.hh"
 #include "./slider.hh"
@@ -30,5 +29,3 @@ typedef union {
 	PF_ButtonDef         button_d;
 	PF_Point3DDef        point3d_d;
 } PF_ParamDefUnion;
-
-#endif

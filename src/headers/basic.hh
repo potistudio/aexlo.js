@@ -1,5 +1,4 @@
-#ifndef AEXLO_BASIC_H_
-#define AEXLO_BASIC_H_
+#pragma once
 
 typedef struct {
 	unsigned char alpha, red, green, blue;
@@ -37,5 +36,3 @@ typedef struct {
 typedef struct {
 	double x, y;
 } A_FloatPoint;
-
-#endif

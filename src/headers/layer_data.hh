@@ -1,5 +1,4 @@
-#ifndef AEXLO_PARAM_LAYER_DATA_H_
-#define AEXLO_PARAM_LAYER_DATA_H_
+#pragma once
 
 #include "./basic.hh"
 
@@ -22,5 +21,3 @@ typedef struct LayerParam {
 	int                 reserved_long3;
 	int                 dephault;
 } LayerParam;
-
-#endif

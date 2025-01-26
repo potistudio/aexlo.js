@@ -1,5 +1,4 @@
-#ifndef AEXLO_PLUGIN_INSTANCE_H_
-#define AEXLO_PLUGIN_INSTANCE_H_
+#pragma once
 
 #include <windows.h>
 #include <string>
@@ -35,5 +34,3 @@ class PluginInstance {
 		HINSTANCE module;
 		EntryPointFunc entry;
 };
-
-#endif

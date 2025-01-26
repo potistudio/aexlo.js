@@ -1,5 +1,4 @@
-#ifndef AEXLO_INPUT_DATA_H_
-#define AEXLO_INPUT_DATA_H_
+#pragma once
 
 #include "./common.hh"
 #include "./basic.hh"
@@ -374,5 +373,3 @@ typedef struct _PF_UtilCallbacks {
 	int				reserved[1];
 
 } PF_UtilCallbacks;
-
-#endif

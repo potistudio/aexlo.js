@@ -1,5 +1,4 @@
-#ifndef AEXLO_SMART_FX_H_
-#define AEXLO_SMART_FX_H_
+#pragma once
 
 #include <stdint.h>
 
@@ -127,5 +126,3 @@ typedef struct {
 	PF_SmartRenderInput        *input;
  	PF_SmartRenderCallbacks    *callbacks;
 } PF_SmartRenderExtra;
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef AEXLO_LOGGER_H_
-#define AEXLO_LOGGER_H_
+#pragma once
 
 #include <iostream>
 
@@ -47,5 +46,3 @@
 #endif
 
 #define LOG_CALL(name, ...)
-
-#endif
