@@ -1,6 +1,7 @@
 #pragma once
 
 #include "./basic.hh"
+#include "./out_flags.hh"
 
 typedef struct {
 	unsigned int         my_version;
@@ -13,10 +14,10 @@ typedef struct {
 	int           width;
 	int           height;
 	PF_Point         origin;
-	PF_OutFlags      out_flags;
+	AE_OutFlag      out_flags;
 	char           return_msg[PF_MAX_EFFECT_MSG_LEN + 1];
 	int           start_sampL;
 	int           dur_sampL;
 	PF_SoundWorld    dest_snd;
-	PF_OutFlags2     out_flags2;
+	AE_OutFlag2     out_flags2;
 } PF_OutData;
