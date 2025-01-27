@@ -4,11 +4,16 @@
 #include <string>
 #include <math.h>
 
-#include "headers/suites.hh"
 #include "headers/entry_point.hh"
 #include "headers/smart_fx.hh"
 #include "./factories/interact_callbacks_factory.hh"
 #include "./factories/utility_callbacks_factory.hh"
+
+#include "./headers/suites/ansi_callback_suite.hh"
+#include "./headers/suites/iterate_8_suite_2.hh"
+#include "./headers/suites/world_transform_suite_1.hh"
+#include "./headers/suites/effect_ui_suite_1.hh"
+#include "./headers/suites/handle_suite_1.hh"
 
 #include "./headers/suites/channel_suite_1.hh"
 #include "./factories/channel_suite_1_factory.cc"
