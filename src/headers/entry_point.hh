@@ -8,7 +8,7 @@
 #include "./layer_data.hh"
 
 typedef int (*EntryPointFunc) (
-	PF_Cmd,
+	AE_Command,
 	PF_InData *,
 	PF_OutData *,
 	PF_ParamDef *[],

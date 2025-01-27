@@ -75,7 +75,7 @@ std::string PluginInstance::ExtractResources() {
 	return result;
 }
 
-int PluginInstance::Execute (PF_Cmd cmd, PF_InData *in_data, PF_OutData *outData, PF_ParamDef *params[], LayerParam *layer, void *extra) {
+int PluginInstance::Execute (AE_Command cmd, PF_InData *in_data, PF_OutData *outData, PF_ParamDef *params[], LayerParam *layer, void *extra) {
 	int err = 0;
 
 	/** Initialize InData **/
@@ -348,7 +348,7 @@ int PluginInstance::Execute (PF_Cmd cmd, PF_InData *in_data, PF_OutData *outData
 int PluginInstance::ExecuteAbout (PF_InData *in_data, PF_OutData *out_data, PF_ParamDef *params[], LayerParam *layer) {
 	LOG_INFO ("-------- begin About --------");
 
-	const int CMD = PF_Cmd_ABOUT;
+	const AE_Command CMD = AE_Command::ABOUT;
 	int error = 0;
 
 	try {
@@ -368,15 +368,15 @@ int PluginInstance::ExecuteGlobalSetup (PF_InData *in_data, PF_OutData *out_data
 	LOG_INFO ("-------- begin Global Setup --------");
 
 	int error = 0;
-	const int CMD = PF_Cmd_GLOBAL_SETUP;
+	const AE_Command CMD = AE_Command::GLOBAL_SETUP;
 
-	LOG_DEBUG ("Execute Plugin with Code: " << CMD);
+	LOG_DEBUG ("Execute Plugin with Code: " << NAMEOF_ENUM(CMD));
 	error = this->Execute (CMD, in_data, out_data, params, layer, NULL);
 	LOG_DEBUG ("Execute Successful\n");
 
 	LOG_INFO ("  ==> Version: " << out_data->my_version);
-	LOG_INFO ("  ==> Flags: " << out_data->out_flags);
-	LOG_INFO ("  ==> Flags2: " << out_data->out_flags2);
+	LOG_INFO ("  ==> Flags: " << NAMEOF_ENUM_FLAG(out_data->out_flags));
+	LOG_INFO ("  ==> Flags2: " << NAMEOF_ENUM_FLAG(out_data->out_flags2));
 
 	LOG_INFO ("-------- end Global Setup --------");
 
@@ -387,15 +387,15 @@ int PluginInstance::ExecuteSequenceSetup (PF_InData *in_data, PF_OutData *out_da
 	LOG_INFO ("-------- begin Global Setup --------");
 
 	int error = 0;
-	const int CMD = PF_Cmd_SEQUENCE_SETUP;
+	const AE_Command CMD = AE_Command::SEQUENCE_SETUP;
 
-	LOG_DEBUG ("Execute Plugin with Code: " << CMD);
+	LOG_DEBUG ("Execute Plugin with Code: " << NAMEOF_ENUM(CMD));
 	error = this->Execute (CMD, in_data, out_data, params, layer, NULL);
 	LOG_DEBUG ("Execute Successful\n");
 
 	LOG_INFO ("  ==> Version: " << out_data->my_version);
-	LOG_INFO ("  ==> Flags: " << out_data->out_flags);
-	LOG_INFO ("  ==> Flags2: " << out_data->out_flags2);
+	LOG_INFO ("  ==> Flags: " << NAMEOF_ENUM_FLAG(out_data->out_flags));
+	LOG_INFO ("  ==> Flags2: " << NAMEOF_ENUM_FLAG(out_data->out_flags2));
 
 	LOG_INFO ("-------- end Global Setup --------");
 
@@ -405,7 +405,7 @@ int PluginInstance::ExecuteSequenceSetup (PF_InData *in_data, PF_OutData *out_da
 int PluginInstance::ExecuteParamsSetup (PF_InData *in_data, PF_OutData *out_data, PF_ParamDef *params[], LayerParam *layer) {
 	LOG_INFO ("-------- begin Parameters Setup --------");
 
-	const int CMD = PF_Cmd_PARAMS_SETUP;
+	const AE_Command CMD = AE_Command::PARAMS_SETUP;
 	int error = 0;
 
 	/* Execute */
@@ -420,7 +420,7 @@ int PluginInstance::ExecuteParamsSetup (PF_InData *in_data, PF_OutData *out_data
 int PluginInstance::ExecuteRender (PF_InData *in_data, PF_OutData *out_data, PF_ParamDef *params[], LayerParam *layer) {
 	LOG_INFO ("-------- begin Render --------");
 
-	const int CMD = PF_Cmd_RENDER;
+	const AE_Command CMD = AE_Command::RENDER;
 	int error = 0;
 
 	error = this->Execute (CMD, in_data, out_data, params, layer, NULL);
@@ -433,7 +433,7 @@ int PluginInstance::ExecuteRender (PF_InData *in_data, PF_OutData *out_data, PF_
 PF_PreRenderOutput PluginInstance::ExecuteSmartPreRender (PF_InData *in_data, PF_OutData *out_data, PF_ParamDef *params[], LayerParam *layer) {
 	LOG_INFO ("-------- begin Smart PreRender --------");
 
-	const int CMD = PF_Cmd_SMART_PRE_RENDER;
+	const AE_Command CMD = AE_Command::SMART_PRE_RENDER;
 	int error = 0;
 
 	PF_PreRenderExtra *extra = new PF_PreRenderExtra();
@@ -508,7 +508,7 @@ PF_PreRenderOutput PluginInstance::ExecuteSmartPreRender (PF_InData *in_data, PF
 int PluginInstance::ExecuteSmartRender (PF_InData *in_data, PF_OutData *out_data, PF_ParamDef *params[], LayerParam *layer) {
 	LOG_INFO ("-------- begin Smart Render --------");
 
-	const int CMD = PF_Cmd_SMART_RENDER;
+	const AE_Command CMD = AE_Command::SMART_RENDER;
 	int error = 0;
 
 	PF_SmartRenderExtra *extra = new PF_SmartRenderExtra();

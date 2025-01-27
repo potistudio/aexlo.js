@@ -21,7 +21,7 @@ class PluginInstance {
 		~PluginInstance();
 
 		std::string ExtractResources();
-		int Execute (PF_Cmd cmd, PF_InData *in_data, PF_OutData *out_data, PF_ParamDef *params[], LayerParam *layer, void *);
+		int Execute (AE_Command cmd, PF_InData *in_data, PF_OutData *out_data, PF_ParamDef *params[], LayerParam *layer, void *);
 		int ExecuteAbout (PF_InData *in_data, PF_OutData *out_data, PF_ParamDef *params[], LayerParam *layer);
 		int ExecuteGlobalSetup (PF_InData *in_data, PF_OutData *out_data, PF_ParamDef *params[], LayerParam *layer);
 		int ExecuteSequenceSetup (PF_InData *in_data, PF_OutData *out_data, PF_ParamDef *params[], LayerParam *layer);
