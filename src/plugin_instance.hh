@@ -7,8 +7,8 @@
 #include "headers/suites.hh"
 #include "headers/entry_point.hh"
 #include "headers/smart_fx.hh"
-#include "interact_callbacks_factory.hh"
-#include "utility_callbacks_factory.hh"
+#include "./factories/interact_callbacks_factory.hh"
+#include "./factories/utility_callbacks_factory.hh"
 
 #include "./headers/suites/channel_suite_1.hh"
 #include "./factories/channel_suite_1_factory.cc"
