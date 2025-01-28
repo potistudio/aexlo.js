@@ -189,7 +189,7 @@ _PF_UtilCallbacks * UtilityCallbackFactory::Create() {
 		int progress_final,
 		LayerParam *src,
 		const PF_Rect *area,
-		const PF_Point *origin,
+		const AE_PointParam *origin,
 		void *refcon,
 		PF_IteratePixel8Func pix_fn,
 		LayerParam *dst
@@ -496,7 +496,7 @@ _PF_UtilCallbacks * UtilityCallbackFactory::Create() {
 		int progress_final,
 		LayerParam *src,
 		const PF_Rect *area,
-		const PF_Point *origin,
+		const AE_PointParam *origin,
 		void *refcon,
 		PF_IteratePixel8Func pix_fn,
 		LayerParam *dst
@@ -588,7 +588,7 @@ _PF_UtilCallbacks * UtilityCallbackFactory::Create() {
 		int progress_final,
 		LayerParam *src,
 		const PF_Rect *area, /* pass NULL for all pixels */
-		const PF_Point *origin,
+		const AE_PointParam *origin,
 		void *refcon,
 		PF_IteratePixel16Func pix_fn,
 		LayerParam *dst
@@ -603,7 +603,7 @@ _PF_UtilCallbacks * UtilityCallbackFactory::Create() {
 		int progress_final,
 		LayerParam *src,
 		const PF_Rect *area,
-		const PF_Point *origin,
+		const AE_PointParam *origin,
 		void *refcon,
 		PF_IteratePixel16Func pix_fn,
 		LayerParam *dst

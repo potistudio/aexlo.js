@@ -2,6 +2,7 @@
 
 #include "./basic.hh"
 #include "./out_flags.hh"
+#include "./parameters/point.hh"
 
 typedef struct {
 	unsigned int         my_version;
@@ -13,7 +14,7 @@ typedef struct {
 	PF_Handle        frame_data;
 	int           width;
 	int           height;
-	PF_Point         origin;
+	AE_PointParam         origin;
 	AE_OutFlag      out_flags;
 	char           return_msg[PF_MAX_EFFECT_MSG_LEN + 1];
 	int           start_sampL;

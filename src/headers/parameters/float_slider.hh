@@ -1,6 +1,6 @@
 #pragma once
 
-typedef struct {
+struct AE_FloatSliderParam {
 	double value;
 	double phase;
 	char value_desc[PF_MAX_PARAM_DESCRIPTION_LEN + 1];
@@ -17,4 +17,4 @@ typedef struct {
 	//* for Pr
 	// char useExponent;
 	// float exponent;
-} FloatSlider;
+};

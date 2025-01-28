@@ -7,6 +7,7 @@
 
 #include "logger/logger.hh"
 #include "./headers/input_data.hh"
+#include "../headers/parameters/point.hh"
 
 class UtilityCallbackFactory {
 	public:

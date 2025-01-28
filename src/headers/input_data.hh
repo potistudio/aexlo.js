@@ -6,6 +6,7 @@
 #include "./param_data.hh"
 #include "./basic_suite.hh"
 #include "./parameters/union.hh"
+#include "./parameters/point.hh"
 
 typedef struct {
 	int (*checkout_param) (ProgressInfoPtr, int, int, int, unsigned int, PF_ParamDef *);
@@ -195,7 +196,7 @@ typedef struct _PF_UtilCallbacks {
 		int					progress_final,
 		LayerParam			*src,
 		const PF_Rect			*area,			/* pass NULL for all pixels */
-		const PF_Point			*origin,
+		const AE_PointParam			*origin,
 		void*					refcon,
 		PF_IteratePixel8Func	pix_fn,
 		LayerParam			*dst);
@@ -278,7 +279,7 @@ typedef struct _PF_UtilCallbacks {
 		int					progress_final,
 		LayerParam			*src,
 		const PF_Rect			*area,
-		const PF_Point			*origin,
+		const AE_PointParam			*origin,
 		void*					refcon,
 		PF_IteratePixel8Func	pix_fn,
 		LayerParam			*dst);
@@ -339,7 +340,7 @@ typedef struct _PF_UtilCallbacks {
 		int					progress_final,
 		LayerParam			*src,
 		const PF_Rect			*area,			/* pass NULL for all pixels */
-		const PF_Point			*origin,
+		const AE_PointParam			*origin,
 		void*					refcon,
 		PF_IteratePixel16Func	pix_fn,
 		LayerParam			*dst);
@@ -350,7 +351,7 @@ typedef struct _PF_UtilCallbacks {
 		int					progress_final,
 		LayerParam				*src,
 		const PF_Rect			*area,
-		const PF_Point			*origin,
+		const AE_PointParam			*origin,
 		void*				refcon,
 		PF_IteratePixel16Func	pix_fn,
 		LayerParam				*dst);

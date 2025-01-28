@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../parameters/point.hh"
+
 typedef struct PF_Iterate8Suite2 {
 	/**
 	 * @brief iterate
@@ -32,7 +34,7 @@ typedef struct PF_Iterate8Suite2 {
 		int         progress_final,
 		LayerParam *src,
 		const PF_Rect  *area, // pass NULL for all pixels
-		const PF_Point *origin,
+		const AE_PointParam *origin,
 		void           *refcon,
 		int (*pix_fn)(void* refcon, int x, int y, Pixel* in, Pixel* out),
 		LayerParam *dst
@@ -57,7 +59,7 @@ typedef struct PF_Iterate8Suite2 {
 		int			progress_final,
 		LayerParam	*src,
 		const PF_Rect	*area,
-		const PF_Point	*origin,
+		const AE_PointParam	*origin,
 		void			*refcon,
 		int(*pix_fn)(void* refcon, int x, int y, Pixel* in, Pixel* out),
 		LayerParam	*dst);

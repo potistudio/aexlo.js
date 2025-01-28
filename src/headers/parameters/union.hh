@@ -15,17 +15,17 @@
 #include "./point_3d.hh"
 
 typedef union {
-	LayerParam          ld;
-	PF_SliderDef         sd;
-	PF_FixedSliderDef    fd;
-	PF_AngleDef          ad;
-	PF_CheckBoxDef       bd;
-	ColorParam           cd;
-	PF_PointDef          td;
-	PF_PopupDef          pd;
-	FloatSlider          fs_d;
-	PF_ArbitraryDef      arb_d;
-	PF_PathDef           path_d;
-	PF_ButtonDef         button_d;
-	PF_Point3DDef        point3d_d;
+	LayerParam             ld;
+	AE_SliderParam         sd;
+	AE_FixedSliderParam    fd;
+	AE_AngleParam          ad;
+	AE_CheckBoxParam       bd;
+	AE_ColorParam          cd;
+	AE_PointParam          td;
+	AE_PopupParam          pd;
+	AE_FloatSliderParam    fs_d;
+	AE_ArbitraryParam      arb_d;
+	AE_PathParam           path_d;
+	AE_ButtonParam         button_d;
+	AE_Point3DParam        point3d_d;
 } PF_ParamDefUnion;

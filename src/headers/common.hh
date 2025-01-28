@@ -3,6 +3,7 @@
 #include "./macros.hh"
 #include "./basic.hh"
 #include "./layer_data.hh"
+#include "./parameters/point.hh"
 
 
 
@@ -23,62 +24,6 @@ typedef short PF_ValueDisplayFlags;
 typedef char PF_Boolean;
 
 typedef double PF_FpLong;
-//* Angle Def
-typedef struct {
-	/* PARAMETER VALUE */
-	PF_Fixed		value;		/* degrees with fixed point accuracy;
-								 * this is NOT limited in range to 0 to 360.
-								 */
-
-	/* PARAMETER DESCRIPTION */
-	PF_Fixed		dephault;
-
-	/* Min and max values. Note!! Not supported for effect plugins.
-	** Angle properties in effects are always unlimited in range.
-	*/
-	PF_Fixed		valid_min, valid_max;
-} PF_AngleDef;
-
-//* Checkbox Def
-typedef struct {
-	/* PARAMETER VALUE */
-	PF_ParamValue		value;
-
-	/* PARAMETER DESCRIPTION */
-	PF_Boolean		dephault;
-	char		reserved;	/* padding	*/
-	short		reserved1;
-	union {
-		const char	*nameptr;
-	} u;
-} PF_CheckBoxDef;
-
-//* Point Parameter
-
-typedef struct {
-	/* PARAMETER VALUE */
-	PF_Fixed			x_value;
-	PF_Fixed			y_value;
-
-	/* PARAMETER DESCRIPTION */
-	char				reserved[3];
-	PF_Boolean			restrict_bounds;		/* restrict bounds to size of src */
-	PF_Fixed			x_dephault;				/* percentage */
-	PF_Fixed			y_dephault;				/* percentage */
-} PF_PointDef;
-
-//* Popup Menu
-typedef struct {
-	/* PARAMETER VALUE */
-	PF_ParamValue	value;
-
-	/* PARAMETER DESCRIPTION */
-	short		num_choices;
-	short		dephault;
-	union {
-		const char	*namesptr; /*  menu manager standard, '|' separator */
-	} u;
-} PF_PopupDef;
 
 //* Floating Point Slider Parameter
 typedef float PF_FpShort;
@@ -87,61 +32,6 @@ typedef unsigned int PF_FSliderFlags;
 
 
 typedef void **PF_Handle;
-//* Arbitrary
-typedef PF_Handle PF_ArbitraryH;
-typedef struct {
-	short					id;			/* for effect use: lets effect distinguish between */
-										/*	different arbitrary data param types in the same effect */
-	short					pad;		/* padding, set to zero */
-	PF_ArbitraryH			dephault;	/* becomes owned by host at ADD_PARAM time */
-	PF_ArbitraryH			value;		/* pass NULL at ADD_PARAM time; owned by host at render time */
-	void					*refconPV;	/* passed into all callbacks, for effect use */
-} PF_ArbitraryDef;
-
-//* Path
-typedef unsigned int PF_PathID;
-typedef struct PF_PathDef {
-
-	/* PARAMETER VALUE */
-	PF_PathID			path_id;		/* to be used with PF_CheckoutPath()
-											note that path_id != PF_PathID_NONE does not
-											guarantee that PF_CheckoutPath will return a
-											valid path (it may have been deleted) */
-
-	/* PARAMETER DESCRIPTION */
-	int				reserved0;		/*  not currently used, set to zero */
-
-	int				dephault;		/*	0 means that the default is NONE,
-											other numbers are the 1-based index of the
-											path, if the path doesn't exist, the
-											path_idLu value will be PF_PathID_NONE.
-										 */
-} PF_PathDef;
-
-//* Momentary Buttons
-typedef struct {
-	/* PARAMETER VALUE */
-	PF_ParamValue	value;		// not used at this time
-
-	union {
-		const char	*namesptr; /* button name */
-	} u;
-} PF_ButtonDef;
-
-//* 3D Point
-typedef struct {
-	/* PARAMETER VALUE */
-	PF_FpLong			x_value;
-	PF_FpLong			y_value;
-	PF_FpLong			z_value;
-
-	/* PARAMETER DESCRIPTION */
-	PF_FpLong			x_dephault;				/* percentage of layer width; note: use 50 for halfway, not 0.5; this matches the old PF_PointDef behavior */
-	PF_FpLong			y_dephault;				/* percentage of layer height */
-	PF_FpLong			z_dephault;				/* percentage of layer _height_ (since typical layers are zero depth) */
-
-	char				reserved[16];			/* set to zeros */
-} PF_Point3DDef;
 
 
 
@@ -188,17 +78,6 @@ typedef void *PF_SndSamplePtr;
 typedef short PF_SoundChannels;
 typedef short PF_SoundFormat;
 typedef short PF_SoundSampleSize;
-
-//* Out Data
-typedef struct {
-		#ifdef	LPOINT_RENAME_COMPONENTS
-			int	x;
-			int	y;
-		#else
-			int	h;
-			int	v;
-		#endif
-	} PF_Point;
 
 enum {
 	PF_MF_Alpha_PREMUL 		= 0,
@@ -386,7 +265,7 @@ typedef struct {
 typedef struct {
 
 	LayerParam		mask;
-	PF_Point			offset;
+	AE_PointParam			offset;
 	PF_MaskFlags		what_is_mask;
 
 } PF_MaskWorld;
