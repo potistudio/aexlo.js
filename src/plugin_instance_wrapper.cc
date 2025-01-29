@@ -1,4 +1,5 @@
 #include "plugin_instance_wrapper.hh"
+#include "function_test.cc"
 
 Napi::Object PluginInstanceWrapper::Init (Napi::Env env, Napi::Object exports) {
 	Napi::Function func = DefineClass (env, "PluginInstance", {
@@ -72,6 +73,9 @@ Napi::Value PluginInstanceWrapper::About (const Napi::CallbackInfo &info) {
 	}
 
 	int error_code = 0;
+
+	MyClassRunner runner;
+	runner.run();  // 46
 
 	try {
 		error_code = static_cast<int>(this->plugin->ExecuteAbout (this->in_data, this->out_data, this->params, this->layer));
