@@ -476,7 +476,7 @@ _PF_UtilCallbacks * UtilityCallbackFactory::Create() {
 		PF_PlatDataID which,
 		void *data
 	) -> int {
-		LOG_INFO ("Called: PF_InteractCallbacks::get_platform_data (" << which << ")");
+		LOG_INFO ("Called: AE_InteractCallbacks::get_platform_data (" << which << ")");
 		data = (void *)"D:/Projects/Development/Node/aexlo.js/test/plugins/DeepGlow2.aex";
 		LOG_INFO ("  ==> " << data);
 
@@ -486,7 +486,7 @@ _PF_UtilCallbacks * UtilityCallbackFactory::Create() {
 	product->host_get_handle_size = [](
 		PF_Handle pf_handle
 	) -> A_u_longlong {
-		LOG_INFO ("Called \"PF_InteractCallbacks.host_get_handle_size\"");
+		LOG_INFO ("Called \"AE_InteractCallbacks.host_get_handle_size\"");
 		return 0;
 	};
 
@@ -501,7 +501,7 @@ _PF_UtilCallbacks * UtilityCallbackFactory::Create() {
 		PF_IteratePixel8Func pix_fn,
 		LayerParam *dst
 	) -> int {
-		LOG_INFO ("Called \"PF_InteractCallbacks.iterate_origin_non_clip_src\"");
+		LOG_INFO ("Called \"AE_InteractCallbacks.iterate_origin_non_clip_src\"");
 		return 0;
 	};
 
@@ -513,7 +513,7 @@ _PF_UtilCallbacks * UtilityCallbackFactory::Create() {
 					   int i,
 					   int iterationsL)
 	) -> int {
-		LOG_INFO ("Called \"PF_InteractCallbacks.iterate_generic\"");
+		LOG_INFO ("Called \"AE_InteractCallbacks.iterate_generic\"");
 		return 0;
 	};
 
@@ -521,7 +521,7 @@ _PF_UtilCallbacks * UtilityCallbackFactory::Create() {
 		A_u_longlong new_sizeL, /* >> */
 		PF_Handle *handlePH
 	) -> int {
-		LOG_INFO ("Called \"PF_InteractCallbacks.host_resize_handle\"");
+		LOG_INFO ("Called \"AE_InteractCallbacks.host_resize_handle\"");
 		return 0;
 	};
 
@@ -532,7 +532,7 @@ _PF_UtilCallbacks * UtilityCallbackFactory::Create() {
 		const PF_SampPB *params,
 		PF_Pixel16 *dst_pixel
 	) -> int {
-		LOG_INFO ("Called \"PF_InteractCallbacks.subpixel_sample16\"");
+		LOG_INFO ("Called \"AE_InteractCallbacks.subpixel_sample16\"");
 		return 0;
 	};
 
@@ -543,7 +543,7 @@ _PF_UtilCallbacks * UtilityCallbackFactory::Create() {
 		const PF_SampPB *params,
 		PF_Pixel16 *dst_pixel
 	) -> int {
-		LOG_INFO ("Called \"PF_InteractCallbacks.area_sample16\"");
+		LOG_INFO ("Called \"AE_InteractCallbacks.area_sample16\"");
 		return 0;
 	};
 
@@ -553,7 +553,7 @@ _PF_UtilCallbacks * UtilityCallbackFactory::Create() {
 		const PF_Rect *dst_rect, /* pass NULL for whole world */
 		LayerParam *world
 	) -> int {
-		LOG_INFO ("Called \"PF_InteractCallbacks.fill16\"");
+		LOG_INFO ("Called \"AE_InteractCallbacks.fill16\"");
 		return 0;
 	};
 
@@ -564,7 +564,7 @@ _PF_UtilCallbacks * UtilityCallbackFactory::Create() {
 		int forward,			 /* TRUE means convert non-premul to premul, FALSE mean reverse */
 		LayerParam *dst
 	) -> int {
-		LOG_INFO ("Called \"PF_InteractCallbacks.premultiply_color16\"");
+		LOG_INFO ("Called \"AE_InteractCallbacks.premultiply_color16\"");
 		return 0;
 	};
 
@@ -578,7 +578,7 @@ _PF_UtilCallbacks * UtilityCallbackFactory::Create() {
 		PF_IteratePixel16Func pix_fn,
 		LayerParam *dst
 	) -> int {
-		LOG_INFO ("Called \"PF_InteractCallbacks.iterate16\"");
+		LOG_INFO ("Called \"AE_InteractCallbacks.iterate16\"");
 		return 0;
 	};
 
@@ -593,7 +593,7 @@ _PF_UtilCallbacks * UtilityCallbackFactory::Create() {
 		PF_IteratePixel16Func pix_fn,
 		LayerParam *dst
 	) -> int {
-		LOG_INFO ("Called \"PF_InteractCallbacks.iterate_origin16\"");
+		LOG_INFO ("Called \"AE_InteractCallbacks.iterate_origin16\"");
 		return 0;
 	};
 
@@ -608,7 +608,7 @@ _PF_UtilCallbacks * UtilityCallbackFactory::Create() {
 		PF_IteratePixel16Func pix_fn,
 		LayerParam *dst
 	) -> int {
-		LOG_INFO ("Called \"PF_InteractCallbacks.iterate_origin_non_clip_src16\"");
+		LOG_INFO ("Called \"AE_InteractCallbacks.iterate_origin_non_clip_src16\"");
 		return 0;
 	};
 
@@ -617,7 +617,7 @@ _PF_UtilCallbacks * UtilityCallbackFactory::Create() {
 		PF_PixelPtr pixelsP0, // NULL to use data in LayerParam
 		Pixel **pixPP
 	) -> int {
-		LOG_INFO ("Called \"PF_InteractCallbacks.get_pixel_data8\"");
+		LOG_INFO ("Called \"AE_InteractCallbacks.get_pixel_data8\"");
 		return 0;
 	};
 
@@ -626,7 +626,7 @@ _PF_UtilCallbacks * UtilityCallbackFactory::Create() {
 		PF_PixelPtr pixelsP0, // NULL to use data in LayerParam
 		PF_Pixel16 **pixPP
 	) -> int {
-		LOG_INFO ("Called \"PF_InteractCallbacks.get_pixel_data16\"");
+		LOG_INFO ("Called \"AE_InteractCallbacks.get_pixel_data16\"");
 		return 0;
 	};
 

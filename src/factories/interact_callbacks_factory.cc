@@ -4,16 +4,16 @@
 InteractCallbackFactory::InteractCallbackFactory() {}
 InteractCallbackFactory::~InteractCallbackFactory() {}
 
-PF_InteractCallbacks InteractCallbackFactory::Create() {
-	PF_InteractCallbacks product = PF_InteractCallbacks();
+AE_InteractCallbacks InteractCallbackFactory::Create() {
+	AE_InteractCallbacks product = AE_InteractCallbacks();
 
 	product.checkout_param = [](ProgressInfoPtr effect_ref, int index, int what_time, int time_step, unsigned int time_scale, PF_ParamDef *param) -> int {
-		LOG_INFO ("Called \"PF_InteractCallbacks.checkout_param\"");
+		LOG_INFO ("Called \"AE_InteractCallbacks.checkout_param\"");
 		return 0;
 	};
 
 	product.checkin_param = [](ProgressInfoPtr effect_ref, PF_ParamDef *param) -> int {
-		LOG_INFO ("Called \"PF_InteractCallbacks.checkin_param\"");
+		LOG_INFO ("Called \"AE_InteractCallbacks.checkin_param\"");
 		return 0;
 	};
 
@@ -43,32 +43,32 @@ PF_InteractCallbacks InteractCallbackFactory::Create() {
 	};
 
 	product.abort = [](ProgressInfoPtr effect_ref) -> int {
-		LOG_INFO ("Called \"PF_InteractCallbacks.abort(" << effect_ref << ")\"");
+		LOG_INFO ("Called \"AE_InteractCallbacks.abort(" << effect_ref << ")\"");
 		return 0;
 	};
 
 	product.progress = [](ProgressInfoPtr effect_ref, int current, int total) -> int {
-		LOG_INFO ("Called \"PF_InteractCallbacks.progress(" << effect_ref << ", " << current << ", " << total << ")\"");
+		LOG_INFO ("Called \"AE_InteractCallbacks.progress(" << effect_ref << ", " << current << ", " << total << ")\"");
 		return 0;
 	};
 
 	product.register_ui = [](ProgressInfoPtr effect_ref, PF_CustomUIInfo *custom_info) -> int {
-		LOG_INFO ("Called \"PF_InteractCallbacks.register_ui(" << effect_ref << ", " << custom_info << ")\"");
+		LOG_INFO ("Called \"AE_InteractCallbacks.register_ui(" << effect_ref << ", " << custom_info << ")\"");
 		return 0;
 	};
 
 	product.checkout_layer_audio = [](ProgressInfoPtr effect_ref, int index, int start_time, int duration, unsigned int time_scale, unsigned int rate, int bytes_per_sample, int num_channels, int fmt_signed, PF_LayerAudio *audio) -> int {
-		LOG_INFO ("Called \"PF_InteractCallbacks.checkout_layer_audio(" << effect_ref << ", " << index << ", " << start_time << ", " << duration << ", " << time_scale << ", " << rate << ", " << bytes_per_sample << ", " << num_channels << ", " << fmt_signed << ", " << audio << ")\"");
+		LOG_INFO ("Called \"AE_InteractCallbacks.checkout_layer_audio(" << effect_ref << ", " << index << ", " << start_time << ", " << duration << ", " << time_scale << ", " << rate << ", " << bytes_per_sample << ", " << num_channels << ", " << fmt_signed << ", " << audio << ")\"");
 		return 0;
 	};
 
 	product.checkin_layer_audio = [](ProgressInfoPtr effect_ref, PF_LayerAudio audio) -> int {
-		LOG_INFO ("Called \"PF_InteractCallbacks.checkin_layer_audio(" << effect_ref << ", " << audio << ")\"");
+		LOG_INFO ("Called \"AE_InteractCallbacks.checkin_layer_audio(" << effect_ref << ", " << audio << ")\"");
 		return 0;
 	};
 
 	product.get_audio_data = [](ProgressInfoPtr effect_ref, PF_LayerAudio audio, PF_SndSamplePtr *data, int *num_samples, unsigned int *rate, int *bytes_per_sample, int *num_channels, int *fmt_signed) -> int {
-		LOG_INFO ("Called \"PF_InteractCallbacks.get_audio_data(" << effect_ref << ", " << audio << ", " << data << ", " << num_samples << ", " << rate << ", " << bytes_per_sample << ", " << num_channels << ", " << fmt_signed << ")\"");
+		LOG_INFO ("Called \"AE_InteractCallbacks.get_audio_data(" << effect_ref << ", " << audio << ", " << data << ", " << num_samples << ", " << rate << ", " << bytes_per_sample << ", " << num_channels << ", " << fmt_signed << ")\"");
 		return 0;
 	};
 

@@ -12,7 +12,7 @@
 // -> "input_data.h"
 //
 // 2. Instantiate Class
-// in_data->inter = PF_InteractCallbacks();
+// in_data->inter = AE_InteractCallbacks();
 //
 // 3. Attach Function to Pointer (or with Lambda)
 // in_data->inter.add_param = &addParam;
@@ -24,5 +24,5 @@ class InteractCallbackFactory {
 		InteractCallbackFactory();
 		~InteractCallbackFactory();
 
-		PF_InteractCallbacks Create();
+		AE_InteractCallbacks Create();
 };
