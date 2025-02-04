@@ -75,7 +75,7 @@ std::string PluginInstance::ExtractResources() {
 	return result;
 }
 
-int PluginInstance::Execute (AE_Command cmd, PF_InData *in_data, PF_OutData *outData, PF_ParamDef *params[], LayerParam *layer, void *extra) {
+int PluginInstance::Execute (AE_Command cmd, PF_InData *in_data, AE_OutData *outData, PF_ParamDef *params[], LayerParam *layer, void *extra) {
 	int err = 0;
 
 	/** Initialize InData **/
@@ -345,7 +345,7 @@ int PluginInstance::Execute (AE_Command cmd, PF_InData *in_data, PF_OutData *out
 	return err;
 }
 
-int PluginInstance::ExecuteAbout (PF_InData *in_data, PF_OutData *out_data, PF_ParamDef *params[], LayerParam *layer) {
+int PluginInstance::ExecuteAbout (PF_InData *in_data, AE_OutData *out_data, PF_ParamDef *params[], LayerParam *layer) {
 	LOG_INFO ("-------- begin About --------");
 
 	const AE_Command CMD = AE_Command::ABOUT;
@@ -364,7 +364,7 @@ int PluginInstance::ExecuteAbout (PF_InData *in_data, PF_OutData *out_data, PF_P
 	return error;
 }
 
-int PluginInstance::ExecuteGlobalSetup (PF_InData *in_data, PF_OutData *out_data, PF_ParamDef *params[], LayerParam *layer) {
+int PluginInstance::ExecuteGlobalSetup (PF_InData *in_data, AE_OutData *out_data, PF_ParamDef *params[], LayerParam *layer) {
 	LOG_INFO ("-------- begin Global Setup --------");
 
 	int error = 0;
@@ -383,7 +383,7 @@ int PluginInstance::ExecuteGlobalSetup (PF_InData *in_data, PF_OutData *out_data
 	return error;
 }
 
-int PluginInstance::ExecuteSequenceSetup (PF_InData *in_data, PF_OutData *out_data, PF_ParamDef *params[], LayerParam *layer) {
+int PluginInstance::ExecuteSequenceSetup (PF_InData *in_data, AE_OutData *out_data, PF_ParamDef *params[], LayerParam *layer) {
 	LOG_INFO ("-------- begin Global Setup --------");
 
 	int error = 0;
@@ -402,7 +402,7 @@ int PluginInstance::ExecuteSequenceSetup (PF_InData *in_data, PF_OutData *out_da
 	return error;
 }
 
-int PluginInstance::ExecuteParamsSetup (PF_InData *in_data, PF_OutData *out_data, PF_ParamDef *params[], LayerParam *layer) {
+int PluginInstance::ExecuteParamsSetup (PF_InData *in_data, AE_OutData *out_data, PF_ParamDef *params[], LayerParam *layer) {
 	LOG_INFO ("-------- begin Parameters Setup --------");
 
 	const AE_Command CMD = AE_Command::PARAMS_SETUP;
@@ -417,7 +417,7 @@ int PluginInstance::ExecuteParamsSetup (PF_InData *in_data, PF_OutData *out_data
 	return error;
 }
 
-int PluginInstance::ExecuteRender (PF_InData *in_data, PF_OutData *out_data, PF_ParamDef *params[], LayerParam *layer) {
+int PluginInstance::ExecuteRender (PF_InData *in_data, AE_OutData *out_data, PF_ParamDef *params[], LayerParam *layer) {
 	LOG_INFO ("-------- begin Render --------");
 
 	const AE_Command CMD = AE_Command::RENDER;
@@ -430,7 +430,7 @@ int PluginInstance::ExecuteRender (PF_InData *in_data, PF_OutData *out_data, PF_
 	return error;
 }
 
-PF_PreRenderOutput PluginInstance::ExecuteSmartPreRender (PF_InData *in_data, PF_OutData *out_data, PF_ParamDef *params[], LayerParam *layer) {
+PF_PreRenderOutput PluginInstance::ExecuteSmartPreRender (PF_InData *in_data, AE_OutData *out_data, PF_ParamDef *params[], LayerParam *layer) {
 	LOG_INFO ("-------- begin Smart PreRender --------");
 
 	const AE_Command CMD = AE_Command::SMART_PRE_RENDER;
@@ -505,7 +505,7 @@ PF_PreRenderOutput PluginInstance::ExecuteSmartPreRender (PF_InData *in_data, PF
 	return *extra->output;
 }
 
-int PluginInstance::ExecuteSmartRender (PF_InData *in_data, PF_OutData *out_data, PF_ParamDef *params[], LayerParam *layer) {
+int PluginInstance::ExecuteSmartRender (PF_InData *in_data, AE_OutData *out_data, PF_ParamDef *params[], LayerParam *layer) {
 	LOG_INFO ("-------- begin Smart Render --------");
 
 	const AE_Command CMD = AE_Command::SMART_RENDER;

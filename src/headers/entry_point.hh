@@ -10,7 +10,7 @@
 typedef int (*EntryPointFunc) (
 	AE_Command,
 	PF_InData *,
-	PF_OutData *,
+	AE_OutData *,
 	PF_ParamDef *[],
 	LayerParam *,
 	void *

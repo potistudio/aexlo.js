@@ -4,7 +4,7 @@
 #include "./out_flags.hh"
 #include "./parameters/point.hh"
 
-typedef struct {
+struct AE_OutData {
 	unsigned int         my_version;
 	char           name[PF_MAX_EFFECT_NAME_LEN + 1];
 	PF_Handle        global_data;
@@ -21,4 +21,4 @@ typedef struct {
 	int           dur_sampL;
 	PF_SoundWorld    dest_snd;
 	AE_OutFlag2     out_flags2;
-} PF_OutData;
+};

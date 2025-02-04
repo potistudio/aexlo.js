@@ -31,7 +31,7 @@ class PluginInstanceWrapper : public Napi::ObjectWrap<PluginInstanceWrapper> {
 	private:
 		PluginInstance* plugin;
 		PF_InData* in_data = new PF_InData();
-		PF_OutData* out_data = new PF_OutData();
+		AE_OutData* out_data = new AE_OutData();
 		PF_ParamDef* params[1] = {};
 		LayerParam* layer = new LayerParam();
 };
