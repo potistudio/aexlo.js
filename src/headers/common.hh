@@ -75,9 +75,7 @@ typedef void *PF_SndSamplePtr;
 
 
 
-typedef short PF_SoundChannels;
-typedef short PF_SoundFormat;
-typedef short PF_SoundSampleSize;
+
 
 enum {
 	PF_MF_Alpha_PREMUL 		= 0,

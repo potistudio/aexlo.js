@@ -1,8 +1,6 @@
 #pragma once
 
-#include <stdint.h>
-
-enum class AE_OutFlag : int32_t {
+enum class AE_OutFlag : int {
 	NONE                            = 0L,
 	KEEP_RESOURCE_OPEN              = 1L << 0,
 	WIDE_TIME_INPUT                 = 1L << 1,
@@ -38,7 +36,7 @@ enum class AE_OutFlag : int32_t {
 	AUDIO_EFFECT_ONLY               = 1L << 31
 };
 
-enum class AE_OutFlag2 : int32_t {
+enum class AE_OutFlag2 : int {
 	NONE                                       = 0L,
 	SUPPORTS_QUERY_DYNAMIC_FLAGS               = 1L << 0,
 	I_USE_3D_CAMERA                            = 1L << 1,

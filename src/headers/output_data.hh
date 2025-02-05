@@ -3,6 +3,7 @@
 #include "./basic.hh"
 #include "./out_flags.hh"
 #include "./parameters/point.hh"
+#include "./audio.hh"
 
 struct AE_OutData {
 	unsigned int         my_version;
@@ -19,6 +20,6 @@ struct AE_OutData {
 	char           return_msg[PF_MAX_EFFECT_MSG_LEN + 1];
 	int           start_sampL;
 	int           dur_sampL;
-	PF_SoundWorld    dest_snd;
+	AE_SoundWorld  dest_snd;
 	AE_OutFlag2     out_flags2;
 };

@@ -8,19 +8,7 @@
 #include "./parameters/union.hh"
 #include "./parameters/point.hh"
 #include "./interact_callbacks.hh"
-
-typedef struct {
-	double				rateF;
-	PF_SoundChannels		num_channels;
-	PF_SoundFormat			format;
-	PF_SoundSampleSize		sample_size;
-} PF_SoundFormatInfo;
-
-typedef struct {
-	PF_SoundFormatInfo		fi;
-	int					num_samples;
-	void					*dataP;
-} PF_SoundWorld;
+#include "./audio.hh"
 
 typedef struct {
 	AE_InteractCallbacks        inter;
@@ -56,7 +44,7 @@ typedef struct {
 	int                      start_sampL;
 	int                      dur_sampL;
 	int                      total_sampL;
-	PF_SoundWorld               src_snd;
+	AE_SoundWorld               src_snd;
 	SPBasicSuite                *pica_basicP;
 	int                      pre_effect_source_origin_x;
 	int                      pre_effect_source_origin_y;
