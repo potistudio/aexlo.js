@@ -10,7 +10,7 @@
 			"src/factories/utility_callbacks_factory.cc",
 			"src/factories/channel_suite_1_factory.cc",
 		],
-		'include_dirs': [ "<!@(node -p \"require('node-addon-api').include\")", "src" ],
+		'include_dirs': [ "<!@(node -p \"require('node-addon-api').include\")" ],
 		'dependencies': [ "<!(node -p \"require('node-addon-api').targets\"):node_addon_api_except" ],
 		'defines': [ 'NAPI_CPP_EXCEPTIONS' ],
 		# "cflags!": [ "-fno-exceptions" ],
