@@ -4,7 +4,7 @@
             "name": "Clang x64",
             "includePath": [
                 "${workspaceFolder}/**",
-				"C:/Users/POTI/AppData/Local/node-gyp/Cache/22.12.0/include/node/**"
+                "C:/Users/poti/AppData/Local/node-gyp/Cache/22.13.1/include/node/**"
             ],
             "defines": [
                 "_DEBUG",
@@ -14,8 +14,8 @@
             "windowsSdkVersion": "10.0.20348.0",
             "cStandard": "c17",
             "cppStandard": "c++17",
-            "intelliSenseMode": "windows-clang-x64",
-            "compilerPath": "C:/bin/msys64/mingw64/bin/clang.exe"
+            "intelliSenseMode": "windows-msvc-x64",
+            "compilerPath": "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.42.34433/bin/Hostx64/x64/cl.exe"
         }
     ],
     "version": 4

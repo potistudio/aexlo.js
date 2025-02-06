@@ -1,14 +1,12 @@
 #pragma once
-
-#include <stdint.h>
+#pragma pack (push, AE, 8)
 
 #include "../errors.hh"
-#include "../basic.hh"
 #include "../common.hh"
 
 /**
  * @struct AE_ChannelSuite1
- * @brief (PF_ChannelSuite1) frozen in AE 5.0
+ * @brief (AE_ChannelSuite1) frozen in AE 5.0
  */
 struct AE_ChannelSuite1 {
 	/**
@@ -21,9 +19,9 @@ struct AE_ChannelSuite1 {
 	 * @return Error code
 	 */
 	AE_Error (*GetLayerChannelCount) (
-		ProgressInfoPtr effect_ref,
+		AE_ProgressInfoPtr effect_ref,
 		AE_ParamIndex   param_index,
-		int32_t         *num_channels
+		int         *num_channels
 	);
 
 	/**
@@ -40,10 +38,10 @@ struct AE_ChannelSuite1 {
 	 * @return Error code
 	 */
 	AE_Error (*GetLayerChannelIndexedRefAndDesc) (
-		ProgressInfoPtr       effect_ref,
+		AE_ProgressInfoPtr       effect_ref,
 		AE_ParamIndex         param_index,
 		AE_ChannelIndex       channel_index,
-		PF_Boolean            *foundPB,
+		AE_Boolean            *foundPB,
 		AE_ChannelRef         *channel_refP,
 		AE_ChannelDescription *channel_descP
 	);
@@ -61,10 +59,10 @@ struct AE_ChannelSuite1 {
 	 * @return Error code
 	 */
 	AE_Error (*GetLayerChannelTypedRefAndDesc) (
-		ProgressInfoPtr       effect_ref,
+		AE_ProgressInfoPtr       effect_ref,
 		AE_ParamIndex         param_index,
 		AE_ChannelType        channel_type,
-		PF_Boolean            *foundPB,
+		AE_Boolean            *foundPB,
 		AE_ChannelRef         *channel_refP,
 		AE_ChannelDescription *channel_descP
 	);
@@ -85,11 +83,11 @@ struct AE_ChannelSuite1 {
 	 * @return Error code
 	 */
 	AE_Error (*CheckoutLayerChannel) (
-		ProgressInfoPtr  effect_ref,
+		AE_ProgressInfoPtr  effect_ref,
 		AE_ChannelRefPtr channel_refP,
-		int32_t          what_time,
-		int32_t          duration,
-		uint32_t         time_scale,
+		int          what_time,
+		int          duration,
+		unsigned int         time_scale,
 		AE_DataType      data_type,
 		AE_ChannelChunk  *channel_chunkP
 	);
@@ -104,8 +102,10 @@ struct AE_ChannelSuite1 {
 	 * @return Error code
 	 */
 	AE_Error (*CheckinLayerChannel) (
-		ProgressInfoPtr  effect_ref,
+		AE_ProgressInfoPtr  effect_ref,
 		AE_ChannelRefPtr channel_refP,
 		AE_ChannelChunk  *channel_chunkP
 	);
 };
+
+#pragma pack (pop, AE)

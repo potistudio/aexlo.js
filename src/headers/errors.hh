@@ -1,9 +1,9 @@
 #pragma once
 
-enum class AE_Error {
-	NONE = 0,
-	OUT_OF_MEMORY = 4,
-	INTERNAL_STRUCT_DAMAGED = 512,
+enum class AE_Error : int {
+	NONE                       = 0,
+	OUT_OF_MEMORY              = 4,
+	INTERNAL_STRUCT_DAMAGED    = 512,
 	INVALID_INDEX,
 	UNRECOGNIZED_PARAM_TYPE,
 	INVALID_CALLBACK,

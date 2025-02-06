@@ -21,11 +21,11 @@ class ChannelSuite1Factory {
 			AE_ChannelSuite1 *suite = new AE_ChannelSuite1();
 
 			suite->GetLayerChannelCount = [](
-				ProgressInfoPtr effect_ref,
+				AE_ProgressInfoPtr effect_ref,
 				AE_ParamIndex   param_index,
-				int32_t         *num_channels
+				int         *num_channels
 			) -> AE_Error {
-				int32_t NUM_CHANNELS = 4;
+				int NUM_CHANNELS = 4;
 				*num_channels = NUM_CHANNELS;
 
 				LOG_DEBUG ("Called: AE_ChannelSuite1::GetLayerChannelCount (");
@@ -38,10 +38,10 @@ class ChannelSuite1Factory {
 			};
 
 			suite->GetLayerChannelIndexedRefAndDesc = [](
-				ProgressInfoPtr       effect_ref,
+				AE_ProgressInfoPtr       effect_ref,
 				AE_ParamIndex         param_index,
 				AE_ChannelIndex       channel_index,
-				PF_Boolean            *foundPB,
+				AE_Boolean            *foundPB,
 				AE_ChannelRef         *channel_refP,
 				AE_ChannelDescription *channel_descP
 			) -> AE_Error {
@@ -55,10 +55,10 @@ class ChannelSuite1Factory {
 			};
 
 			suite->GetLayerChannelTypedRefAndDesc = [](
-				ProgressInfoPtr       effect_ref,
+				AE_ProgressInfoPtr       effect_ref,
 				AE_ParamIndex         param_index,
 				AE_ChannelType        channel_type,
-				PF_Boolean            *foundPB,
+				AE_Boolean            *foundPB,
 				AE_ChannelRef         *channel_refP,
 				AE_ChannelDescription *channel_descP
 			) -> AE_Error {
@@ -72,11 +72,11 @@ class ChannelSuite1Factory {
 			};
 
 			suite->CheckoutLayerChannel = [](
-				ProgressInfoPtr			effect_ref,
+				AE_ProgressInfoPtr			effect_ref,
 				AE_ChannelRefPtr	channel_refP,
-				int32_t				what_time,
-				int32_t				duration,
-				uint32_t		time_scale,
+				int				what_time,
+				int				duration,
+				unsigned int		time_scale,
 				AE_DataType 		data_type,
 				AE_ChannelChunk		*channel_chunkP
 			) -> AE_Error {
@@ -93,7 +93,7 @@ class ChannelSuite1Factory {
 			};
 
 			suite->CheckinLayerChannel = [](
-				ProgressInfoPtr  effect_ref,
+				AE_ProgressInfoPtr  effect_ref,
 				AE_ChannelRefPtr channel_refP,
 				AE_ChannelChunk  *channel_chunkP
 			) -> AE_Error {

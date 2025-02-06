@@ -31,7 +31,7 @@ function loadResources() {
 function executeAll() {
 	console.log (instance.about());
 	console.log (instance.setupGlobal());
-	console.log (instance.setupParameters());
-	console.log (instance.render());
-	console.log (instance.smartRender());
+	// console.log (instance.setupParameters());
+	// console.log (instance.render());
+	// console.log (instance.smartRender());
 }

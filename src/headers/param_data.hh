@@ -1,45 +1,50 @@
 #pragma once
+#pragma pack (push, AE, 8)
 
-#include "./basic.hh"
 #include "./parameters/union.hh"
 
-enum class ParamType : int {
-	PF_Param_RESERVED = -1,
-	PF_Param_LAYER = 0,
-	PF_Param_SLIDER,
-	PF_Param_FIX_SLIDER,
-	PF_Param_ANGLE,
-	PF_Param_CHECKBOX,
-	PF_Param_COLOR,
-	PF_Param_POINT,
-	PF_Param_POPUP,
-	PF_Param_CUSTOM,
-	PF_Param_NO_DATA,
-	PF_Param_FLOAT_SLIDER,
-	PF_Param_ARBITRARY_DATA,
-	PF_Param_PATH,
-	PF_Param_GROUP_START,
-	PF_Param_GROUP_END,
-	PF_Param_BUTTON,
-	PF_Param_RESERVED2,
-	PF_Param_RESERVED3,
-	PF_Param_POINT_3D
+enum class AE_ParamType : int {
+	RESERVED = -1,
+	LAYER    = 0,
+	SLIDER,
+	FIX_SLIDER,
+	ANGLE,
+	CHECKBOX,
+	COLOR,
+	POINT,
+	POPUP,
+	CUSTOM,
+	_NO_DATA,
+	FLOAT_SLIDER,
+	ARBITRARY_DATA,
+	PATH,
+	GROUP_START,
+	GROUP_END,
+	BUTTON,
+	RESERVED2,
+	RESERVED3,
+	POINT_3D
 };
 
-typedef struct {
+struct AE_ParamDef {
 	union {
-		int    id;
-		int    change_flags;
+		int             id;
+		int             change_flags;
 	} uu;
 
-	int      ui_flags;
-	short    ui_width;
-	short    ui_height;
+	int                 ui_flags;
+	short               ui_width;
+	short               ui_height;
 
-	ParamType	    param_type;
-	char    name[PF_MAX_EFFECT_PARAM_NAME_LEN + 1];
-	int	    flags;
+	AE_ParamType        param_type;
+	char                name[32];
+	int	                flags;
 
 	int                 unused;
-	PF_ParamDefUnion    u;
-} PF_ParamDef, *PF_ParamDefPtr, **PF_ParamDefH;
+	AE_ParamDefUnion    u;
+};
+
+typedef AE_ParamDef *AE_ParamDefPtr, **AE_ParamDefH;
+typedef AE_ParamDef **AE_ParamList;
+
+#pragma pack (pop, AE)

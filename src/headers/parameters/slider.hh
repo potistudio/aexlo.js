@@ -1,13 +1,24 @@
+/**
+ * @file slider.hh
+ * @brief Slider Parameter
+ * @author potistudio
+ */
+
 #pragma once
+#pragma pack (push, AE, 8)
 
-typedef struct {
-	/* PARAMETER VALUE */
-	int	value;
-	char value_str[PF_MAX_PARAM_VALUE_LEN + 1];  // string for value
-	char value_desc[PF_MAX_PARAM_DESCRIPTION_LEN + 1];  // qualitative description
+/**
+ * @struct AE_SliderParam
+ * @brief Slider Parameter
+ */
+struct AE_SliderParam {
+	long	value;
+	char value_str[32];
+	char value_desc[32];
 
-	/* PARAMETER DESCRIPTION */
-	int	valid_min, valid_max;  // acceptable input range
-	int	slider_min, slider_max;  // range represented by width of slider
+	int	valid_min, valid_max;
+	int	slider_min, slider_max;
 	int	dephault;
-} PF_SliderDef;
+};
+
+#pragma pack (pop, AE)

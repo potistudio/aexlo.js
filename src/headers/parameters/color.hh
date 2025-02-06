@@ -1,8 +1,22 @@
 #pragma once
+#pragma pack (push, AE, 8)
 
-#include "../basic.hh"
+#include "../common.hh"
 
-typedef struct {
-	Pixel value;
-	Pixel dephault;
-} ColorParam;
+/**
+ * @struct AE_ColorParam
+ * @brief Color Parameter
+ */
+struct AE_ColorParam {
+	/**
+	 * @brief Parameter Value
+	 */
+	AE_Pixel value;
+
+	/**
+	 * @brief Parameter Description
+	 */
+	AE_Pixel dephault;
+};
+
+#pragma pack (pop, AE)

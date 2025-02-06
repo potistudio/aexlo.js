@@ -1,9 +1,12 @@
 #include "plugin_instance.hh"
 
 PluginInstance::PluginInstance (std::string path) {
-	this->module = LoadLibraryA ((LPCSTR)path.c_str());
+	AddDllDirectory (PCWSTR("C:\\Program Files\\Adobe\\Adobe After Effects 2025\\Support Files"));
+	this->module = LoadLibraryExA ((LPCSTR)path.c_str(), NULL, 0);
+
 	if (this->module == NULL) {
-		throw std::runtime_error ("Failed to load AEX");
+		LOG_CRITICAL ("Failed to load library with code: " << GetLastError());
+		throw std::exception ("Failed to load library");
 	}
 
 	// Cast the exported function address "EffectMain" or "EntryPointFunc" to a function pointer
@@ -29,8 +32,15 @@ PluginInstance::PluginInstance (std::string path) {
 				this->entry = (EntryPointFunc)GetProcAddress (module, "EffectMainExtra");
 
 				if (this->entry == NULL) {
-					LOG_CRITICAL ("Failed to cast entry point");
-					throw std::runtime_error ("Failed to cast entry point");
+					LOG_WARNING ("Cannot cast entry point as \"EffectMainExtra\"");
+					LOG_INFO ("Trying \"FilterMain\"");
+
+					this->entry = (EntryPointFunc)GetProcAddress (module, "FilterMain");
+
+					if (this->entry == NULL) {
+						LOG_CRITICAL ("Failed to cast entry point");
+						throw std::runtime_error ("Failed to cast entry point");
+					}
 				}
 			}
 		}
@@ -75,11 +85,11 @@ std::string PluginInstance::ExtractResources() {
 	return result;
 }
 
-int PluginInstance::Execute (PF_Cmd cmd, PF_InData *in_data, PF_OutData *outData, PF_ParamDef *params[], LayerParam *layer, void *extra) {
-	int err = 0;
+AE_Error PluginInstance::Execute (AE_Command cmd, AE_InData *in_data, AE_OutData *outData, AE_ParamDef *params[], AE_LayerParam *layer, void *extra) {
+	AE_Error err = AE_Error::NONE;
 
 	/** Initialize InData **/
-	in_data->version = PF_SpecVersion();
+	in_data->version = AE_SpecVersion();
 	in_data->version.major = 13;
 	in_data->version.minor = 28;
 
@@ -88,18 +98,18 @@ int PluginInstance::Execute (PF_Cmd cmd, PF_InData *in_data, PF_OutData *outData
 
 	in_data->what_cpu = 3;
 
-	in_data->extent_hint = PF_LRect();
+	in_data->extent_hint = AE_LRect();
 	in_data->extent_hint.left = 32760;
 	in_data->extent_hint.top = -186403897;
 	in_data->extent_hint.right = 32761;
 	in_data->extent_hint.bottom = -417837312;
 
 	in_data->pica_basicP = new SPBasicSuite();
-	in_data->pica_basicP->AcquireSuite = [](const char *name, int version, const void **suite) -> int {
+	in_data->pica_basicP->AcquireSuite = [](const char *name, int version, const void **suite) -> AE_Error {
 		LOG_INFO ("AcquireSuite: \"" << name << ", ver." << version << "\"");
 
 		if (strcmp(name, "PF ANSI Suite") == 0) {
-			PF_ANSICallbacksSuite *ansi = new PF_ANSICallbacksSuite();
+			AE_ANSICallbacksSuite *ansi = new AE_ANSICallbacksSuite();
 
 			ansi->sin = [](double x) -> double {
 				double result = sin (x);
@@ -222,57 +232,81 @@ int PluginInstance::Execute (PF_Cmd cmd, PF_InData *in_data, PF_OutData *outData
 
 			*suite = ansi;
 
-			return 0;
+			return AE_Error::NONE;
 		} else if (strcmp(name, "PF Iterate8 Suite") == 0) {
-			PF_Iterate8Suite2 *i8s = new PF_Iterate8Suite2();
+			AE_Iterate8Suite2 *i8s = new AE_Iterate8Suite2();
 
-			i8s->iterate = [](PF_InData *in_data, int progress_base, int progress_final, LayerParam *src, const PF_Rect *area, void *controller, int(*pix_fn)(void* controller, int x, int y, Pixel* in, Pixel* out), LayerParam *dts) -> int {
-				Pixel inPixel;
-				Pixel outPixel;
+			i8s->iterate = [](AE_InData *in_data, int progress_base, int progress_final, AE_LayerParam *src, const AE_Rect *area, void *controller, int(*pix_fn)(void* controller, int x, int y, AE_Pixel* in, AE_Pixel* out), AE_LayerParam *dts) -> int {
+				AE_Pixel inPixel;
+				AE_Pixel outPixel;
 
 				for (int i = 0; i < 10; i++) {
 					pix_fn (controller, i, 0, &inPixel, &outPixel);
-					LOG_INFO ("A: " << ((int)outPixel.alpha) << ", R: " << ((int)outPixel.red) << ", G: " << ((int)outPixel.green) << ", B: " << ((int)outPixel.blue));
+					LOG_INFO ("A: " << ((int)outPixel.a) << ", R: " << ((int)outPixel.r) << ", G: " << ((int)outPixel.g) << ", B: " << ((int)outPixel.b));
 				}
 
 				return 0;
 			};
 
 			*suite = i8s;
-			return 0;
+			return AE_Error::NONE;
 		} else if (strcmp(name, "PF World Transform Suite") == 0) {
-			PF_WorldTransformSuite1 *wts = new PF_WorldTransformSuite1();
+			AE_WorldTransformSuite1 *wts = new AE_WorldTransformSuite1();
 
-			wts->copy = [](ProgressInfoPtr effect_ref, LayerParam *src, LayerParam *dst, PF_Rect *src_r, PF_Rect *dst_r) -> int {
-				LOG_INFO ("copy" << src);
-				return 0;
+			wts->Copy = [] (
+				AE_ProgressInfoPtr    effect_ref,
+				AE_LayerParam         *src,
+				AE_LayerParam         *dst,
+				AE_Rect               *src_r,
+				AE_Rect               *dst_r
+			) -> AE_Error {
+				AE_Error error = AE_Error::NONE;
+
+				LOG_DEBUG ("Called: AE_WorldTransformSuite1::Copy (");
+				LOG_DEBUG ("     from: 0x" << effect_ref);
+				LOG_DEBUG ("      src: 0x" << src);
+				LOG_DEBUG ("      dst: 0x" << dst);
+				LOG_DEBUG ("    src_r: 0x" << src_r);
+				LOG_DEBUG ("    dst_r: 0x" << dst_r);
+				LOG_DEBUG (") -> AE_Error::" << NAMEOF_ENUM(error));
+
+				return error;
 			};
 
 			*suite = wts;
-			return 0;
+			return AE_Error::NONE;
 		} else if (strcmp(name, "PF Effect UI Suite") == 0) {
-			PF_EffectUISuite1 *eui = new PF_EffectUISuite1();
+			AE_EffectUISuite1 *eui = new AE_EffectUISuite1();
 
-			eui->PF_SetOptionsButtonName = [](void *effect_ref, const char *name) -> int {
-				LOG_INFO ("Set Options Button Name: " << name);
-				return 0;
+			eui->SetOptionsButtonName = [] (
+				AE_ProgressInfoPtr    effect_ref,
+				const char            *name
+			) -> AE_Error {
+				AE_Error error = AE_Error::NONE;
+
+				LOG_DEBUG ("Called: AE_EffectUISuite1::SetOptionsButtonName (");
+				LOG_DEBUG ("    from: 0x" << effect_ref);
+				LOG_DEBUG ("    name: \"" << *name << "\"");
+				LOG_DEBUG (") -> " << NAMEOF_ENUM(error));
+
+				return error;
 			};
 
 			*suite = eui;
 
-			return 0;
+			return AE_Error::NONE;
 		} else if (strcmp(name, "PF Handle Suite") == 0) {
-			PF_HandleSuite1 *hs = new PF_HandleSuite1();
+			AE_HandleSuite1 *hs = new AE_HandleSuite1();
 
 			hs->HostNewHandle = [](uint64_t size) -> void * {
 				LOG_INFO ("New Handle: " << size);
-				PF_Handle *handle = new PF_Handle();
+				AE_Handle *handle = new AE_Handle();
 				return handle;
 			};
 
 			hs->HostLockHandle = [](void *handle) -> void * {
 				LOG_INFO ("Lock Handle: " << handle);
-				return new PF_Handle();
+				return new AE_Handle();
 			};
 
 			hs->HostUnlockHandle = [](void *handle) -> void {
@@ -295,46 +329,46 @@ int PluginInstance::Execute (PF_Cmd cmd, PF_InData *in_data, PF_OutData *outData
 
 			*suite = hs;
 
-			return 0;
+			return AE_Error::NONE;
 		} else if (strcmp(name, "PF AE Channel Suite") == 0) {
-			LOG_DEBUG ("Aquire Suite Success as \"PF AE Channel Suite\"");
-			LOG_DEBUG (" ==> PF_ChannelSuite1");
+			LOG_DEBUG ("Acquire Suite Success as \"PF AE Channel Suite\"");
+			LOG_DEBUG (" ==> AE_ChannelSuite1");
 
 			*suite = (new ChannelSuite1Factory())->Create();
-			return 0;
+			return AE_Error::NONE;
 		}
 
-		return -1; // Error
+		return AE_Error::BAD_CALLBACK_PARAM;
 	};
 
-	in_data->pica_basicP->ReleaseSuite = [](const char *name, int version) -> int {
+	in_data->pica_basicP->ReleaseSuite = [](const char *name, int version) -> AE_Error {
 		LOG_INFO ("ReleaseSuite: \"" << name << ", ver." << version << "\"");
-		return 0;
+		return AE_Error::NONE;
 	};
 
-	in_data->pica_basicP->IsEqual = [](const char *token1, const char *token2) -> int {
+	in_data->pica_basicP->IsEqual = [](const char *token1, const char *token2) -> AE_Error {
 		LOG_INFO ("Called ---- SPBasicSuite.IsEqual(" << token1 << ", " << token2 << ") ---- ");
-		return 0;
+		return AE_Error::NONE;
 	};
 
-	in_data->pica_basicP->AllocateBlock = [](size_t size, void **block) -> int {
+	in_data->pica_basicP->AllocateBlock = [](size_t size, void **block) -> AE_Error {
 		LOG_INFO ("---- AllocateBlock: " << size);
-		return 0;
+		return AE_Error::NONE;
 	};
 
-	in_data->pica_basicP->FreeBlock = [](void *block) -> int {
+	in_data->pica_basicP->FreeBlock = [](void *block) -> AE_Error {
 		LOG_INFO ("---- FreeBlock: " << block);
-		return 0;
+		return AE_Error::NONE;
 	};
 
-	in_data->pica_basicP->ReallocateBlock = [](void *block, size_t newSize, void **newblock) -> int {
+	in_data->pica_basicP->ReallocateBlock = [](void *block, size_t newSize, void **newblock) -> AE_Error {
 		LOG_INFO ("---- ReallocateBlock: " << block << ", " << newSize);
-		return 0;
+		return AE_Error::NONE;
 	};
 
-	in_data->pica_basicP->Undefined = [](void) -> int {
+	in_data->pica_basicP->Undefined = [](void) -> AE_Error {
 		LOG_INFO ("---- Undefined");
-		return 0;
+		return AE_Error::NONE;
 	};
 
 	in_data->utils = (new UtilityCallbackFactory())->Create();
@@ -345,11 +379,11 @@ int PluginInstance::Execute (PF_Cmd cmd, PF_InData *in_data, PF_OutData *outData
 	return err;
 }
 
-int PluginInstance::ExecuteAbout (PF_InData *in_data, PF_OutData *out_data, PF_ParamDef *params[], LayerParam *layer) {
+AE_Error PluginInstance::ExecuteAbout (AE_InData *in_data, AE_OutData *out_data, AE_ParamDef *params[], AE_LayerParam *layer) {
 	LOG_INFO ("-------- begin About --------");
 
-	const int CMD = PF_Cmd_ABOUT;
-	int error = 0;
+	const AE_Command CMD = AE_Command::ABOUT;
+	AE_Error error = AE_Error::NONE;
 
 	try {
 		error = this->Execute (CMD, in_data, out_data, params, layer, NULL);
@@ -364,49 +398,49 @@ int PluginInstance::ExecuteAbout (PF_InData *in_data, PF_OutData *out_data, PF_P
 	return error;
 }
 
-int PluginInstance::ExecuteGlobalSetup (PF_InData *in_data, PF_OutData *out_data, PF_ParamDef *params[], LayerParam *layer) {
+AE_Error PluginInstance::ExecuteGlobalSetup (AE_InData *in_data, AE_OutData *out_data, AE_ParamDef *params[], AE_LayerParam *layer) {
 	LOG_INFO ("-------- begin Global Setup --------");
 
-	int error = 0;
-	const int CMD = PF_Cmd_GLOBAL_SETUP;
+	AE_Error error = AE_Error::NONE;
+	const AE_Command CMD = AE_Command::GLOBAL_SETUP;
 
-	LOG_DEBUG ("Execute Plugin with Code: " << CMD);
+	LOG_DEBUG ("Execute Plugin with Code: " << NAMEOF_ENUM(CMD));
 	error = this->Execute (CMD, in_data, out_data, params, layer, NULL);
 	LOG_DEBUG ("Execute Successful\n");
 
 	LOG_INFO ("  ==> Version: " << out_data->my_version);
-	LOG_INFO ("  ==> Flags: " << out_data->out_flags);
-	LOG_INFO ("  ==> Flags2: " << out_data->out_flags2);
+	LOG_INFO ("  ==> Flags: " << NAMEOF_ENUM_FLAG(out_data->out_flags));
+	LOG_INFO ("  ==> Flags2: " << NAMEOF_ENUM_FLAG(out_data->out_flags2));
 
 	LOG_INFO ("-------- end Global Setup --------");
 
 	return error;
 }
 
-int PluginInstance::ExecuteSequenceSetup (PF_InData *in_data, PF_OutData *out_data, PF_ParamDef *params[], LayerParam *layer) {
+AE_Error PluginInstance::ExecuteSequenceSetup (AE_InData *in_data, AE_OutData *out_data, AE_ParamDef *params[], AE_LayerParam *layer) {
 	LOG_INFO ("-------- begin Global Setup --------");
 
-	int error = 0;
-	const int CMD = PF_Cmd_SEQUENCE_SETUP;
+	AE_Error error = AE_Error::NONE;
+	const AE_Command CMD = AE_Command::SEQUENCE_SETUP;
 
-	LOG_DEBUG ("Execute Plugin with Code: " << CMD);
+	LOG_DEBUG ("Execute Plugin with Code: " << NAMEOF_ENUM(CMD));
 	error = this->Execute (CMD, in_data, out_data, params, layer, NULL);
 	LOG_DEBUG ("Execute Successful\n");
 
 	LOG_INFO ("  ==> Version: " << out_data->my_version);
-	LOG_INFO ("  ==> Flags: " << out_data->out_flags);
-	LOG_INFO ("  ==> Flags2: " << out_data->out_flags2);
+	LOG_INFO ("  ==> Flags: " << NAMEOF_ENUM_FLAG(out_data->out_flags));
+	LOG_INFO ("  ==> Flags2: " << NAMEOF_ENUM_FLAG(out_data->out_flags2));
 
 	LOG_INFO ("-------- end Global Setup --------");
 
 	return error;
 }
 
-int PluginInstance::ExecuteParamsSetup (PF_InData *in_data, PF_OutData *out_data, PF_ParamDef *params[], LayerParam *layer) {
+AE_Error PluginInstance::ExecuteParamsSetup (AE_InData *in_data, AE_OutData *out_data, AE_ParamDef *params[], AE_LayerParam *layer) {
 	LOG_INFO ("-------- begin Parameters Setup --------");
 
-	const int CMD = PF_Cmd_PARAMS_SETUP;
-	int error = 0;
+	const AE_Command CMD = AE_Command::PARAMS_SETUP;
+	AE_Error error = AE_Error::NONE;
 
 	/* Execute */
 	error = this->Execute (CMD, in_data, out_data, params, layer, NULL);
@@ -417,11 +451,11 @@ int PluginInstance::ExecuteParamsSetup (PF_InData *in_data, PF_OutData *out_data
 	return error;
 }
 
-int PluginInstance::ExecuteRender (PF_InData *in_data, PF_OutData *out_data, PF_ParamDef *params[], LayerParam *layer) {
+AE_Error PluginInstance::ExecuteRender (AE_InData *in_data, AE_OutData *out_data, AE_ParamDef *params[], AE_LayerParam *layer) {
 	LOG_INFO ("-------- begin Render --------");
 
-	const int CMD = PF_Cmd_RENDER;
-	int error = 0;
+	const AE_Command CMD = AE_Command::RENDER;
+	AE_Error error = AE_Error::NONE;
 
 	error = this->Execute (CMD, in_data, out_data, params, layer, NULL);
 
@@ -430,44 +464,44 @@ int PluginInstance::ExecuteRender (PF_InData *in_data, PF_OutData *out_data, PF_
 	return error;
 }
 
-PF_PreRenderOutput PluginInstance::ExecuteSmartPreRender (PF_InData *in_data, PF_OutData *out_data, PF_ParamDef *params[], LayerParam *layer) {
+AE_PreRenderOutput PluginInstance::ExecuteSmartPreRender (AE_InData *in_data, AE_OutData *out_data, AE_ParamDef *params[], AE_LayerParam *layer) {
 	LOG_INFO ("-------- begin Smart PreRender --------");
 
-	const int CMD = PF_Cmd_SMART_PRE_RENDER;
-	int error = 0;
+	const AE_Command CMD = AE_Command::SMART_PRE_RENDER;
+	AE_Error error = AE_Error::NONE;
 
-	PF_PreRenderExtra *extra = new PF_PreRenderExtra();
-	extra->input = new PF_PreRenderInput();
-	extra->output = new PF_PreRenderOutput();
-	extra->callbacks = new PF_PreRenderCallbacks();
+	AE_PreRenderExtra *extra = new AE_PreRenderExtra();
+	extra->input = new AE_PreRenderInput();
+	extra->output = new AE_PreRenderOutput();
+	extra->callbacks = new AE_PreRenderCallbacks();
 
-	// PF_PreRenderInput
-	extra->input->output_request = PF_RenderRequest();
-	extra->input->output_request.rect = PF_LRect();
+	// AE_PreRenderInput
+	extra->input->output_request = AE_RenderRequest();
+	extra->input->output_request.rect = AE_LRect();
 	extra->input->output_request.rect.left = -192;
 	extra->input->output_request.rect.top = -108;
 	extra->input->output_request.rect.right = 2112;
 	extra->input->output_request.rect.bottom = 1188;
-	extra->input->output_request.channel_mask = 15;
+	extra->input->output_request.channel_mask = AE_ChannelMask::ARGB;
 	extra->input->bitdepth = 8;
 	extra->input->device_index = 4294967295;
 
-	// PF_PreRenderOutput
+	// AE_PreRenderOutput
 	extra->output->delete_pre_render_data_func = [](void *pre_render_data) -> void {
 		LOG_INFO ("Called: delete_pre_render_data_func (" << pre_render_data << ")");
 	};
 
-	// PF_PreRenderCallbacks
+	// AE_PreRenderCallbacks
 	extra->callbacks->checkout_layer = [](
-		ProgressInfoPtr           effect_ref,
-		int32_t                   index,
-		int32_t                   checkout_idL,
-		const PF_RenderRequest    *req,
-		int32_t                   what_time,
-		int32_t                   time_step,
-		uint32_t                  time_scale,
-		PF_CheckoutResult         *checkout_result
-	) -> int32_t {
+		AE_ProgressInfoPtr           effect_ref,
+		int                   index,
+		int                   checkout_idL,
+		const AE_RenderRequest    *req,
+		int                   what_time,
+		int                   time_step,
+		unsigned int                  time_scale,
+		AE_CheckoutResult         *checkout_result
+	) -> int {
 		LOG_INFO ("Called: PreRenderCallbacks.checkout_layer()");
 
 		checkout_result->result_rect.left = 0;
@@ -491,10 +525,10 @@ PF_PreRenderOutput PluginInstance::ExecuteSmartPreRender (PF_InData *in_data, PF
 	};
 
 	extra->callbacks->GuidMixInPtr = [](
-		ProgressInfoPtr    effect_ref,
-		uint32_t           buf_sizeLu,
+		AE_ProgressInfoPtr    effect_ref,
+		unsigned int           buf_sizeLu,
 		const void         *buf
-	) -> int32_t {
+	) -> int {
 		LOG_INFO ("Called: PreRenderCallbacks.GuidMixInPtr()");
 		return 0;
 	};
@@ -505,41 +539,41 @@ PF_PreRenderOutput PluginInstance::ExecuteSmartPreRender (PF_InData *in_data, PF
 	return *extra->output;
 }
 
-int PluginInstance::ExecuteSmartRender (PF_InData *in_data, PF_OutData *out_data, PF_ParamDef *params[], LayerParam *layer) {
+AE_Error PluginInstance::ExecuteSmartRender (AE_InData *in_data, AE_OutData *out_data, AE_ParamDef *params[], AE_LayerParam *layer) {
 	LOG_INFO ("-------- begin Smart Render --------");
 
-	const int CMD = PF_Cmd_SMART_RENDER;
-	int error = 0;
+	const AE_Command CMD = AE_Command::SMART_RENDER;
+	AE_Error error = AE_Error::NONE;
 
-	PF_SmartRenderExtra *extra = new PF_SmartRenderExtra();
-	extra->input = new PF_SmartRenderInput();
-	extra->callbacks = new PF_SmartRenderCallbacks();
+	AE_SmartRenderExtra *extra = new AE_SmartRenderExtra();
+	extra->input = new AE_SmartRenderInput();
+	extra->callbacks = new AE_SmartRenderCallbacks();
 
 
 	extra->input->bitdepth = 8;
 	extra->input->device_index = 4294967295;
 
 	extra->callbacks->checkout_layer_pixels = [](
-		ProgressInfoPtr    effect_ref,
-		int32_t            checkout_idL,
-		LayerParam         **pixels
-	) -> int32_t {
+		AE_ProgressInfoPtr    effect_ref,
+		int            checkout_idL,
+		AE_LayerParam         **pixels
+	) -> int {
 		LOG_INFO ("Called: SmartRenderCallbacks.checkout_layer_pixels()");
 		return 0;
 	};
 
 	extra->callbacks->checkin_layer_pixels = [](
-		ProgressInfoPtr    effect_ref,
-		int32_t            checkout_idL
-	) -> int32_t {
+		AE_ProgressInfoPtr    effect_ref,
+		int            checkout_idL
+	) -> int {
 		LOG_INFO ("Called: SmartRenderCallbacks.checkin_layer_pixels()");
 		return 0;
 	};
 
 	extra->callbacks->checkout_output = [](
-		ProgressInfoPtr    effect_ref,
-		LayerParam         **output
-	) -> int32_t {
+		AE_ProgressInfoPtr    effect_ref,
+		AE_LayerParam         **output
+	) -> int {
 		LOG_INFO ("Called: SmartRenderCallbacks.checkout_output()");
 		return 0;
 	};
