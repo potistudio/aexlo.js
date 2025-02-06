@@ -1,6 +1,6 @@
 #pragma once
 
-enum class AE_Command {
+enum class AE_Command : int {
 	ABOUT = 0,
 	GLOBAL_SETUP,
 	UNUSED_0,

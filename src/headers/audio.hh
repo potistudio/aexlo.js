@@ -1,10 +1,9 @@
 #pragma once
 #pragma pack (push, AE, 8)
-extern "C" {
 
 enum class AE_SoundChannels : short {
-	PF_Channels_MONO   = 1,
-	PF_Channels_STEREO = 2
+	MONO   = 1,
+	STEREO = 2
 };
 
 enum class AE_SoundFormat : short {
@@ -20,17 +19,16 @@ enum class AE_SoundSampleSize : short {
 };
 
 struct AE_SoundFormatInfo {
-	double                rateF;
-	AE_SoundChannels      num_channels;
-	AE_SoundFormat        format;
-	AE_SoundSampleSize    sample_size;
-};
+	double                rateF;         // 0
+	AE_SoundChannels      num_channels;  // 8
+	AE_SoundFormat        format;        // 10
+	AE_SoundSampleSize    sample_size;   // 12
+};  // 16bytes
 
 struct AE_SoundWorld {
-	AE_SoundFormatInfo    fi;
-	int                   num_samples;
-	void                  *dataP;
-};
+	AE_SoundFormatInfo    fi;           // 0
+	int                   num_samples;  // 16
+	void                  *dataP;       // 24
+};  // 32bytes
 
-}
 #pragma pack (pop, AE)

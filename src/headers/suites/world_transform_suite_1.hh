@@ -1,80 +1,88 @@
 #pragma once
+#pragma pack (push, AE, 8)
 
-typedef struct PF_WorldTransformSuite1 {
-	int (*composite_rect) (
-		ProgressInfoPtr     effect_ref,  /* from in_data */
-		PF_Rect        *src_rect,   /* rectangle in source image */
-		int         src_opacity, /* opacity of src */
-		LayerParam *source_wld, /* src PF world */
-		int         dest_x,      /* upper left-hand corner of src rect...*/
-		int         dest_y,      /* ... in composite image */
-		int       field_rdr,   /* which scanlines to render (all, upper, lower) */
-		int    xfer_mode,   /* Copy, Composite Behind, Composite In Front */
-		LayerParam *dest_wld   /* Destination buffer. Already filled */
+#include "../errors.hh"
+#include "../common.hh"
+#include "../layer_data.hh"
+
+struct AE_WorldTransformSuite1 {
+	AE_Error (*CompositeRect) (
+		AE_ProgressInfoPtr    effect_ref,
+		AE_Rect               *src_rect,
+		int                   src_opacity,
+		AE_EffectWorld        *source_wld,
+		int                   dest_x,
+		int                   dest_y,
+		AE_Field              field_rdr,
+		AE_XferMode           xfer_mode,
+		AE_LayerParam         *dest_wld
 	);
 
-	int (*blend) (
-		ProgressInfoPtr           effect_ref,		/* reference from in_data */
-		const LayerParam *src1,
-		const LayerParam *src2,
-		int             ratio,			/* 0 == full src1, 0x00010000 == full src2 */
-		LayerParam       *dst
+	AE_Error (*Blend) (
+		AE_ProgressInfoPtr      effect_ref,
+		const AE_EffectWorld    *src1,
+		const AE_EffectWorld    *src2,
+		AE_Fixed                ratio,
+		AE_EffectWorld          *dst
 	);
 
-	int (*convolve) (
-		ProgressInfoPtr     effect_ref,  /* reference from in_data */
-		LayerParam *src,
-		const PF_Rect  *area,       /* pass NULL for all pixels */
-		unsigned int flags,
-		int         kernel_size,
-		void           *a_kernel,
-		void           *r_kernel,
-		void           *g_kernel,
-		void           *b_kernel,
-		LayerParam *dst
+	AE_Error (*Convolve) (
+		AE_ProgressInfoPtr    effect_ref,
+		AE_EffectWorld        *src,
+		const AE_Rect         *area,
+		AE_KernelFlags        flags,
+		int                   kernel_size,
+		void                  *a_kernel,
+		void                  *r_kernel,
+		void                  *g_kernel,
+		void                  *b_kernel,
+		AE_EffectWorld        *dst
 	);
 
-	int (*copy) (
-		ProgressInfoPtr     effect_ref, /* reference from in_data */
-		LayerParam *src,
-		LayerParam *dst,
-		PF_Rect        *src_r,     /* pass NULL for whole world */
-		PF_Rect        *dst_r     /* pass NULL for whole world */
+	AE_Error (*Copy) (
+		AE_ProgressInfoPtr    effect_ref,
+		AE_EffectWorld        *src,
+		AE_EffectWorld        *dst,
+		AE_Rect               *src_r,
+		AE_Rect               *dst_r
 	);
 
-	int (*copy_hq) (
-		ProgressInfoPtr     effect_ref, /* reference from in_data */
-		LayerParam *src,
-		LayerParam *dst,
-		PF_Rect        *src_r,     /* pass NULL for whole world */
-		PF_Rect        *dst_r     /* pass NULL for whole world */
+	AE_Error (*CopyHQ) (
+		AE_ProgressInfoPtr    effect_ref,
+		AE_EffectWorld        *src,
+		AE_EffectWorld        *dst,
+		AE_Rect               *src_r,
+		AE_Rect               *dst_r
 	);
 
+	AE_Error (*TransferRect) (
+		AE_ProgressInfoPtr        effect_ref,
+		AE_Quality                quality,
+		AE_ModeFlags              m_flags,
+		AE_Field                  field,
+		const AE_Rect             *src_rec,
+		const AE_EffectWorld      *src_world,
+		const AE_CompositeMode    *comp_mode,
+		const AE_MaskWorld        *mask_world0,
+		int                       dest_x,
+		int                       dest_y,
+		AE_EffectWorld            *dst_world
+	);
 
-	 int	(*transfer_rect)(
-		ProgressInfoPtr				effect_ref,
-		int				quality,
-		int			m_flags,
-		int				field,
-		const PF_Rect			*src_rec,
-		const LayerParam	*src_world,
-		const PF_CompositeMode	*comp_mode,
-		const PF_MaskWorld		*mask_world0,
-		int					dest_x,
-		int					dest_y,
-		LayerParam			*dst_world);
+	AE_Error (*TransformWorld) (
+		AE_ProgressInfoPtr        effect_ref,
+		AE_Quality                quality,
+		AE_ModeFlags              m_flags,
+		AE_Field                  field,
+		const AE_EffectWorld      *src_world,
+		const AE_CompositeMode    *comp_mode,
+		const AE_MaskWorld        *mask_world0,
+		const AE_FloatMatrix      *matrices,
+		int                       num_matrices,
+		AE_Boolean                src2dst_matrix,
+		const AE_Rect             *dest_rect,
+		AE_EffectWorld            *dst_world
+	);
+};
 
-	 int	(*transform_world)(
-		ProgressInfoPtr				effect_ref,
-		int				quality,
-		int			m_flags,
-		int				field,
-		const LayerParam	*src_world,
-		const PF_CompositeMode	*comp_mode,
-		const PF_MaskWorld		*mask_world0,
-		const PF_FloatMatrix	*matrices,
-		int					num_matrices,
-		char				src2dst_matrix,
-		const PF_Rect			*dest_rect,
-		LayerParam			*dst_world);
-} PF_WorldTransformSuite1;
+#pragma pack (pop, AE)

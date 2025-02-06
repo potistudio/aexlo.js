@@ -3,12 +3,13 @@
 #include <iostream>
 #include <napi.h>
 
-#include "./headers/basic.hh"
+#include "./headers/common.hh"
 #include "./headers/commands.hh"
 #include "./headers/input_data.hh"
 #include "./headers/output_data.hh"
 #include "./headers/param_data.hh"
 #include "./headers/layer_data.hh"
+#include "./headers/smart_fx.hh"
 
 #include "plugin_instance.hh"
 
@@ -30,8 +31,8 @@ class PluginInstanceWrapper : public Napi::ObjectWrap<PluginInstanceWrapper> {
 
 	private:
 		PluginInstance* plugin;
-		PF_InData* in_data = new PF_InData();
+		AE_InData* in_data = new AE_InData();
 		AE_OutData* out_data = new AE_OutData();
-		PF_ParamDef* params[1] = {};
-		LayerParam* layer = new LayerParam();
+		AE_ParamDef* params[1] = {};
+		AE_LayerParam* layer = new AE_LayerParam();
 };

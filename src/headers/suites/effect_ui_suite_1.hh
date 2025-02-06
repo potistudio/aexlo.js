@@ -1,5 +1,14 @@
 #pragma once
+#pragma pack (push, AE, 8)
 
-struct PF_EffectUISuite1 {
-	int (*PF_SetOptionsButtonName)(void *, const char *);
+#include "../errors.hh"
+#include "../common.hh"
+
+struct AE_EffectUISuite1 {
+	AE_Error (*SetOptionsButtonName) (
+		AE_ProgressInfoPtr    effect_ref,
+		const char            *nameZ
+	);
 };
+
+#pragma pack (pop, AE)

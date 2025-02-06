@@ -1,6 +1,7 @@
 #pragma once
+#pragma pack (push, AE, 8)
 
-#include "../basic.hh"
+#include "../common.hh"
 
 /**
  * @struct AE_ColorParam
@@ -10,10 +11,12 @@ struct AE_ColorParam {
 	/**
 	 * @brief Parameter Value
 	 */
-	Pixel value;
+	AE_Pixel value;
 
 	/**
 	 * @brief Parameter Description
 	 */
-	Pixel dephault;
+	AE_Pixel dephault;
 };
+
+#pragma pack (pop, AE)

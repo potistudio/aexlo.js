@@ -1,8 +1,11 @@
 #pragma once
+#pragma pack (push, AE, 8)
+
+#include "../common.hh"
 
 struct AE_PopupParam {
 	/* PARAMETER VALUE */
-	PF_ParamValue	value;
+	AE_ParamValue	value;
 
 	/* PARAMETER DESCRIPTION */
 	short		num_choices;
@@ -11,3 +14,5 @@ struct AE_PopupParam {
 		const char	*namesptr; /*  menu manager standard, '|' separator */
 	} u;
 };
+
+#pragma pack (pop, AE)

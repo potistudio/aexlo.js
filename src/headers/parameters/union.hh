@@ -1,4 +1,5 @@
 #pragma once
+#pragma pack (push, AE, 8)
 
 #include "../layer_data.hh"
 #include "./slider.hh"
@@ -14,8 +15,8 @@
 #include "./button.hh"
 #include "./point_3d.hh"
 
-typedef union {
-	LayerParam             ld;
+union AE_ParamDefUnion {
+	AE_LayerParam          ld;
 	AE_SliderParam         sd;
 	AE_FixedSliderParam    fd;
 	AE_AngleParam          ad;
@@ -28,4 +29,6 @@ typedef union {
 	AE_PathParam           path_d;
 	AE_ButtonParam         button_d;
 	AE_Point3DParam        point3d_d;
-} PF_ParamDefUnion;
+};
+
+#pragma pack (pop, AE)

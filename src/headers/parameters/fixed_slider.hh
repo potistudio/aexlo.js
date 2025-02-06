@@ -5,6 +5,7 @@
  */
 
 #pragma once
+#pragma pack (push, AE, 8)
 
 /**
  * @struct AE_FixedSliderParam
@@ -26,3 +27,5 @@ struct AE_FixedSliderParam {
 	short precision;  // decimal places to display
 	short display_flags;  // set bit to 1 to enable special display: --> bit 0 == append percent sign
 };
+
+#pragma pack (pop, AE)

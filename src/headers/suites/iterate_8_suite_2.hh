@@ -1,8 +1,9 @@
 #pragma once
+#pragma pack (push, AE, 8)
 
 #include "../parameters/point.hh"
 
-typedef struct PF_Iterate8Suite2 {
+struct AE_Iterate8Suite2 {
 	/**
 	 * @brief iterate
 	 *
@@ -18,59 +19,58 @@ typedef struct PF_Iterate8Suite2 {
 	 * @return Error code
 	 */
 	int (*iterate) (
-		PF_InData     *in_data,
-		int           progress_base,
-		int           progress_final,
-		LayerParam    *src,
-		const PF_Rect *area,  // pass NULL for all pixels
-		void          *refcon,
-		int           (*pix_fn)(void* refcon, int x, int y, Pixel* in, Pixel* out),
-		LayerParam    *dst
+		AE_InData        *in_data,
+		int              progress_base,
+		int              progress_final,
+		AE_LayerParam    *src,
+		const AE_Rect    *area,
+		void             *refcon,
+		int              (*pix_fn)(void* refcon, int x, int y, AE_Pixel* in, AE_Pixel* out),
+		AE_LayerParam    *dst
 	);
 
 	int (*iterate_origin) (
-		PF_InData      *in_data,
-		int         progress_base,
-		int         progress_final,
-		LayerParam *src,
-		const PF_Rect  *area, // pass NULL for all pixels
-		const AE_PointParam *origin,
-		void           *refcon,
-		int (*pix_fn)(void* refcon, int x, int y, Pixel* in, Pixel* out),
-		LayerParam *dst
+		AE_InData              *in_data,
+		int                    progress_base,
+		int                    progress_final,
+		AE_LayerParam          *src,
+		const AE_Rect          *area,
+		const AE_PointParam    *origin,
+		void                   *refcon,
+		int                    (*pix_fn)(void* refcon, int x, int y, AE_Pixel* in, AE_Pixel* out),
+		AE_LayerParam          *dst
 	);
 
 	int (*iterate_lut) (
-		PF_InData      *in_data,
-		int         progress_base,
-		int         progress_final,
-		LayerParam *src,
-		const PF_Rect  *area,			/* pass NULL for all pixels */
-		unsigned char       *a_lut0,		/* pass NULL for identity */
-		unsigned char       *r_lut0,		/* pass NULL for identity */
-		unsigned char       *g_lut0,		/* pass NULL for identity */
-		unsigned char       *b_lut0,		/* pass NULL for identity */
-		LayerParam *dst
+		AE_InData        *in_data,
+		int              progress_base,
+		int              progress_final,
+		AE_LayerParam    *src,
+		const AE_Rect    *area,
+		unsigned char    *a_lut0,
+		unsigned char    *r_lut0,
+		unsigned char    *g_lut0,
+		unsigned char    *b_lut0,
+		AE_LayerParam    *dst
 	);
 
-	int(*iterate_origin_non_clip_src)(
-		PF_InData		*in_data,
-		int			progress_base,
-		int			progress_final,
-		LayerParam	*src,
-		const PF_Rect	*area,
-		const AE_PointParam	*origin,
-		void			*refcon,
-		int(*pix_fn)(void* refcon, int x, int y, Pixel* in, Pixel* out),
-		LayerParam	*dst);
+	int (*iterate_origin_non_clip_src) (
+		AE_InData              *in_data,
+		int                    progress_base,
+		int                    progress_final,
+		AE_LayerParam          *src,
+		const AE_Rect          *area,
+		const AE_PointParam    *origin,
+		void                   *refcon,
+		int                    (*pix_fn)(void* refcon, int x, int y, AE_Pixel* in, AE_Pixel* out),
+		AE_LayerParam          *dst
+	);
 
-	int(*iterate_generic)(
-		int			iterationsL,	/* >> */		// can be PF_Iterations_ONCE_PER_PROCESSOR
-		void			*refconPV,		/* >> */
-		int(*fn_func)(
-			void	*refconPV,			/* >> */
-			int	thread_indexL,		// only call abort and progress from thread_indexL == 0.
-			int	i,
-			int	iterationsL));		// never sends PF_Iterations_ONCE_PER_PROCESSOR
+	int (*iterate_generic) (
+		int     iterationsL,
+		void    *refconPV,
+		int     (*fn_func)(void	*refconPV, int thread_indexL, int i, int iterationsL)
+	);
+};
 
-} PF_Iterate8Suite2;
+#pragma pack (pop, AE)

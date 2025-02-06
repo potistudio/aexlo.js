@@ -1,6 +1,7 @@
 #pragma once
+#pragma pack (push, AE, 8)
 
-struct PF_ANSICallbacksSuite {
+struct AE_ANSICallbacksSuite {
 	double (*atan)(double);
 	double (*atan2)(double, double);
 	double (*ceil)(double);
@@ -23,3 +24,5 @@ struct PF_ANSICallbacksSuite {
 	double (*asin)(double);
 	double (*acos)(double);
 };
+
+#pragma pack (pop, AE)

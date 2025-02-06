@@ -5,6 +5,7 @@
  */
 
 #pragma once
+#pragma pack (push, AE, 8)
 
 #include <stdint.h>
 
@@ -39,3 +40,5 @@ struct AE_ArbitraryParam {
 	 */
 	void *refconPV;
 };
+
+#pragma pack (pop, AE)

@@ -3,299 +3,352 @@
 UtilityCallbackFactory::UtilityCallbackFactory() {}
 UtilityCallbackFactory::~UtilityCallbackFactory() {}
 
-_PF_UtilCallbacks * UtilityCallbackFactory::Create() {
-	_PF_UtilCallbacks *product = new _PF_UtilCallbacks();
+_AE_UtilCallbacks * UtilityCallbackFactory::Create() {
+	_AE_UtilCallbacks *product = new _AE_UtilCallbacks();
 
 	//* Call this routine before you plan to perform a large number of image resamplings.
 	//* Depending on platform, this routine could start up the DSP chip, compute an index table to each scanline of the buffer, or whatever might be needed to speed up image resampling.
-	product->begin_sampling = [](
-		ProgressInfoPtr effect_ref,
+	product->BeginSampling = [](
+		AE_ProgressInfoPtr effect_ref,
 		int qual,
-		PF_ModeFlags mf,
-		PF_SampPB *params
-	) -> int {
-		LOG_INFO ("Called: UtilityCallbacks::begin_sampling (" << qual << ", " << mf << ")");
-		return 0;
+		AE_ModeFlags mf,
+		AE_SamplePB *params
+	) -> AE_Error {
+		AE_Error error = AE_Error::NONE;
+		AE_SamplePB *pb = new AE_SamplePB();
+
+		LOG_DEBUG ("Called: UtilityCallbacks::BeginSampling (");
+		LOG_DEBUG ("    from: 0x" << effect_ref);
+		LOG_DEBUG ("    qual: " << qual);
+		LOG_DEBUG ("    mf: " << NAMEOF_ENUM(mf));
+		LOG_DEBUG (") => (");
+		LOG_DEBUG ("    params: " << pb);
+		LOG_DEBUG (") -> " << NAMEOF_ENUM(error));
+
+		params = pb;
+
+		return error;
 	};
 
 	//* Use this to interpolate the appropriate alpha weighted mix of colors at a non-integral point in a source image, in high quality.
 	//*	Nearest neighbor sample is used in low quality.
-	product->subpixel_sample = [](
-		ProgressInfoPtr effect_ref,
-		PF_Fixed x,
-		PF_Fixed y,
-		const PF_SampPB *params,
-		Pixel *dst_pixel
-	) -> int {
-		LOG_INFO ("Called: UtilityCallbacks::subpixel_sample (" << x << ", " << y << ")");
-		return 0;
+	product->SubpixelSample = [](
+		AE_ProgressInfoPtr    effect_ref,
+		AE_Fixed              x,
+		AE_Fixed              y,
+		const AE_SamplePB     *params,
+		AE_Pixel              *dst_pixel
+	) -> AE_Error {
+		AE_Error error = AE_Error::NONE;
+
+		AE_SamplePB *pb    = new AE_SamplePB();
+		AE_Pixel    *pixel = new AE_Pixel();
+
+		LOG_DEBUG ("Called: _AE_UtilCallbacks::SubpixelSample (");
+		LOG_DEBUG ("    from: 0x" << effect_ref);
+		LOG_DEBUG ("    x: " << x);
+		LOG_DEBUG ("    y: " << y);
+		LOG_DEBUG (") => (");
+		LOG_DEBUG ("    params: " << params);
+		LOG_DEBUG ("    dst_pixel: " << dst_pixel);
+		LOG_DEBUG (") -> " << NAMEOF_ENUM(error));
+
+		return error;
 	};
 
 	//* Use this to calculate the appropriate alpha weighted average of an axis-aligned non-integral rectangle of color in a source image, in high quality.
 	//* Nearest neighbor in low quality.
 	//* Because of overflow issues, this can only average a maximum of a 256 pixel by 256 pixel area (ie. x and y range < 128 pixels).
-	product->area_sample = [](
-		ProgressInfoPtr effect_ref,
-		PF_Fixed x,
-		PF_Fixed y,
-		const PF_SampPB *params,
-		Pixel *dst_pixel
-	) -> int {
-		LOG_INFO ("Called: UtilityCallbacks::area_sample (" << x << ", " << y << ")");
-		return 0;
+	product->AreaSample = [] (
+		AE_ProgressInfoPtr    effect_ref,
+		AE_Fixed              x,
+		AE_Fixed              y,
+		const AE_SamplePB     *params,
+		AE_Pixel              *dst_pixel
+	) -> AE_Error {
+		AE_Error error = AE_Error::NONE;
+
+		AE_SamplePB *param = new AE_SamplePB();
+		AE_Pixel    *pixel = new AE_Pixel();
+
+		LOG_DEBUG ("Called: UtilityCallbacks::AreaSample (");
+		LOG_DEBUG ("    from: 0x" << effect_ref);
+		LOG_DEBUG ("    x: " << x);
+		LOG_DEBUG ("    y: " << y);
+		LOG_DEBUG (") => (");
+		LOG_DEBUG ("    params: " << param);
+		LOG_DEBUG ("    dst_pixel: " << pixel);
+		LOG_DEBUG (") -> " << NAMEOF_ENUM(error));
+
+		return error;
 	};
 
-	product->end_sampling = [](
-		ProgressInfoPtr effect_ref,
+	product->EndSampling = [] (
+		AE_ProgressInfoPtr effect_ref,
 		int qual,
-		PF_ModeFlags mf,
-		PF_SampPB *params
-	) -> int {
-		LOG_INFO ("Called \"_PF_UtilCallbacks.end_sampling\"");
-		return 0;
+		AE_ModeFlags mf,
+		AE_SamplePB *params
+	) -> AE_Error {
+		LOG_INFO ("Called \"_AE_UtilCallbacks.end_sampling\"");
+		return AE_Error::NONE;
 	};
 
-	product->composite_rect = [](
-		ProgressInfoPtr effect_ref,
-		PF_Rect *src_rect,
+	product->CompositeRect = [] (
+		AE_ProgressInfoPtr effect_ref,
+		AE_Rect *src_rect,
 		int src_opacity,
-		LayerParam *source_wld,
+		AE_LayerParam *source_wld,
 		int dest_x,
 		int dest_y,
 		int field_rdr,
-		PF_XferMode xfer_mode,
-		LayerParam *dest_wld
-	) -> int {
-		LOG_INFO ("Called \"_PF_UtilCallbacks.composite_rect\"");
-		return 0;
+		AE_XferMode xfer_mode,
+		AE_LayerParam *dest_wld
+	) -> AE_Error {
+		LOG_INFO ("Called \"_AE_UtilCallbacks.composite_rect\"");
+		return AE_Error::NONE;
 	};
 
-	product->blend = [](
-		ProgressInfoPtr effect_ref,
-		const LayerParam *src1,
-		const LayerParam *src2,
-		PF_Fixed ratio,
-		LayerParam *dst
-	) -> int {
-		LOG_INFO ("Called \"_PF_UtilCallbacks.blend\"");
-		return 0;
+	product->Blend = [](
+		AE_ProgressInfoPtr effect_ref,
+		const AE_LayerParam *src1,
+		const AE_LayerParam *src2,
+		AE_Fixed ratio,
+		AE_LayerParam *dst
+	) -> AE_Error {
+		LOG_INFO ("Called \"_AE_UtilCallbacks.blend\"");
+		return AE_Error::NONE;
 	};
 
-	product->convolve = [](
-		ProgressInfoPtr effect_ref,
-		LayerParam *src,
-		const PF_Rect *area,
-		PF_KernelFlags flags,
+	product->Convolve = [](
+		AE_ProgressInfoPtr effect_ref,
+		AE_LayerParam *src,
+		const AE_Rect *area,
+		AE_KernelFlags flags,
 		int kernel_size,
 		void *a_kernel,
 		void *r_kernel,
 		void *g_kernel,
 		void *b_kernel,
-		LayerParam *dst
-	) -> int {
-		LOG_INFO ("Called \"_PF_UtilCallbacks.convolve\"");
-		return 0;
+		AE_LayerParam *dst
+	) -> AE_Error {
+		LOG_INFO ("Called \"_AE_UtilCallbacks.convolve\"");
+		return AE_Error::NONE;
 	};
 
-	product->copy = [](
-		ProgressInfoPtr effect_ref,
-		LayerParam *src,
-		LayerParam *dst,
-		PF_Rect *src_rect,
-		PF_Rect *dst_rect
-	) -> int {
-		LOG_INFO ("Called \"_PF_UtilCallbacks.copy\"");
-		return 0;
+	product->Copy = [](
+		AE_ProgressInfoPtr effect_ref,
+		AE_LayerParam *src,
+		AE_LayerParam *dst,
+		AE_Rect *src_rect,
+		AE_Rect *dst_rect
+	) -> AE_Error {
+		LOG_INFO ("Called \"_AE_UtilCallbacks.copy\"");
+		return AE_Error::NONE;
 	};
 
-	product->fill = [](
-		ProgressInfoPtr effect_ref,
-		const Pixel *color,
-		const PF_Rect *destination_rect,
-		LayerParam *world
-	) -> int {
-		LOG_INFO ("Called \"_PF_UtilCallbacks.fill\"");
-		return 0;
+	product->Fill = [](
+		AE_ProgressInfoPtr effect_ref,
+		const AE_Pixel *color,
+		const AE_Rect *destination_rect,
+		AE_LayerParam *world
+	) -> AE_Error {
+		LOG_INFO ("Called \"_AE_UtilCallbacks.fill\"");
+		return AE_Error::NONE;
 	};
 
-	product->gaussian_kernel = [](
-		ProgressInfoPtr effect_ref,
+	product->GaussianKernel = [](
+		AE_ProgressInfoPtr effect_ref,
 		double kRadius,
-		PF_KernelFlags flags,
+		AE_KernelFlags flags,
 		double multiplier,
 		int *diameter,
 		void *kernel
-	) -> int {
-		LOG_INFO ("Called \"_PF_UtilCallbacks.gaussian_kernel\"");
-		return 0;
+	) -> AE_Error {
+		LOG_INFO ("Called \"_AE_UtilCallbacks.gaussian_kernel\"");
+		return AE_Error::NONE;
 	};
 
-	product->iterate = [](
-		PF_InData *in_data,
+	product->Iterate = [](
+		AE_InData *in_data,
 		int progress_base,
 		int progress_final,
-		LayerParam *src,
-		const PF_Rect *area,
+		AE_LayerParam *src,
+		const AE_Rect *area,
 		void *refcon,
-		PF_IteratePixel8Func pixel_function,
-		LayerParam *dst
-	) -> int {
-		LOG_INFO ("Called \"_PF_UtilCallbacks.iterate\"");
-		return 0;
+		AE_IteratePixel8Func pixel_function,
+		AE_LayerParam *dst
+	) -> AE_Error {
+		LOG_INFO ("Called \"_AE_UtilCallbacks.iterate\"");
+		return AE_Error::NONE;
 	};
 
-	product->premultiply = [](
-		ProgressInfoPtr effect_ref,
+	product->Premultiply = [](
+		AE_ProgressInfoPtr effect_ref,
 		int forward,
-		LayerParam *dst
-	) -> int {
-		LOG_INFO ("Called \"_PF_UtilCallbacks.premultiply\"");
-		return 0;
+		AE_LayerParam *dst
+	) -> AE_Error {
+		LOG_INFO ("Called \"_AE_UtilCallbacks.premultiply\"");
+		return AE_Error::NONE;
 	};
 
-	product->premultiply_color = [](
-		ProgressInfoPtr effect_ref,
-		LayerParam *src,
-		const Pixel *color,
+	product->PremultiplyColor = [](
+		AE_ProgressInfoPtr effect_ref,
+		AE_LayerParam *src,
+		const AE_Pixel *color,
 		int forward,
-		LayerParam *dst
-	) -> int {
-		LOG_INFO ("Called \"_PF_UtilCallbacks.premultiply_color\"");
-		return 0;
+		AE_LayerParam *dst
+	) -> AE_Error {
+		LOG_INFO ("Called \"_AE_UtilCallbacks.premultiply_color\"");
+		return AE_Error::NONE;
 	};
 
-	product->new_world = [](
-		ProgressInfoPtr effect_ref,
+	product->NewWorld = [](
+		AE_ProgressInfoPtr effect_ref,
 		int width,
 		int height,
-		PF_NewWorldFlags flags,
-		LayerParam *world
-	) -> int {
-		LOG_INFO ("Called \"_PF_UtilCallbacks.new_world\"");
-		return 0;
+		AE_NewWorldFlags flags,
+		AE_LayerParam *world
+	) -> AE_Error {
+		LOG_INFO ("Called \"_AE_UtilCallbacks.new_world\"");
+		return AE_Error::NONE;
 	};
 
-	product->dispose_world = [](
-		ProgressInfoPtr effect_ref,
-		LayerParam *world
-	) -> int {
-		LOG_INFO ("Called \"_PF_UtilCallbacks.dispose_world\"");
-		return 0;
+	product->DisposeWorld = [](
+		AE_ProgressInfoPtr effect_ref,
+		AE_LayerParam *world
+	) -> AE_Error {
+		LOG_INFO ("Called \"_AE_UtilCallbacks.dispose_world\"");
+		return AE_Error::NONE;
 	};
 
-	product->iterate_origin = [](
-		PF_InData *in_data,
+	product->IterateOrigin = [](
+		AE_InData *in_data,
 		int progress_base,
 		int progress_final,
-		LayerParam *src,
-		const PF_Rect *area,
+		AE_LayerParam *src,
+		const AE_Rect *area,
 		const AE_PointParam *origin,
 		void *refcon,
-		PF_IteratePixel8Func pix_fn,
-		LayerParam *dst
-	) -> int {
-		LOG_INFO ("Called \"_PF_UtilCallbacks.iterate_origin\"");
-		return 0;
+		AE_IteratePixel8Func pix_fn,
+		AE_LayerParam *dst
+	) -> AE_Error {
+		LOG_INFO ("Called \"_AE_UtilCallbacks.iterate_origin\"");
+		return AE_Error::NONE;
 	};
 
-	product->iterate_lut = [](
-		PF_InData *in_data,
+	product->IterateLUT = [](
+		AE_InData *in_data,
 		int progress_base,
 		int progress_final,
-		LayerParam *src,
-		const PF_Rect *area,
+		AE_LayerParam *src,
+		const AE_Rect *area,
 		unsigned char *a_lut0,
 		unsigned char *r_lut0,
 		unsigned char *g_lut0,
 		unsigned char *b_lut0,
-		LayerParam *dst
-	) -> int {
-		LOG_INFO ("Called \"_PF_UtilCallbacks.iterate_lut\"");
-		return 0;
+		AE_LayerParam *dst
+	) -> AE_Error {
+		LOG_INFO ("Called \"_AE_UtilCallbacks.iterate_lut\"");
+		return AE_Error::NONE;
 	};
 
-	product->transfer_rect = [](
-		ProgressInfoPtr effect_ref,
+	product->TransferRect = [](
+		AE_ProgressInfoPtr effect_ref,
 		int quality,
-		PF_ModeFlags m_flags,
+		AE_ModeFlags m_flags,
 		int field,
-		const PF_Rect *src_rec,
-		const LayerParam *src_world,
-		const PF_CompositeMode *comp_mode,
-		const PF_MaskWorld *mask_world0,
+		const AE_Rect *src_rec,
+		const AE_LayerParam *src_world,
+		const AE_CompositeMode *comp_mode,
+		const AE_MaskWorld *mask_world0,
 		int dest_x,
 		int dest_y,
-		LayerParam *dst_world
-	) -> int {
-		LOG_INFO ("Called \"_PF_UtilCallbacks.transfer_rect\"");
-		return 0;
+		AE_LayerParam *dst_world
+	) -> AE_Error {
+		LOG_INFO ("Called \"_AE_UtilCallbacks.transfer_rect\"");
+		return AE_Error::NONE;
 	};
 
-	product->transform_world = [](
-		ProgressInfoPtr effect_ref,
+	product->TransformWorld = [](
+		AE_ProgressInfoPtr effect_ref,
 		int quality,
-		PF_ModeFlags m_flags,
+		AE_ModeFlags m_flags,
 		int field,
-		const LayerParam *src_world,
-		const PF_CompositeMode *comp_mode,
-		const PF_MaskWorld *mask_world0,
-		const PF_FloatMatrix *matrices,
+		const AE_LayerParam *src_world,
+		const AE_CompositeMode *comp_mode,
+		const AE_MaskWorld *mask_world0,
+		const AE_FloatMatrix *matrices,
 		int num_matrices,
-		PF_Boolean src2dst_matrix,
-		const PF_Rect *dest_rect,
-		LayerParam *dst_world
-	) -> int {
-		LOG_INFO ("Called \"_PF_UtilCallbacks.transform_world\"");
-		return 0;
+		AE_Boolean src2dst_matrix,
+		const AE_Rect *dest_rect,
+		AE_LayerParam *dst_world
+	) -> AE_Error {
+		LOG_INFO ("Called \"_AE_UtilCallbacks.transform_world\"");
+		return AE_Error::NONE;
 	};
 
-	product->host_new_handle = [](
-		A_u_longlong size
-	) -> PF_Handle {
-		LOG_INFO ("Called \"_PF_UtilCallbacks.host_new_handle\"");
+	product->HostNewHandle = [](
+		unsigned long long size
+	) -> AE_Handle {
+		LOG_INFO ("Called \"_AE_UtilCallbacks.host_new_handle\"");
 		return NULL;
 	};
 
-	product->host_lock_handle = [](
-		PF_Handle pf_handle
+	product->HostLockHandle = [](
+		AE_Handle handle
 	) -> void * {
-		LOG_INFO ("Called \"_PF_UtilCallbacks.host_lock_handle\"");
+		LOG_INFO ("Called \"_AE_UtilCallbacks.host_lock_handle\"");
 		return NULL;
 	};
 
-	product->host_unlock_handle = [](
-		PF_Handle pf_handle
+	product->HostUnlockHandle = [](
+		AE_Handle handle
 	) -> void {
-		LOG_INFO ("Called \"_PF_UtilCallbacks.host_lock_handle\"");
+		LOG_INFO ("Called \"_AE_UtilCallbacks.host_lock_handle\"");
 	};
 
-	product->host_dispose_handle = [](
-		PF_Handle pf_handle
+	product->HostDisposeHandle = [](
+		AE_Handle handle
 	) -> void {
-		LOG_INFO ("Called \"_PF_UtilCallbacks.host_lock_handle\"");
+		LOG_INFO ("Called \"_AE_UtilCallbacks.host_lock_handle\"");
 	};
 
-	product->get_callback_addr = [](
-		ProgressInfoPtr effect_ref,
-		int quality,
-		PF_ModeFlags mode_flags,
-		PF_CallbackID which_callback,
-		PF_CallbackFunc *fn_ptr
-	) -> int {
-		LOG_INFO ("Called \"_PF_UtilCallbacks.get_callback_addr\"");
-		return 0;
+	product->GetCallbackAddress = [] (
+		AE_ProgressInfoPtr    effect_ref,
+		AE_Quality            quality,
+		AE_ModeFlags          mode_flags,
+		AE_CallbackID         which_callback,
+		AE_CallbackFunc       *fn_ptr
+	) -> AE_Error {
+		AE_Error error = AE_Error::NONE;
+
+		LOG_DEBUG ("Called: _AE_UtilCallbacks::GetCallbackAddress");
+		LOG_DEBUG ("    from: 0x"         << effect_ref);
+		LOG_DEBUG ("    quality: "        << NAMEOF_ENUM(quality));
+		LOG_DEBUG ("    mode_flags: "     << NAMEOF_ENUM_FLAG(mode_flags));
+		LOG_DEBUG ("    which_callback: " << NAMEOF_ENUM(which_callback));
+		LOG_DEBUG ("    fn_ptr: "         << fn_ptr);
+		LOG_DEBUG (") -> " << NAMEOF_ENUM(error));
+
+		return error;
 	};
 
-	product->app = [](
-		ProgressInfoPtr,
-		int,
+	product->App = [] (
+		AE_ProgressInfoPtr effect_ref,
+		int args,
 		...
-	) -> int {
-		LOG_INFO ("Called \"_PF_UtilCallbacks.app\"");
-		return 0;
+	) -> AE_Error {
+		AE_Error error = AE_Error::NONE;
+
+		LOG_DEBUG ("Called _AE_UtilCallbacks::App (");
+		LOG_DEBUG ("    from: " << effect_ref);
+		LOG_DEBUG ("    args: " << args);
+		LOG_DEBUG (") -> " << NAMEOF_ENUM(error));
+
+		return error;
 	};
 
-	product->ansi = PF_ANSICallbacks();
+	product->ansi = AE_ANSICallbacks();
 
 	product->ansi.sin = [](double x) -> double {
 		return sin (x);
@@ -397,237 +450,258 @@ _PF_UtilCallbacks * UtilityCallbackFactory::Create() {
 		return 0;
 	};
 
-	product->colorCB = PF_ColorCallbacks();
+	product->colorCB = AE_ColorCallbacks();
 
 	product->colorCB.RGBtoHLS = [](
-		ProgressInfoPtr effect_ref,
-		Pixel *rgb,
-		PF_HLS_Pixel hls
-	) -> int {
-		LOG_INFO ("Called \"PF_ColorCallbacks.RGBtoHLS\"");
-		return 0;
+		AE_ProgressInfoPtr effect_ref,
+		AE_Pixel *rgb,
+		AE_HLS_Pixel hls
+	) -> AE_Error {
+		LOG_INFO ("Called \"AE_ColorCallbacks.RGBtoHLS\"");
+		return AE_Error::NONE;
 	};
 
 	product->colorCB.HLStoRGB = [](
-		ProgressInfoPtr effect_ref,
-		PF_HLS_Pixel hls,
-		Pixel *rgb
-	) -> int {
-		LOG_INFO ("Called \"PF_ColorCallbacks.HLStoRGB\"");
-		return 0;
+		AE_ProgressInfoPtr effect_ref,
+		AE_HLS_Pixel hls,
+		AE_Pixel *rgb
+	) -> AE_Error {
+		LOG_INFO ("Called \"AE_ColorCallbacks.HLStoRGB\"");
+		return AE_Error::NONE;
 	};
 
 	product->colorCB.RGBtoYIQ = [](
-		ProgressInfoPtr effect_ref,
-		Pixel *rgb,
-		PF_YIQ_Pixel yiq
-	) -> int {
-		LOG_INFO ("Called \"PF_ColorCallbacks.RGBtoYIQ\"");
-		return 0;
+		AE_ProgressInfoPtr effect_ref,
+		AE_Pixel *rgb,
+		AE_YIQ_Pixel yiq
+	) -> AE_Error {
+		LOG_INFO ("Called \"AE_ColorCallbacks.RGBtoYIQ\"");
+		return AE_Error::NONE;
 	};
 
 	product->colorCB.YIQtoRGB = [](
-		ProgressInfoPtr effect_ref,
-		PF_YIQ_Pixel yiq,
-		Pixel *rgb
-	) -> int {
-		LOG_INFO ("Called \"PF_ColorCallbacks.YIQtoRGB\"");
-		return 0;
+		AE_ProgressInfoPtr effect_ref,
+		AE_YIQ_Pixel yiq,
+		AE_Pixel *rgb
+	) -> AE_Error {
+		LOG_INFO ("Called \"AE_ColorCallbacks.YIQtoRGB\"");
+		return AE_Error::NONE;
 	};
 
 	product->colorCB.Luminance = [](
-		ProgressInfoPtr effect_ref,
-		Pixel *rgb,
+		AE_ProgressInfoPtr effect_ref,
+		AE_Pixel *rgb,
 		int *lum100
-	) -> int {
-		LOG_INFO ("Called \"PF_ColorCallbacks.Luminance\"");
-		return 0;
+	) -> AE_Error {
+		LOG_INFO ("Called \"AE_ColorCallbacks.Luminance\"");
+		return AE_Error::NONE;
 	};
 
 	product->colorCB.Hue = [](
-		ProgressInfoPtr effect_ref,
-		Pixel *rgb,
+		AE_ProgressInfoPtr effect_ref,
+		AE_Pixel *rgb,
 		int *hue
-	) -> int {
-		LOG_INFO ("Called \"PF_ColorCallbacks.Hue\"");
-		return 0;
+	) -> AE_Error {
+		LOG_INFO ("Called \"AE_ColorCallbacks.Hue\"");
+		return AE_Error::NONE;
 	};
 
 	product->colorCB.Lightness = [](
-		ProgressInfoPtr effect_ref,
-		Pixel *rgb,
+		AE_ProgressInfoPtr effect_ref,
+		AE_Pixel *rgb,
 		int *lightness
-	) -> int {
-		LOG_INFO ("Called \"PF_ColorCallbacks.Lightness\"");
-		return 0;
+	) -> AE_Error {
+		LOG_INFO ("Called \"AE_ColorCallbacks.Lightness\"");
+		return AE_Error::NONE;
 	};
 
 	product->colorCB.Saturation = [](
-		ProgressInfoPtr effect_ref,
-		Pixel *rgb,
+		AE_ProgressInfoPtr effect_ref,
+		AE_Pixel *rgb,
 		int *saturation
-	) -> int {
-		LOG_INFO ("Called \"PF_ColorCallbacks.Saturation\"");
-		return 0;
+	) -> AE_Error {
+		LOG_INFO ("Called \"AE_ColorCallbacks.Saturation\"");
+		return AE_Error::NONE;
 	};
 
-	product->get_platform_data = [](
-		ProgressInfoPtr effect_ref,
-		PF_PlatDataID which,
-		void *data
-	) -> int {
-		LOG_INFO ("Called: AE_InteractCallbacks::get_platform_data (" << which << ")");
-		data = (void *)"D:/Projects/Development/Node/aexlo.js/test/plugins/DeepGlow2.aex";
-		LOG_INFO ("  ==> " << data);
+	product->GetPlatformData = [] (
+		AE_ProgressInfoPtr    effect_ref,
+		AE_PlatDataID         which,
+		void                  *data
+	) -> AE_Error {
+		AE_Error error = AE_Error::NONE;
 
-		return 0;
+		void *result = (void *)"D:/Projects/Development/Node/aexlo.js/test/plugins/DeepGlow2.aex";
+
+		LOG_DEBUG ("Called: AE_InteractCallbacks::GetPlatformData (");
+		LOG_DEBUG ("    from: 0x" << effect_ref);
+		LOG_DEBUG ("    which: " << NAMEOF_ENUM(which));
+		LOG_DEBUG (") => (");
+		LOG_DEBUG ("    data: " << data);
+		LOG_DEBUG (") -> " << NAMEOF_ENUM(error));
+
+		data = result;
+
+		return error;
 	};
 
-	product->host_get_handle_size = [](
-		PF_Handle pf_handle
-	) -> A_u_longlong {
+	product->HostGetHandleSize = [](
+		AE_Handle handle
+	) -> unsigned long long {
 		LOG_INFO ("Called \"AE_InteractCallbacks.host_get_handle_size\"");
 		return 0;
 	};
 
-	product->iterate_origin_non_clip_src = [](
-		PF_InData *in_data,
+	product->IterateOriginNonClipSource = [](
+		AE_InData *in_data,
 		int progress_base,
 		int progress_final,
-		LayerParam *src,
-		const PF_Rect *area,
+		AE_LayerParam *src,
+		const AE_Rect *area,
 		const AE_PointParam *origin,
 		void *refcon,
-		PF_IteratePixel8Func pix_fn,
-		LayerParam *dst
-	) -> int {
+		AE_IteratePixel8Func pix_fn,
+		AE_LayerParam *dst
+	) -> AE_Error {
 		LOG_INFO ("Called \"AE_InteractCallbacks.iterate_origin_non_clip_src\"");
-		return 0;
+		return AE_Error::NONE;
 	};
 
-	product->iterate_generic = [](
-		int iterationsL, /* >> */		  // can be PF_Iterations_ONCE_PER_PROCESSOR
-		void *refconPV,					  /* >> */
-		int (*fn_func)(void *refconPV,	  /* >> */
-					   int thread_indexL, // only call abort and progress from thread_indexL == 0.
-					   int i,
-					   int iterationsL)
-	) -> int {
+	product->IterateGeneric = [](
+		int iterationsL,
+		void *refconPV,
+		int (*fn_func) (
+			void *refconPV,
+			int thread_indexL,
+			int i,
+			int iterationsL
+		)
+	) -> AE_Error {
 		LOG_INFO ("Called \"AE_InteractCallbacks.iterate_generic\"");
-		return 0;
+		return AE_Error::NONE;
 	};
 
-	product->host_resize_handle = [](
-		A_u_longlong new_sizeL, /* >> */
-		PF_Handle *handlePH
-	) -> int {
+	product->HostResizeHandle = [](
+		unsigned long long new_sizeL,
+		AE_Handle *handlePH
+	) -> AE_Error {
 		LOG_INFO ("Called \"AE_InteractCallbacks.host_resize_handle\"");
-		return 0;
+		return AE_Error::NONE;
 	};
 
-	product->subpixel_sample16 = [](
-		ProgressInfoPtr effect_ref, /* reference from in_data */
-		PF_Fixed x,
-		PF_Fixed y,
-		const PF_SampPB *params,
-		PF_Pixel16 *dst_pixel
-	) -> int {
+	product->SubpixelSample16 = [](
+		AE_ProgressInfoPtr effect_ref,
+		AE_Fixed x,
+		AE_Fixed y,
+		const AE_SamplePB *params,
+		AE_Pixel16 *dst_pixel
+	) -> AE_Error {
 		LOG_INFO ("Called \"AE_InteractCallbacks.subpixel_sample16\"");
-		return 0;
+		return AE_Error::NONE;
 	};
 
-	product->area_sample16 = [](
-		ProgressInfoPtr effect_ref, /* reference from in_data */
-		PF_Fixed x,
-		PF_Fixed y,
-		const PF_SampPB *params,
-		PF_Pixel16 *dst_pixel
-	) -> int {
+	product->AreaSample16 = [](
+		AE_ProgressInfoPtr effect_ref,
+		AE_Fixed x,
+		AE_Fixed y,
+		const AE_SamplePB *params,
+		AE_Pixel16 *dst_pixel
+	) -> AE_Error {
 		LOG_INFO ("Called \"AE_InteractCallbacks.area_sample16\"");
-		return 0;
+		return AE_Error::NONE;
 	};
 
-	product->fill16 = [](
-		ProgressInfoPtr effect_ref, /* reference from in_data	*/
-		const PF_Pixel16 *color,
-		const PF_Rect *dst_rect, /* pass NULL for whole world */
-		LayerParam *world
-	) -> int {
+	product->Fill16 = [](
+		AE_ProgressInfoPtr effect_ref,
+		const AE_Pixel16 *color,
+		const AE_Rect *dst_rect,
+		AE_LayerParam *world
+	) -> AE_Error {
 		LOG_INFO ("Called \"AE_InteractCallbacks.fill16\"");
-		return 0;
+		return AE_Error::NONE;
 	};
 
-	product->premultiply_color16 = [](
-		ProgressInfoPtr effect_ref, /* reference from in_data */
-		LayerParam *src,
-		const PF_Pixel16 *color, /* color to premultiply/unmultiply with */
-		int forward,			 /* TRUE means convert non-premul to premul, FALSE mean reverse */
-		LayerParam *dst
-	) -> int {
+	product->PremultiplyColor16 = [](
+		AE_ProgressInfoPtr effect_ref,
+		AE_LayerParam *src,
+		const AE_Pixel16 *color,
+		int forward,
+		AE_LayerParam *dst
+	) -> AE_Error {
 		LOG_INFO ("Called \"AE_InteractCallbacks.premultiply_color16\"");
-		return 0;
+		return AE_Error::NONE;
 	};
 
-	product->iterate16 = [](
-		PF_InData *in_data,
+	product->Iterate16 = [](
+		AE_InData *in_data,
 		int progress_base,
 		int progress_final,
-		LayerParam *src,
-		const PF_Rect *area, /* pass NULL for all pixels */
+		AE_LayerParam *src,
+		const AE_Rect *area,
 		void *refcon,
-		PF_IteratePixel16Func pix_fn,
-		LayerParam *dst
-	) -> int {
+		AE_IteratePixel16Func pix_fn,
+		AE_LayerParam *dst
+	) -> AE_Error {
 		LOG_INFO ("Called \"AE_InteractCallbacks.iterate16\"");
-		return 0;
+		return AE_Error::NONE;
 	};
 
-	product->iterate_origin16 = [](
-		PF_InData *in_data,
+	product->IterateOrigin16 = [](
+		AE_InData *in_data,
 		int progress_base,
 		int progress_final,
-		LayerParam *src,
-		const PF_Rect *area, /* pass NULL for all pixels */
+		AE_LayerParam *src,
+		const AE_Rect *area,
 		const AE_PointParam *origin,
 		void *refcon,
-		PF_IteratePixel16Func pix_fn,
-		LayerParam *dst
-	) -> int {
+		AE_IteratePixel16Func pix_fn,
+		AE_LayerParam *dst
+	) -> AE_Error {
 		LOG_INFO ("Called \"AE_InteractCallbacks.iterate_origin16\"");
-		return 0;
+		return AE_Error::NONE;
 	};
 
-	product->iterate_origin_non_clip_src16 = [](
-		PF_InData *in_data,
+	product->IterateOriginNonClipSource16 = [](
+		AE_InData *in_data,
 		int progress_base,
 		int progress_final,
-		LayerParam *src,
-		const PF_Rect *area,
+		AE_LayerParam *src,
+		const AE_Rect *area,
 		const AE_PointParam *origin,
 		void *refcon,
-		PF_IteratePixel16Func pix_fn,
-		LayerParam *dst
-	) -> int {
+		AE_IteratePixel16Func pix_fn,
+		AE_LayerParam *dst
+	) -> AE_Error {
 		LOG_INFO ("Called \"AE_InteractCallbacks.iterate_origin_non_clip_src16\"");
-		return 0;
+		return AE_Error::NONE;
 	};
 
-	product->get_pixel_data8 = [](
-		LayerParam *worldP,
-		PF_PixelPtr pixelsP0, // NULL to use data in LayerParam
-		Pixel **pixPP
-	) -> int {
+	product->GetPixelData8 = [](
+		AE_LayerParam *worldP,
+		AE_PixelPtr pixelsP0,
+		AE_Pixel **pixPP
+	) -> AE_Error {
 		LOG_INFO ("Called \"AE_InteractCallbacks.get_pixel_data8\"");
-		return 0;
+		return AE_Error::NONE;
 	};
 
-	product->get_pixel_data16 = [](
-		LayerParam *worldP,
-		PF_PixelPtr pixelsP0, // NULL to use data in LayerParam
-		PF_Pixel16 **pixPP
-	) -> int {
+	product->GetPixelData16 = [](
+		AE_LayerParam *worldP,
+		AE_PixelPtr pixelsP0,
+		AE_Pixel16 **pixPP
+	) -> AE_Error {
 		LOG_INFO ("Called \"AE_InteractCallbacks.get_pixel_data16\"");
-		return 0;
+		return AE_Error::NONE;
+	};
+
+	auto reserved0 = [](
+		AE_ProgressInfoPtr effect_ref,
+		const AE_Pixel *color,
+		const AE_Rect *dst_rect,
+		AE_LayerParam *world
+	) -> AE_Error {
+		LOG_INFO ("Called \"AE_InteractCallbacks.reserved[0]\"");
+		return AE_Error::NONE;
 	};
 
 	return product;

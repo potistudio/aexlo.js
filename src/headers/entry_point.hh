@@ -1,17 +1,17 @@
 #pragma once
 
-#include "./basic.hh"
+#include "./errors.hh"
 #include "./commands.hh"
 #include "./input_data.hh"
 #include "./output_data.hh"
 #include "./param_data.hh"
 #include "./layer_data.hh"
 
-typedef int (*EntryPointFunc) (
+typedef AE_Error (*EntryPointFunc) (
 	AE_Command,
-	PF_InData *,
+	AE_InData *,
 	AE_OutData *,
-	PF_ParamDef *[],
-	LayerParam *,
+	AE_ParamDef *[],
+	AE_LayerParam *,
 	void *
 );

@@ -1,4 +1,5 @@
 #pragma once
+#pragma pack (push, AE, 8)
 
 /**
  * @struct AE_AngleParam
@@ -22,3 +23,5 @@ struct AE_AngleParam {
 	 */
 	int valid_min, valid_max;
 };
+
+#pragma pack (pop, AE)

@@ -1,4 +1,5 @@
 #pragma once
+#pragma pack (push, AE, 8)
 
 /**
  * @struct AE_PointParam
@@ -13,21 +14,23 @@ struct AE_PointParam {
 	/**
 	 * @brief Parameter Value (x)
 	 */
-	int x_value;
+	int x_value;  // 4
 
 	/**
 	 * @brief Parameter Value (y)
 	 */
-	int y_value;
+	int y_value;  // 8
 
-	char reserved[3];
+	char reserved[3];  // 11
 
 	/**
 	 * @brief If restrict_bounds is TRUE, the user will not be allowed to specify points outside the bounds of the layer to which they are applying the effect.
 	 * If this is TRUE, the dephaults should be between 0.0 and 100.0.
 	 */
-	bool restrict_bounds;
+	bool restrict_bounds;  // 12
 
-	int x_dephault;
-	int y_dephault;
-};
+	int x_dephault;  // 16
+	int y_dephault;  // 20
+};  // 20bytes
+
+#pragma pack (pop, AE)

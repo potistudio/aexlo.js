@@ -5,6 +5,7 @@
  */
 
 #pragma once
+#pragma pack (push, AE, 8)
 
 /**
  * @struct AE_ButtonParam
@@ -17,3 +18,5 @@ struct AE_ButtonParam {
 		const char *nameptr;
 	} u;
 };
+
+#pragma pack (pop, AE)

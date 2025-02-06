@@ -1,5 +1,4 @@
-#include "interact_callbacks_factory.hh"
-#include "headers/param_data.hh"
+#include "./interact_callbacks_factory.hh"
 
 InteractCallbackFactory::InteractCallbackFactory() {}
 InteractCallbackFactory::~InteractCallbackFactory() {}
@@ -7,17 +6,27 @@ InteractCallbackFactory::~InteractCallbackFactory() {}
 AE_InteractCallbacks InteractCallbackFactory::Create() {
 	AE_InteractCallbacks product = AE_InteractCallbacks();
 
-	product.checkout_param = [](ProgressInfoPtr effect_ref, int index, int what_time, int time_step, unsigned int time_scale, PF_ParamDef *param) -> int {
+	product.CheckoutParam = [] (
+		AE_ProgressInfoPtr effect_ref,
+		int index,
+		int what_time,
+		int time_step,
+		unsigned int time_scale,
+		AE_ParamDef *param
+	) -> AE_Error {
 		LOG_INFO ("Called \"AE_InteractCallbacks.checkout_param\"");
-		return 0;
+		return AE_Error::NONE;
 	};
 
-	product.checkin_param = [](ProgressInfoPtr effect_ref, PF_ParamDef *param) -> int {
+	product.CheckinParam = [](
+		AE_ProgressInfoPtr effect_ref,
+		AE_ParamDef *param
+	) -> AE_Error {
 		LOG_INFO ("Called \"AE_InteractCallbacks.checkin_param\"");
-		return 0;
+		return AE_Error::NONE;
 	};
 
-	product.add_param = [](ProgressInfoPtr effect_ref, int index, PF_ParamDefPtr def) -> int {
+	product.add_param = [](AE_ProgressInfoPtr effect_ref, int index, AE_ParamDefPtr def) -> int {
 		LOG_INFO ("Called: InteractCallbacks::add_param (" << "index: " << index << ")");
 
 		LOG_INFO ("  ==> ID: " << def->uu.id);
@@ -42,32 +51,32 @@ AE_InteractCallbacks InteractCallbackFactory::Create() {
 		return 0;
 	};
 
-	product.abort = [](ProgressInfoPtr effect_ref) -> int {
+	product.abort = [](AE_ProgressInfoPtr effect_ref) -> int {
 		LOG_INFO ("Called \"AE_InteractCallbacks.abort(" << effect_ref << ")\"");
 		return 0;
 	};
 
-	product.progress = [](ProgressInfoPtr effect_ref, int current, int total) -> int {
+	product.progress = [](AE_ProgressInfoPtr effect_ref, int current, int total) -> int {
 		LOG_INFO ("Called \"AE_InteractCallbacks.progress(" << effect_ref << ", " << current << ", " << total << ")\"");
 		return 0;
 	};
 
-	product.register_ui = [](ProgressInfoPtr effect_ref, PF_CustomUIInfo *custom_info) -> int {
+	product.register_ui = [](AE_ProgressInfoPtr effect_ref, AE_CustomUIInfo *custom_info) -> int {
 		LOG_INFO ("Called \"AE_InteractCallbacks.register_ui(" << effect_ref << ", " << custom_info << ")\"");
 		return 0;
 	};
 
-	product.checkout_layer_audio = [](ProgressInfoPtr effect_ref, int index, int start_time, int duration, unsigned int time_scale, unsigned int rate, int bytes_per_sample, int num_channels, int fmt_signed, PF_LayerAudio *audio) -> int {
+	product.checkout_layer_audio = [](AE_ProgressInfoPtr effect_ref, int index, int start_time, int duration, unsigned int time_scale, unsigned int rate, int bytes_per_sample, int num_channels, int fmt_signed, AE_LayerAudio *audio) -> int {
 		LOG_INFO ("Called \"AE_InteractCallbacks.checkout_layer_audio(" << effect_ref << ", " << index << ", " << start_time << ", " << duration << ", " << time_scale << ", " << rate << ", " << bytes_per_sample << ", " << num_channels << ", " << fmt_signed << ", " << audio << ")\"");
 		return 0;
 	};
 
-	product.checkin_layer_audio = [](ProgressInfoPtr effect_ref, PF_LayerAudio audio) -> int {
+	product.checkin_layer_audio = [](AE_ProgressInfoPtr effect_ref, AE_LayerAudio audio) -> int {
 		LOG_INFO ("Called \"AE_InteractCallbacks.checkin_layer_audio(" << effect_ref << ", " << audio << ")\"");
 		return 0;
 	};
 
-	product.get_audio_data = [](ProgressInfoPtr effect_ref, PF_LayerAudio audio, PF_SndSamplePtr *data, int *num_samples, unsigned int *rate, int *bytes_per_sample, int *num_channels, int *fmt_signed) -> int {
+	product.get_audio_data = [](AE_ProgressInfoPtr effect_ref, AE_LayerAudio audio, AE_SndSamplePtr *data, int *num_samples, unsigned int *rate, int *bytes_per_sample, int *num_channels, int *fmt_signed) -> int {
 		LOG_INFO ("Called \"AE_InteractCallbacks.get_audio_data(" << effect_ref << ", " << audio << ", " << data << ", " << num_samples << ", " << rate << ", " << bytes_per_sample << ", " << num_channels << ", " << fmt_signed << ")\"");
 		return 0;
 	};

@@ -1,12 +1,11 @@
 #pragma once
-
-#include <stdint.h>
+#pragma pack (push, AE, 8)
 
 struct AE_CheckBoxParam {
 	/**
 	 * @brief Parameter value
 	 */
-	int32_t value;
+	int value;
 
 	/**
 	 * @brief Default value
@@ -23,3 +22,5 @@ struct AE_CheckBoxParam {
 		const char *nameptr;
 	} u;
 };
+
+#pragma pack (pop, AE)
