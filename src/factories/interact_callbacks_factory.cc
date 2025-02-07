@@ -41,7 +41,7 @@ AE_InteractCallbacks InteractCallbackFactory::Create() {
 		LOG_DEBUG ("      def: 0x" << def);
 		LOG_DEBUG (") -> AE_Error::" << NAMEOF_ENUM(error));
 
-		LOG_INFO ("    parameters: " << ParamManager::GetParamsCount());  // expect 2
+		LOG_INFO ("    parameters: " << ParamManager::GetParamsCount());
 
 		return static_cast<int>(error);
 	};
