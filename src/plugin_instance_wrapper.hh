@@ -37,4 +37,6 @@ class PluginInstanceWrapper : public Napi::ObjectWrap<PluginInstanceWrapper> {
 		AE_OutData* out_data = new AE_OutData();
 		AE_ParamDef* params[1] = {};
 		AE_LayerParam* layer = new AE_LayerParam();
+
+		Napi::Object CreatePixelObject (Napi::Env env, AE_Pixel pixel);
 };

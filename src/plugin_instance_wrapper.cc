@@ -226,11 +226,87 @@ Napi::Value PluginInstanceWrapper::GetParameters (const Napi::CallbackInfo &info
 	for (int i = 0; i < params.size(); i++) {
 		Napi::Object param = Napi::Object::New (env);
 
+		param.Set ("id", Napi::Number::New(env, params[i].uu.id));
 		param.Set ("name", Napi::String::New(env, params[i].name));
 		param.Set ("type", Napi::Number::New(env, static_cast<int>(params[i].param_type)));
+		param.Set ("flagsUI", Napi::Number::New(env, static_cast<int>(params[i].ui_flags)));
+		param.Set ("flags", Napi::Number::New(env, static_cast<int>(params[i].flags)));
+
+		switch (params[i].param_type) {
+			case AE_ParamType::LAYER:
+				param.Set ("default", Napi::Number::New(env, params[i].u.ld.dephault));
+
+				break;
+
+			case AE_ParamType::CHECKBOX:
+				param.Set ("value", Napi::Boolean::New(env, params[i].u.bd.value));
+				param.Set ("default", Napi::Boolean::New(env, params[i].u.bd.dephault));
+
+				break;
+
+			case AE_ParamType::POINT:
+				// Value
+				param.Set ("valueX", Napi::Number::New(env, params[i].u.td.x_value));
+				param.Set ("valueY", Napi::Number::New(env, params[i].u.td.y_value));
+
+				// Default
+				param.Set ("defaultX", Napi::Number::New(env, params[i].u.td.x_dephault));
+				param.Set ("defaultY", Napi::Number::New(env, params[i].u.td.y_dephault));
+
+				// Options
+				param.Set ("restrict", Napi::Boolean::New(env, params[i].u.td.restrict_bounds));
+
+				break;
+
+			case AE_ParamType::COLOR:
+				param.Set ("value", CreatePixelObject(env, params[i].u.cd.value));
+				param.Set ("default", CreatePixelObject(env, params[i].u.cd.dephault));
+
+				break;
+
+			case AE_ParamType::FLOAT_SLIDER:
+				// Valid
+				param.Set ("validMin", Napi::Number::New(env, params[i].u.fs_d.valid_min));
+				param.Set ("validMax", Napi::Number::New(env, params[i].u.fs_d.valid_max));
+
+				// Slider
+				param.Set ("sliderMin", Napi::Number::New(env, params[i].u.fs_d.slider_min));
+				param.Set ("sliderMax", Napi::Number::New(env, params[i].u.fs_d.slider_max));
+
+				// Value
+				param.Set ("value", Napi::Number::New(env, params[i].u.fs_d.value));
+				param.Set ("default", Napi::Number::New(env, params[i].u.fs_d.dephault));
+
+				// Options
+				param.Set ("precision", Napi::Number::New(env, params[i].u.fs_d.precision));
+				param.Set ("curveTolerance", Napi::Number::New(env, params[i].u.fs_d.curve_tolerance));
+
+				// Flags
+				param.Set ("displayFlags", Napi::Number::New(env, params[i].u.fs_d.display_flags));
+				param.Set ("sliderFlags", Napi::Number::New(env, params[i].u.fs_d.fs_flags));
+
+				break;
+
+
+			case AE_ParamType::GROUP_END:
+				param.Delete ("name");
+
+				break;
+		}
 
 		result.Set (i, param);
 	}
+
+	return result;
+}
+
+Napi::Object PluginInstanceWrapper::CreatePixelObject (Napi::Env env, AE_Pixel pixel) {
+	Napi::Object result = Napi::Object::New (env);
+
+	result.Set ("alpha", Napi::Number::New (env, pixel.a));
+	result.Set ("red", Napi::Number::New (env, pixel.r));
+	result.Set ("green", Napi::Number::New (env, pixel.g));
+	result.Set ("blue", Napi::Number::New (env, pixel.b));
 
 	return result;
 }
