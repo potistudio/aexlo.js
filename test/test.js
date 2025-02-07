@@ -32,7 +32,8 @@ function executeAll() {
 	// console.log (instance.about());
 	// console.log (instance.setupGlobal());
 	console.log (instance.setupParameters());
-	instance2.setupParameters();
+	// instance2.setupParameters();
 	// console.log (instance.render());
 	// console.log (instance.smartRender());
+	console.log (instance.getParameters());
 }

@@ -33,3 +33,7 @@ void ParamManager::AddParam (AE_ProgressInfoPtr effect_ref, AE_ParamDef param) {
 int ParamManager::GetParamsCount() {
 	return params.size();
 }
+
+std::vector<AE_ParamDef> ParamManager::GetParamsByRef (AE_ProgressInfoPtr effect_ref) {
+	return params.at (effect_ref);
+}

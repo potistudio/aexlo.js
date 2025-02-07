@@ -10,6 +10,7 @@ Napi::Object PluginInstanceWrapper::Init (Napi::Env env, Napi::Object exports) {
 		InstanceMethod ("render", &PluginInstanceWrapper::Render),
 		InstanceMethod ("smartPreRender", &PluginInstanceWrapper::SmartPreRender),
 		InstanceMethod ("smartRender", &PluginInstanceWrapper::SmartRender),
+		InstanceMethod ("getParameters", &PluginInstanceWrapper::GetParameters),
 	});
 
 	Napi::FunctionReference *constructor = new Napi::FunctionReference();
@@ -210,4 +211,26 @@ Napi::Value PluginInstanceWrapper::SmartRender (const Napi::CallbackInfo &info) 
 	}
 
 	return Napi::Number::New (env, error_code);
+}
+
+Napi::Value PluginInstanceWrapper::GetParameters (const Napi::CallbackInfo &info) {
+	Napi::Env env = info.Env();
+
+	if (info.Length() != 0) {
+		throw Napi::TypeError::New (env, "Wrong number of arguments");
+	}
+
+	Napi::Array result = Napi::Array::New (env);
+	std::vector<AE_ParamDef> params = ParamManager::GetParamsByRef ((AE_ProgressInfoPtr)this->plugin->entry);
+
+	for (int i = 0; i < params.size(); i++) {
+		Napi::Object param = Napi::Object::New (env);
+
+		param.Set ("name", Napi::String::New(env, params[i].name));
+		param.Set ("type", Napi::Number::New(env, static_cast<int>(params[i].param_type)));
+
+		result.Set (i, param);
+	}
+
+	return result;
 }
