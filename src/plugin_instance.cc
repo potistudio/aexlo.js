@@ -97,6 +97,7 @@ AE_Error PluginInstance::Execute (AE_Command cmd, AE_InData *in_data, AE_OutData
 	in_data->appl_id = 1180193859;
 
 	in_data->what_cpu = 3;
+	in_data->effect_ref = (AE_ProgressInfoPtr)this->entry;
 
 	in_data->extent_hint = AE_LRect();
 	in_data->extent_hint.left = 32760;

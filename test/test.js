@@ -4,9 +4,9 @@ import aexlo from "aexlo";
 
 const AE_PLUGIN_DIRECTORY = "C:/Program Files/Adobe/Adobe After Effects 2025/Support Files/Plug-ins/Effects";
 const PROJECT_PLUGIN_DIRECTORY = "D:/Projects/Development/Node/aexlo.js/test/plugins";
-const PLUGIN_NAME = "FillColor.aex";
-
+const PLUGIN_NAME = "Rand_Pos.aex"
 const instance = new aexlo.PluginInstance (path.resolve(PROJECT_PLUGIN_DIRECTORY, PLUGIN_NAME));
+const instance2 = new aexlo.PluginInstance (path.resolve(PROJECT_PLUGIN_DIRECTORY, "SDK_Noise.aex"));
 
 loadResources();
 executeAll();
@@ -29,9 +29,10 @@ function loadResources() {
 }
 
 function executeAll() {
-	console.log (instance.about());
-	console.log (instance.setupGlobal());
+	// console.log (instance.about());
+	// console.log (instance.setupGlobal());
 	console.log (instance.setupParameters());
+	instance2.setupParameters();
 	// console.log (instance.render());
 	// console.log (instance.smartRender());
 }
