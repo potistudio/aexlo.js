@@ -9,6 +9,8 @@
 #include "../headers/audio.hh"
 #include "../headers/custom_ui.hh"
 
+#include "../parameter_manager.hh"
+
 // #### Factory Process ####
 //
 // 1. Define Class with Function Pointers

@@ -26,29 +26,24 @@ AE_InteractCallbacks InteractCallbackFactory::Create() {
 		return AE_Error::NONE;
 	};
 
-	product.add_param = [](AE_ProgressInfoPtr effect_ref, int index, AE_ParamDefPtr def) -> int {
-		LOG_INFO ("Called: InteractCallbacks::add_param (" << "index: " << index << ")");
+	product.add_param = [] (
+		AE_ProgressInfoPtr    effect_ref,
+		int                   index,
+		AE_ParamDefPtr        def
+	) -> int {
+		AE_Error error = AE_Error::NONE;
 
-		LOG_INFO ("  ==> ID: " << def->uu.id);
-		LOG_INFO ("  ==> Param Name: " << def->name);
-		LOG_INFO ("  ==> Param Type: " << NAMEOF_ENUM(def->param_type));
+		ParamManager::AddParam (effect_ref, *def);
 
-		LOG_INFO ("  ==> Valid Min: " << def->u.fs_d.valid_min);
-		LOG_INFO ("  ==> Valid Max: " << def->u.fs_d.valid_max);
+		LOG_DEBUG ("Called: AE_InteractCallbacks::AddParam (");
+		LOG_DEBUG ("     from: " << effect_ref);
+		LOG_DEBUG ("    index: " << index);
+		LOG_DEBUG ("      def: 0x" << def);
+		LOG_DEBUG (") -> AE_Error::" << NAMEOF_ENUM(error));
 
-		LOG_INFO ("  ==> Slider Min: " << def->u.fs_d.slider_min);
-		LOG_INFO ("  ==> Slider Max: " << def->u.fs_d.slider_max);
+		LOG_INFO ("    parameters: " << ParamManager::GetParamsCount());  // expect 2
 
-		LOG_INFO ("  ==> Value: " << def->u.fs_d.value);
-		LOG_INFO ("  ==> Default: " << def->u.fs_d.dephault);
-
-		LOG_INFO ("  ==> Precision: " << def->u.fs_d.precision);
-		LOG_INFO ("  ==> Curve Tolerance: " << def->u.fs_d.curve_tolerance);
-
-		LOG_INFO ("  ==> Display Flags: " << def->u.fs_d.display_flags);
-		LOG_INFO ("  ==> Flags: " << def->u.fs_d.fs_flags);
-
-		return 0;
+		return static_cast<int>(error);
 	};
 
 	product.abort = [](AE_ProgressInfoPtr effect_ref) -> int {
