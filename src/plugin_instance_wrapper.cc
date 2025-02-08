@@ -271,6 +271,21 @@ Napi::Value PluginInstanceWrapper::GetParameters (const Napi::CallbackInfo &info
 
 				break;
 
+			case AE_ParamType::SLIDER:
+				// Valid
+				param.Set ("validMin", Napi::Number::New(env, params[i].u.sd.valid_min));
+				param.Set ("validMax", Napi::Number::New(env, params[i].u.sd.valid_max));
+
+				// Slider
+				param.Set ("sliderMin", Napi::Number::New(env, params[i].u.sd.slider_min));
+				param.Set ("sliderMax", Napi::Number::New(env, params[i].u.sd.slider_max));
+
+				// Value
+				param.Set ("value", Napi::Number::New(env, params[i].u.sd.value));
+				param.Set ("default", Napi::Number::New(env, params[i].u.sd.dephault));
+
+				break;
+
 			case AE_ParamType::CHECKBOX:
 				param.Set ("value", Napi::Boolean::New(env, params[i].u.bd.value));
 				param.Set ("default", Napi::Boolean::New(env, params[i].u.bd.dephault));
@@ -353,6 +368,10 @@ AE_ParamDef PluginInstanceWrapper::ParseParam (Napi::Object param) {
 	for (int i = 0; i < params.size(); i++) {
 		if (params[i].uu.id == target_id) {
 			switch (params[i].param_type) {
+				case AE_ParamType::SLIDER:
+					result.u.fs_d.value = param.Get ("value").As<Napi::Number>().Int32Value();
+
+					break;
 				case AE_ParamType::CHECKBOX:
 					result.u.bd.value = param.Get ("value").As<Napi::Boolean>().Value();
 
@@ -369,7 +388,7 @@ AE_ParamDef PluginInstanceWrapper::ParseParam (Napi::Object param) {
 
 					break;
 				case AE_ParamType::FLOAT_SLIDER:
-					result.u.fs_d.value = param.Get ("value").As<Napi::Number>().Int32Value();
+					result.u.fs_d.value = param.Get ("value").As<Napi::Number>().DoubleValue();
 
 					break;
 			}
