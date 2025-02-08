@@ -8,8 +8,8 @@ const PLUGIN_NAME = "Rand_Pos.aex"
 const instance = new aexlo.PluginInstance (path.resolve(PROJECT_PLUGIN_DIRECTORY, PLUGIN_NAME));
 const instance2 = new aexlo.PluginInstance (path.resolve(PROJECT_PLUGIN_DIRECTORY, "SDK_Noise.aex"));
 
-loadResources();
-executeAll();
+// loadResources();
+invokePlugin();
 
 function loadResources() {
 	const resources = instance.loadResources();
@@ -28,13 +28,19 @@ function loadResources() {
 	url: ${url}`);
 }
 
-function executeAll() {
-	// console.log (instance.about());
-	// console.log (instance.setupGlobal());
+function invokePlugin() {
+	instance.about();
 	console.log (instance.setupParameters());
-	// console.log (instance.render());
-	// console.log (instance.smartRender());
 	console.log (instance.getCurrentParameters());
-	instance.setParameterById (1, 100);
-	console.log (instance.getCurrentParameters());
+
+	// console.log ("\n -------- set parameter to \"10\" (default) -------- ")
+	// instance.render();
+
+	// console.log ("\n -------- set parameter to \"100\" -------- ")
+	// instance.setParameterById (1, 100);
+	// instance.render();
+
+	// console.log ("\n -------- set parameter to \"0\" -------- ")
+	// instance.setParameterById (1, 0);
+	// instance.render();
 }

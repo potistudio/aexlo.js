@@ -140,14 +140,47 @@ Napi::Value PluginInstanceWrapper::SetupParameters (const Napi::CallbackInfo &in
 Napi::Value PluginInstanceWrapper::Render (const Napi::CallbackInfo &info) {
 	Napi::Env env = info.Env();
 
-	if (info.Length() != 0) {
-		throw Napi::TypeError::New (env, "Wrong number of arguments");
+	// Argument validation
+	if (info.Length() < 2) {
+		throw Napi::TypeError::New (env, "Too few arguments");
 	}
 
+	if (!info[0].IsObject() || !info[1].IsArray()) {
+		throw Napi::TypeError::New (env, "Wrong argument type");
+	}
+
+	if (info.Length() > 2) {
+		throw Napi::TypeError::New (env, "Too many arguments");
+	}
+
+	// Parse arguments
+	Napi::Object in_data_arg = info[0].As<Napi::Object>();
+	Napi::Array params_arg = info[1].As<Napi::Array>();
+
+	// Parse parameters
+	std::vector<AE_ParamDef> params;
+
+	for (int i = 0; i < params_arg.Length(); i++) {
+		Napi::Object param = params_arg.Get(i).As<Napi::Object>();
+
+		if (!param.IsObject()) {
+			throw Napi::TypeError::New (env, "Wrong argument type");
+		}
+
+		params.push_back (this->ParseParam(param));
+	}
+
+	AE_ParamDef *params_raw = new AE_ParamDef[params.size()];
+
+	for (int i = 0; i < params.size(); i++) {
+		params_raw[i] = params[i];
+	}
+
+	// Invoke
 	int error_code = 0;
 
 	try {
-		error_code = static_cast<int>(this->plugin->ExecuteRender (this->in_data, this->out_data, this->params, this->layer));
+		error_code = static_cast<int>(this->plugin->ExecuteRender(this->in_data, this->out_data, &params_raw, this->layer));
 	} catch (std::runtime_error& exception) {
 		throw Napi::Error::New (env, exception.what());
 	}
@@ -307,6 +340,43 @@ Napi::Object PluginInstanceWrapper::CreatePixelObject (Napi::Env env, AE_Pixel p
 	result.Set ("red", Napi::Number::New (env, pixel.r));
 	result.Set ("green", Napi::Number::New (env, pixel.g));
 	result.Set ("blue", Napi::Number::New (env, pixel.b));
+
+	return result;
+}
+
+AE_ParamDef PluginInstanceWrapper::ParseParam (Napi::Object param) {
+	AE_ParamDef result;
+
+	std::vector<AE_ParamDef> params = ParamManager::GetParamsByRef ((AE_ProgressInfoPtr)this->plugin->entry);
+	int target_id = param.Get ("id").As<Napi::Number>().Int32Value();
+
+	for (int i = 0; i < params.size(); i++) {
+		if (params[i].uu.id == target_id) {
+			switch (params[i].param_type) {
+				case AE_ParamType::CHECKBOX:
+					result.u.bd.value = param.Get ("value").As<Napi::Boolean>().Value();
+
+					break;
+				case AE_ParamType::COLOR:
+					AE_Pixel pixel;
+
+					pixel.a = param.Get ("value").As<Napi::Object>().Get ("alpha").As<Napi::Number>().Int32Value();
+					pixel.r = param.Get ("value").As<Napi::Object>().Get ("red").As<Napi::Number>().Int32Value();
+					pixel.g = param.Get ("value").As<Napi::Object>().Get ("green").As<Napi::Number>().Int32Value();
+					pixel.b = param.Get ("value").As<Napi::Object>().Get ("blue").As<Napi::Number>().Int32Value();
+
+					result.u.cd.value = pixel;
+
+					break;
+				case AE_ParamType::FLOAT_SLIDER:
+					result.u.fs_d.value = param.Get ("value").As<Napi::Number>().Int32Value();
+
+					break;
+			}
+
+			break;
+		}
+	}
 
 	return result;
 }

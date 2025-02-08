@@ -37,5 +37,7 @@ export class PluginInstance {
 	smartPreRender(): number;
 	smartRender(): number;
 
-	getParameters(): parameter[];
+	getCurrentParameters(): parameter[];
+	setParameterById (id: number, value: number): void;
+	setParameterByName (name: string, value: number): void;
 };
