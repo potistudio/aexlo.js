@@ -377,14 +377,7 @@ AE_ParamDef PluginInstanceWrapper::ParseParam (Napi::Object param) {
 
 					break;
 				case AE_ParamType::COLOR:
-					AE_Pixel pixel;
-
-					pixel.a = param.Get ("value").As<Napi::Object>().Get ("alpha").As<Napi::Number>().Int32Value();
-					pixel.r = param.Get ("value").As<Napi::Object>().Get ("red").As<Napi::Number>().Int32Value();
-					pixel.g = param.Get ("value").As<Napi::Object>().Get ("green").As<Napi::Number>().Int32Value();
-					pixel.b = param.Get ("value").As<Napi::Object>().Get ("blue").As<Napi::Number>().Int32Value();
-
-					result.u.cd.value = pixel;
+					result.u.cd.value = ParsePixel (param.Get("value").As<Napi::Object>());
 
 					break;
 				case AE_ParamType::FLOAT_SLIDER:
@@ -396,6 +389,17 @@ AE_ParamDef PluginInstanceWrapper::ParseParam (Napi::Object param) {
 			break;
 		}
 	}
+
+	return result;
+}
+
+AE_Pixel PluginInstanceWrapper::ParsePixel (Napi::Object pixel) {
+	AE_Pixel result;
+
+	result.a = static_cast<uint8_t>(pixel.Get("alpha").As<Napi::Number>().Int32Value());
+	result.r = static_cast<uint8_t>(pixel.Get("red").As<Napi::Number>().Int32Value());
+	result.g = static_cast<uint8_t>(pixel.Get("green").As<Napi::Number>().Int32Value());
+	result.b = static_cast<uint8_t>(pixel.Get("blue").As<Napi::Number>().Int32Value());
 
 	return result;
 }
