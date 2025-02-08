@@ -160,14 +160,14 @@ Napi::Value PluginInstanceWrapper::Render (const Napi::CallbackInfo &info) {
 	// Parse parameters
 	std::vector<AE_ParamDef> params;
 
-	for (int i = 0; i < params_arg.Length(); i++) {
+	for (uint32_t i = 0; i < params_arg.Length(); i++) {
 		Napi::Object param = params_arg.Get(i).As<Napi::Object>();
 
 		if (!param.IsObject()) {
 			throw Napi::TypeError::New (env, "Wrong argument type");
 		}
 
-		params.push_back (this->ParseParam(param));
+		params.push_back (ParamParser::ParseParam(param, ParamManager::GetParamsByRef((AE_ProgressInfoPtr)this->plugin->entry)));
 	}
 
 	AE_ParamDef *params_raw = new AE_ParamDef[params.size()];
@@ -355,51 +355,6 @@ Napi::Object PluginInstanceWrapper::CreatePixelObject (Napi::Env env, AE_Pixel p
 	result.Set ("red", Napi::Number::New (env, pixel.r));
 	result.Set ("green", Napi::Number::New (env, pixel.g));
 	result.Set ("blue", Napi::Number::New (env, pixel.b));
-
-	return result;
-}
-
-AE_ParamDef PluginInstanceWrapper::ParseParam (Napi::Object param) {
-	AE_ParamDef result;
-
-	std::vector<AE_ParamDef> params = ParamManager::GetParamsByRef ((AE_ProgressInfoPtr)this->plugin->entry);
-	int target_id = param.Get ("id").As<Napi::Number>().Int32Value();
-
-	for (int i = 0; i < params.size(); i++) {
-		if (params[i].uu.id == target_id) {
-			switch (params[i].param_type) {
-				case AE_ParamType::SLIDER:
-					result.u.fs_d.value = param.Get ("value").As<Napi::Number>().Int32Value();
-
-					break;
-				case AE_ParamType::CHECKBOX:
-					result.u.bd.value = param.Get ("value").As<Napi::Boolean>().Value();
-
-					break;
-				case AE_ParamType::COLOR:
-					result.u.cd.value = ParsePixel (param.Get("value").As<Napi::Object>());
-
-					break;
-				case AE_ParamType::FLOAT_SLIDER:
-					result.u.fs_d.value = param.Get ("value").As<Napi::Number>().DoubleValue();
-
-					break;
-			}
-
-			break;
-		}
-	}
-
-	return result;
-}
-
-AE_Pixel PluginInstanceWrapper::ParsePixel (Napi::Object pixel) {
-	AE_Pixel result;
-
-	result.a = static_cast<uint8_t>(pixel.Get("alpha").As<Napi::Number>().Int32Value());
-	result.r = static_cast<uint8_t>(pixel.Get("red").As<Napi::Number>().Int32Value());
-	result.g = static_cast<uint8_t>(pixel.Get("green").As<Napi::Number>().Int32Value());
-	result.b = static_cast<uint8_t>(pixel.Get("blue").As<Napi::Number>().Int32Value());
 
 	return result;
 }

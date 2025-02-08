@@ -6,7 +6,7 @@
 struct AE_LayerParam {
 	void                *reserved0;
 	void                *reserved1;
-	AE_WorldFlags                 world_flags;
+	AE_WorldFlags       world_flags;
 	AE_PixelPtr         data;
 	int                 rowbytes;
 	int                 width;
