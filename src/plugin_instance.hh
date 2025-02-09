@@ -21,6 +21,7 @@
 #include "./factories/interact_callbacks_factory.hh"
 #include "./factories/utility_callbacks_factory.hh"
 #include "./factories/channel_suite_1_factory.cc"
+#include "./factories/suite/ansi_callbacks_suite_factory.cc"
 
 #include "logger/logger.hh"
 

@@ -9,6 +9,7 @@
 			"src/factories/interact_callbacks_factory.cc",
 			"src/factories/utility_callbacks_factory.cc",
 			"src/factories/channel_suite_1_factory.cc",
+			"src/factories/suite/ansi_callbacks_suite_factory.cc",
 			"src/parameter_manager.cc",
 			"src/parameter_parser.cc",
 		],
