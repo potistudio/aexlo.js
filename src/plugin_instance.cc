@@ -109,112 +109,24 @@ AE_Error PluginInstance::Execute (AE_Command cmd, AE_InData *in_data, AE_OutData
 	in_data->pica_basicP->AcquireSuite = [](const char *name, int version, const void **suite) -> AE_Error {
 		LOG_INFO ("AcquireSuite: \"" << name << ", ver." << version << "\"");
 
+		// TODO: Template
 		if (strcmp(name, "PF ANSI Suite") == 0) {
 			*suite = ANSICallbacksSuiteFactory::Create();
-
 			return AE_Error::NONE;
 		} else if (strcmp(name, "PF Iterate8 Suite") == 0) {
-			AE_Iterate8Suite2 *i8s = new AE_Iterate8Suite2();
-
-			i8s->iterate = [](AE_InData *in_data, int progress_base, int progress_final, AE_LayerParam *src, const AE_Rect *area, void *controller, int(*pix_fn)(void* controller, int x, int y, AE_Pixel* in, AE_Pixel* out), AE_LayerParam *dts) -> int {
-				AE_Pixel inPixel;
-				AE_Pixel outPixel;
-
-				for (int i = 0; i < 10; i++) {
-					pix_fn (controller, i, 0, &inPixel, &outPixel);
-					LOG_INFO ("A: " << ((int)outPixel.a) << ", R: " << ((int)outPixel.r) << ", G: " << ((int)outPixel.g) << ", B: " << ((int)outPixel.b));
-				}
-
-				return 0;
-			};
-
-			*suite = i8s;
+			*suite = Iterate8Suite2Factory::Create();
 			return AE_Error::NONE;
 		} else if (strcmp(name, "PF World Transform Suite") == 0) {
-			AE_WorldTransformSuite1 *wts = new AE_WorldTransformSuite1();
-
-			wts->Copy = [] (
-				AE_ProgressInfoPtr    effect_ref,
-				AE_LayerParam         *src,
-				AE_LayerParam         *dst,
-				AE_Rect               *src_r,
-				AE_Rect               *dst_r
-			) -> AE_Error {
-				AE_Error error = AE_Error::NONE;
-
-				LOG_DEBUG ("Called: AE_WorldTransformSuite1::Copy (");
-				LOG_DEBUG ("     from: 0x" << effect_ref);
-				LOG_DEBUG ("      src: 0x" << src);
-				LOG_DEBUG ("      dst: 0x" << dst);
-				LOG_DEBUG ("    src_r: 0x" << src_r);
-				LOG_DEBUG ("    dst_r: 0x" << dst_r);
-				LOG_DEBUG (") -> AE_Error::" << NAMEOF_ENUM(error));
-
-				return error;
-			};
-
-			*suite = wts;
+			*suite = WorldTransformSuiteFactory::Create();
 			return AE_Error::NONE;
 		} else if (strcmp(name, "PF Effect UI Suite") == 0) {
-			AE_EffectUISuite1 *eui = new AE_EffectUISuite1();
-
-			eui->SetOptionsButtonName = [] (
-				AE_ProgressInfoPtr    effect_ref,
-				const char            *name
-			) -> AE_Error {
-				AE_Error error = AE_Error::NONE;
-
-				LOG_DEBUG ("Called: AE_EffectUISuite1::SetOptionsButtonName (");
-				LOG_DEBUG ("    from: 0x" << effect_ref);
-				LOG_DEBUG ("    name: \"" << *name << "\"");
-				LOG_DEBUG (") -> " << NAMEOF_ENUM(error));
-
-				return error;
-			};
-
-			*suite = eui;
-
+			*suite = EffectUISuite1Factory::Create();
 			return AE_Error::NONE;
 		} else if (strcmp(name, "PF Handle Suite") == 0) {
-			AE_HandleSuite1 *hs = new AE_HandleSuite1();
-
-			hs->HostNewHandle = [](uint64_t size) -> void * {
-				LOG_INFO ("New Handle: " << size);
-				AE_Handle *handle = new AE_Handle();
-				return handle;
-			};
-
-			hs->HostLockHandle = [](void *handle) -> void * {
-				LOG_INFO ("Lock Handle: " << handle);
-				return new AE_Handle();
-			};
-
-			hs->HostUnlockHandle = [](void *handle) -> void {
-				LOG_INFO ("Unlock Handle: " << handle);
-			};
-
-			hs->HostDisposeHandle = [](void *handle) -> void {
-				LOG_INFO ("Dispose Handle: " << handle);
-			};
-
-			hs->HostGetHandleSize = [](void *handle) -> uint64_t {
-				LOG_INFO ("Get Handle Size: " << handle);
-				return 0;
-			};
-
-			hs->HostResizeHandle = [](uint64_t size, void **handle) -> int {
-				LOG_INFO ("Resize Handle: " << size);
-				return 0;
-			};
-
-			*suite = hs;
-
+			*suite = HandlerSuite1Factory::Create();
 			return AE_Error::NONE;
 		} else if (strcmp(name, "PF AE Channel Suite") == 0) {
-			LOG_DEBUG ("Acquire Suite Success as \"PF AE Channel Suite\"");
-			LOG_DEBUG (" ==> AE_ChannelSuite1");
-
-			*suite = (new ChannelSuite1Factory())->Create();
+			*suite = ChannelSuite1Factory::Create();
 			return AE_Error::NONE;
 		}
 

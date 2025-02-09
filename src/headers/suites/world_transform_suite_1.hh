@@ -3,6 +3,7 @@
 
 #include "../errors.hh"
 #include "../common.hh"
+#include "../uncommon.hh"
 #include "../layer_data.hh"
 
 struct AE_WorldTransformSuite1 {

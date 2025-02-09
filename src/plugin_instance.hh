@@ -11,19 +11,17 @@
 #include "./headers/smart_fx.hh"
 #include "./headers/basic_suite.hh"
 
-#include "./headers/suites/ansi_callback_suite.hh"
-#include "./headers/suites/iterate_8_suite_2.hh"
-#include "./headers/suites/world_transform_suite_1.hh"
-#include "./headers/suites/effect_ui_suite_1.hh"
-#include "./headers/suites/channel_suite_1.hh"
-
-#include "./headers/suites/handle_suite_1.hh"
 #include "./factories/interact_callbacks_factory.hh"
 #include "./factories/utility_callbacks_factory.hh"
-#include "./factories/channel_suite_1_factory.cc"
-#include "./factories/suite/ansi_callbacks_suite_factory.cc"
 
-#include "logger/logger.hh"
+#include "./factories/suite/ansi_callbacks_suite_factory.cc"
+#include "./factories/suite/channel_suite_1_factory.cc"
+#include "./factories/suite/effect_ui_suite_1_factory.cc"
+#include "./factories/suite/handler_suite_1_factory.cc"
+#include "./factories/suite/iterate_8_suite_2_factory.cc"
+#include "./factories/suite/world_transform_suite_factory.cc"
+
+#include "./logger/logger.hh"
 
 class PluginInstance {
 	public:
