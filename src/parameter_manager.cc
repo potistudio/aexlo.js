@@ -5,7 +5,7 @@ std::map<AE_ProgressInfoPtr, std::vector<AE_ParamDef>> ParamManager::params;
 void ParamManager::AddParam (AE_ProgressInfoPtr effect_ref, AE_ParamDef param) {
 	try {
 		params.at (effect_ref).push_back (param);
-	} catch (const std::out_of_range& oor) {
+	} catch (const std::out_of_range) {
 		LOG_DEBUG ("Parameter Added: " << param.name);
 		params.insert (std::pair<AE_ProgressInfoPtr, std::vector<AE_ParamDef>>(effect_ref, std::vector<AE_ParamDef>{ param }));
 	}
@@ -32,4 +32,8 @@ void ParamManager::AddParam (AE_ProgressInfoPtr effect_ref, AE_ParamDef param) {
 
 int ParamManager::GetParamsCount() {
 	return params.size();
+}
+
+std::vector<AE_ParamDef> ParamManager::GetParamsByRef (AE_ProgressInfoPtr effect_ref) {
+	return params.at (effect_ref);
 }

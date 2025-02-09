@@ -10,6 +10,7 @@
 			"src/factories/utility_callbacks_factory.cc",
 			"src/factories/channel_suite_1_factory.cc",
 			"src/parameter_manager.cc",
+			"src/parameter_parser.cc",
 		],
 		'include_dirs': [ "<!@(node -p \"require('node-addon-api').include\")" ],
 		'dependencies': [ "<!(node -p \"require('node-addon-api').targets\"):node_addon_api_except" ],

@@ -1,7 +1,7 @@
 #include "plugin_instance.hh"
 
 PluginInstance::PluginInstance (std::string path) {
-	AddDllDirectory (PCWSTR("C:\\Program Files\\Adobe\\Adobe After Effects 2025\\Support Files"));
+	// AddDllDirectory (PCWSTR("C:\\Program Files\\Adobe\\Adobe After Effects 2025\\Support Files"));
 	this->module = LoadLibraryExA ((LPCSTR)path.c_str(), NULL, 0);
 
 	if (this->module == NULL) {

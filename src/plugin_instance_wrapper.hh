@@ -11,7 +11,9 @@
 #include "./headers/layer_data.hh"
 #include "./headers/smart_fx.hh"
 
-#include "plugin_instance.hh"
+#include "./plugin_instance.hh"
+#include "./parameter_manager.hh"
+#include "./parameter_parser.hh"
 
 class PluginInstanceWrapper : public Napi::ObjectWrap<PluginInstanceWrapper> {
 	public:
@@ -28,6 +30,7 @@ class PluginInstanceWrapper : public Napi::ObjectWrap<PluginInstanceWrapper> {
 		Napi::Value Render (const Napi::CallbackInfo &info);
 		Napi::Value SmartPreRender (const Napi::CallbackInfo &info);
 		Napi::Value SmartRender (const Napi::CallbackInfo &info);
+		Napi::Value GetParameters (const Napi::CallbackInfo &info);
 
 	private:
 		PluginInstance* plugin;
@@ -35,4 +38,6 @@ class PluginInstanceWrapper : public Napi::ObjectWrap<PluginInstanceWrapper> {
 		AE_OutData* out_data = new AE_OutData();
 		AE_ParamDef* params[1] = {};
 		AE_LayerParam* layer = new AE_LayerParam();
+
+		Napi::Object CreatePixelObject (Napi::Env env, AE_Pixel pixel);
 };

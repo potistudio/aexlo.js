@@ -17,4 +17,5 @@ class ParamManager {
 	public:
 		static void AddParam (AE_ProgressInfoPtr, AE_ParamDef);
 		static int GetParamsCount();
+		static std::vector<AE_ParamDef> GetParamsByRef (AE_ProgressInfoPtr);
 };
