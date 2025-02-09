@@ -1,10 +1,15 @@
 {
 	"C_Cpp.default.compilerPath": "C:\\bin\\msys64\\ucrt64\\bin\\gcc.exe",
-	"C_Cpp.errorSquiggles": "disabled",
 	"cSpell.words": [
 		"Aexlo",
 		"dephault",
+		"dnik",
+		"eman",
+		"gtac",
 		"HINSTANCE",
-		"Napi"
+		"LPCSTR",
+		"MAKEINTRESOURCEA",
+		"Napi",
+		"ripl"
 	]
 }
