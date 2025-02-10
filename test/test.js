@@ -1,4 +1,5 @@
 
+import fs from "node:fs";
 import path from "node:path";
 import aexlo from "aexlo";
 
@@ -34,13 +35,24 @@ function invokePlugin() {
 	console.log (instance.getCurrentParameters());
 
 	// console.log ("\n -------- set parameter to \"10\" (default) -------- ")
-	instance.render();
+	render (10);
 
 	// console.log ("\n -------- set parameter to \"100\" -------- ")
 	instance.setParameterById (1, 100);
-	instance.render();
+	render (100);
 
 	// console.log ("\n -------- set parameter to \"0\" -------- ")
 	// instance.setParameterById (1, 0);
 	// instance.render();
+}
+
+function render (index) {
+	let result = "";
+	let pixels = instance.render();
+
+	for (let i = 0; i < pixels.length; i++) {
+		result += `( a: ${pixels[i]["alpha"]}, r: ${pixels[i]["red"]}, g: ${pixels[i]["green"]}, b: ${pixels[i]["blue"]} )\n`;
+	}
+
+	fs.writeFileSync (path.resolve(`output_${index}.txt`), result);
 }

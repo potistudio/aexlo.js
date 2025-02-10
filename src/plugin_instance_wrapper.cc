@@ -185,7 +185,19 @@ Napi::Value PluginInstanceWrapper::Render (const Napi::CallbackInfo &info) {
 		throw Napi::Error::New (env, exception.what());
 	}
 
-	return Napi::Number::New (env, error_code);
+	Napi::Array result = Napi::Array::New (env);
+
+	for (int i = 0; i < 10; i++) {
+		AE_Pixel pixel;
+		pixel.alpha = 0;
+		pixel.red = 64;
+		pixel.green = 128;
+		pixel.blue = 255;
+
+		result[i] = this->CreatePixelObject (env, pixel);
+	}
+
+	return result;
 }
 
 Napi::Value PluginInstanceWrapper::SmartPreRender (const Napi::CallbackInfo &info) {
