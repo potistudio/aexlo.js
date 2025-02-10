@@ -26,11 +26,15 @@ class Iterate8Suite2Factory {
 			) -> int {
 				AE_Error error = AE_Error::NONE;
 
-				AE_Pixel inPixel;
-				AE_Pixel outPixel;
+				AE_Pixel *output_pixels = new AE_Pixel[10];
 
 				for (int i = 0; i < 10; i++) {
+					AE_Pixel inPixel { 255, 0, 0, 0 };
+					AE_Pixel outPixel;
+
 					pix_fn (controller, i, 0, &inPixel, &outPixel);
+					output_pixels[i] = outPixel;
+
 					std::cout << "a: " << (int)outPixel.alpha << " r: " << (int)outPixel.red << " g: " << (int)outPixel.green << " b: " << (int)outPixel.blue << std::endl;
 				}
 
