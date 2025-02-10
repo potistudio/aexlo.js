@@ -38,6 +38,8 @@ class Iterate8Suite2Factory {
 					std::cout << "a: " << (int)outPixel.alpha << " r: " << (int)outPixel.red << " g: " << (int)outPixel.green << " b: " << (int)outPixel.blue << std::endl;
 				}
 
+				dts->data = output_pixels;
+
 				LOG_DEBUG ("Called: AE_Iterate8Suite2::Iterate (");
 				LOG_DEBUG ("           in_data: 0x" << in_data);
 				LOG_DEBUG ("     progress_base: " << progress_base);
