@@ -351,10 +351,10 @@ Napi::Value PluginInstanceWrapper::GetParameters (const Napi::CallbackInfo &info
 Napi::Object PluginInstanceWrapper::CreatePixelObject (Napi::Env env, AE_Pixel pixel) {
 	Napi::Object result = Napi::Object::New (env);
 
-	result.Set ("alpha", Napi::Number::New (env, pixel.a));
-	result.Set ("red", Napi::Number::New (env, pixel.r));
-	result.Set ("green", Napi::Number::New (env, pixel.g));
-	result.Set ("blue", Napi::Number::New (env, pixel.b));
+	result.Set ("alpha", Napi::Number::New (env, pixel.alpha));
+	result.Set ("red", Napi::Number::New (env, pixel.red));
+	result.Set ("green", Napi::Number::New (env, pixel.green));
+	result.Set ("blue", Napi::Number::New (env, pixel.blue));
 
 	return result;
 }

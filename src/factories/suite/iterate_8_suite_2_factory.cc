@@ -18,7 +18,6 @@ class Iterate8Suite2Factory {
 
 				for (int i = 0; i < 10; i++) {
 					pix_fn (controller, i, 0, &inPixel, &outPixel);
-					LOG_INFO ("A: " << ((int)outPixel.a) << ", R: " << ((int)outPixel.r) << ", G: " << ((int)outPixel.g) << ", B: " << ((int)outPixel.b));
 				}
 
 				return 0;

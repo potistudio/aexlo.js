@@ -3,10 +3,10 @@
 AE_Pixel ParamParser::ParsePixel (Napi::Object pixel) {
 	AE_Pixel result;
 
-	result.a = static_cast<uint8_t>(pixel.Get("alpha").As<Napi::Number>().Int32Value());
-	result.r = static_cast<uint8_t>(pixel.Get("red").As<Napi::Number>().Int32Value());
-	result.g = static_cast<uint8_t>(pixel.Get("green").As<Napi::Number>().Int32Value());
-	result.b = static_cast<uint8_t>(pixel.Get("blue").As<Napi::Number>().Int32Value());
+	result.alpha = static_cast<uint8_t>(pixel.Get("alpha").As<Napi::Number>().Int32Value());
+	result.red = static_cast<uint8_t>(pixel.Get("red").As<Napi::Number>().Int32Value());
+	result.green = static_cast<uint8_t>(pixel.Get("green").As<Napi::Number>().Int32Value());
+	result.blue = static_cast<uint8_t>(pixel.Get("blue").As<Napi::Number>().Int32Value());
 
 	return result;
 }
