@@ -4,7 +4,7 @@ import aexlo from "aexlo";
 
 const AE_PLUGIN_DIRECTORY = "C:/Program Files/Adobe/Adobe After Effects 2025/Support Files/Plug-ins/Effects";
 const PROJECT_PLUGIN_DIRECTORY = "D:/Projects/Development/Node/aexlo.js/test/plugins";
-const PLUGIN_NAME = "Rand_Pos.aex"
+const PLUGIN_NAME = "SDK_Noise.aex"
 const instance = new aexlo.PluginInstance (path.resolve(PROJECT_PLUGIN_DIRECTORY, PLUGIN_NAME));
 const instance2 = new aexlo.PluginInstance (path.resolve(PROJECT_PLUGIN_DIRECTORY, "SDK_Noise.aex"));
 
@@ -34,11 +34,11 @@ function invokePlugin() {
 	console.log (instance.getCurrentParameters());
 
 	// console.log ("\n -------- set parameter to \"10\" (default) -------- ")
-	// instance.render();
+	instance.render();
 
 	// console.log ("\n -------- set parameter to \"100\" -------- ")
-	// instance.setParameterById (1, 100);
-	// instance.render();
+	instance.setParameterById (1, 100);
+	instance.render();
 
 	// console.log ("\n -------- set parameter to \"0\" -------- ")
 	// instance.setParameterById (1, 0);
