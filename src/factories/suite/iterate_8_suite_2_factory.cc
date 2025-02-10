@@ -26,9 +26,12 @@ class Iterate8Suite2Factory {
 			) -> int {
 				AE_Error error = AE_Error::NONE;
 
-				AE_Pixel *output_pixels = new AE_Pixel[10];
+				int width = in_data->width;
+				int height = in_data->height;
 
-				for (int i = 0; i < 10; i++) {
+				AE_Pixel *output_pixels = new AE_Pixel[width * height];
+
+				for (int i = 0; i < width * height; i++) {
 					AE_Pixel inPixel { 255, 0, 0, 0 };
 					AE_Pixel outPixel;
 

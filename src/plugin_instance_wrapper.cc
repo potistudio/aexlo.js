@@ -176,6 +176,12 @@ Napi::Value PluginInstanceWrapper::Render (const Napi::CallbackInfo &info) {
 		params_raw[i] = params[i];
 	}
 
+	const int WIDTH = 10;
+	const int HEIGHT = 10;
+
+	this->in_data->width = WIDTH;
+	this->in_data->height = HEIGHT;
+
 	// Invoke
 	int error_code = 0;
 
@@ -187,7 +193,7 @@ Napi::Value PluginInstanceWrapper::Render (const Napi::CallbackInfo &info) {
 
 	Napi::Array result = Napi::Array::New (env);
 
-	for (int i = 0; i < 10; i++) {
+	for (int i = 0; i < WIDTH * HEIGHT; i++) {
 		AE_Pixel pixel = this->layer->data[i];
 
 		result[i] = this->CreatePixelObject (env, pixel);
