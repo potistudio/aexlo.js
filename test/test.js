@@ -7,9 +7,8 @@ const AE_PLUGIN_DIRECTORY = "C:/Program Files/Adobe/Adobe After Effects 2025/Sup
 const PROJECT_PLUGIN_DIRECTORY = "D:/Projects/Development/Node/aexlo.js/test/plugins";
 const PLUGIN_NAME = "SDK_Noise.aex"
 const instance = new aexlo.PluginInstance (path.resolve(PROJECT_PLUGIN_DIRECTORY, PLUGIN_NAME));
-const instance2 = new aexlo.PluginInstance (path.resolve(PROJECT_PLUGIN_DIRECTORY, "SDK_Noise.aex"));
 
-// loadResources();
+loadResources();
 invokePlugin();
 
 function loadResources() {
