@@ -33,7 +33,7 @@ export class PluginInstance {
 	setupGlobal(): number;
 	setupSequence(): number;
 	setupParameters(): number;
-	render(): number;
+	render(): Uint8Array;
 	smartPreRender(): number;
 	smartRender(): number;
 
