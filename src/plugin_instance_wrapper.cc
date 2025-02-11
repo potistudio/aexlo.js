@@ -176,8 +176,8 @@ Napi::Value PluginInstanceWrapper::Render (const Napi::CallbackInfo &info) {
 		params_raw[i] = params[i];
 	}
 
-	const int WIDTH = 10;
-	const int HEIGHT = 10;
+	const int WIDTH = 128;
+	const int HEIGHT = 128;
 
 	this->in_data->width = WIDTH;
 	this->in_data->height = HEIGHT;

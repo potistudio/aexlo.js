@@ -34,10 +34,18 @@ function invokePlugin() {
 	console.log (instance.setupParameters());
 	console.log (instance.getCurrentParameters());
 
-	// console.log ("\n -------- set parameter to \"10\" (default) -------- ")
+	console.log ("\n -------- set parameter to \"10\" (default) -------- ")
 	render (10);
 
-	// console.log ("\n -------- set parameter to \"100\" -------- ")
+	console.log ("\n -------- set parameter to \"20\" -------- ")
+	instance.setParameterById (1, 20);
+	render (20);
+
+	console.log ("\n -------- set parameter to \"50\" -------- ")
+	instance.setParameterById (1, 50);
+	render (50);
+
+	console.log ("\n -------- set parameter to \"100\" -------- ")
 	instance.setParameterById (1, 100);
 	render (100);
 

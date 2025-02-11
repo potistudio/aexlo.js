@@ -37,8 +37,6 @@ class Iterate8Suite2Factory {
 
 					pix_fn (controller, i, 0, &inPixel, &outPixel);
 					output_pixels[i] = outPixel;
-
-					std::cout << "a: " << (int)outPixel.alpha << " r: " << (int)outPixel.red << " g: " << (int)outPixel.green << " b: " << (int)outPixel.blue << std::endl;
 				}
 
 				dts->data = output_pixels;
