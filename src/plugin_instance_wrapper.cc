@@ -191,7 +191,7 @@ Napi::Value PluginInstanceWrapper::Render (const Napi::CallbackInfo &info) {
 		throw Napi::Error::New (env, exception.what());
 	}
 
-	//FIXME: ↓ Conversion overhead
+	// Data Conversion
 	Napi::Uint8Array result = Napi::Uint8Array::New (env, WIDTH * HEIGHT * sizeof(AE_Pixel));
 
 	for (int i = 0; i < WIDTH * HEIGHT; i++) {
@@ -203,17 +203,6 @@ Napi::Value PluginInstanceWrapper::Render (const Napi::CallbackInfo &info) {
 		result[pixel_offset + 2] = pixel.blue;
 		result[pixel_offset + 3] = pixel.alpha;
 	}
-
-
-
-	// Napi::Array result = Napi::Array::New (env);
-
-	// for (int i = 0; i < WIDTH * HEIGHT; i++) {
-	// 	AE_Pixel pixel = this->layer->data[i];
-
-	// 	result[i] = this->CreatePixelObject (env, pixel);
-	// }
-	//FIXME: ↑ Conversion overhead
 
 	return result;
 }
