@@ -32,10 +32,13 @@ class Iterate8Suite2Factory {
 				AE_Pixel *output_pixels = new AE_Pixel[width * height];
 
 				for (int i = 0; i < width * height; i++) {
+					int x = i % (width);
+					int y = i / (width);
+
 					AE_Pixel inPixel { 255, 0, 0, 0 };
 					AE_Pixel outPixel;
 
-					pix_fn (controller, i, 0, &inPixel, &outPixel);
+					pix_fn (controller, x, y, &inPixel, &outPixel);
 					output_pixels[i] = outPixel;
 				}
 
