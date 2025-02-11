@@ -2,11 +2,15 @@
 import fs from "node:fs";
 import path from "node:path";
 import aexlo from "aexlo";
+import { Canvas } from "canvas";
 
 const AE_PLUGIN_DIRECTORY = "C:/Program Files/Adobe/Adobe After Effects 2025/Support Files/Plug-ins/Effects";
 const PROJECT_PLUGIN_DIRECTORY = "D:/Projects/Development/Node/aexlo.js/test/plugins";
 const PLUGIN_NAME = "SDK_Noise.aex"
 const instance = new aexlo.PluginInstance (path.resolve(PROJECT_PLUGIN_DIRECTORY, PLUGIN_NAME));
+
+const WIDTH = 1920;
+const HEIGHT = 1080;
 
 loadResources();
 invokePlugin();
@@ -54,13 +58,21 @@ function invokePlugin() {
 }
 
 function render (index) {
-	let result = "";
-	let pixels = instance.render();
+	const canvas = new Canvas (WIDTH, HEIGHT);
+	const context = canvas.getContext ("2d");
+	const imageData = context.createImageData (WIDTH, HEIGHT);
 
-	for (let i = 0; i < pixels.length / 4; i++) {
+	const rendered_pixels = instance.render();
+
+	for (let i = 0; i < rendered_pixels.length / 4; i++) {
 		const pixelOffset = i * 4;
-		result += `at pixel ${i} - ( r: ${pixels[pixelOffset]}, g: ${pixels[pixelOffset + 1]}, b: ${pixels[pixelOffset + 2]}, a: ${pixels[pixelOffset + 3]} )\n`;
+
+		imageData.data[pixelOffset] = rendered_pixels[pixelOffset];
+		imageData.data[pixelOffset + 1] = rendered_pixels[pixelOffset + 1];
+		imageData.data[pixelOffset + 2] = rendered_pixels[pixelOffset + 2];
+		imageData.data[pixelOffset + 3] = rendered_pixels[pixelOffset + 3];
 	}
 
-	fs.writeFileSync (path.resolve(`output_${index}.txt`), result);
+	context.putImageData (imageData, 0, 0);
+	fs.writeFileSync (path.resolve(`output_${index}.png`), canvas.toBuffer ("image/png"));
 }
