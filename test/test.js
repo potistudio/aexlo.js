@@ -1,14 +1,14 @@
 
+import fs from "node:fs";
 import path from "node:path";
 import aexlo from "aexlo";
 
 const AE_PLUGIN_DIRECTORY = "C:/Program Files/Adobe/Adobe After Effects 2025/Support Files/Plug-ins/Effects";
 const PROJECT_PLUGIN_DIRECTORY = "D:/Projects/Development/Node/aexlo.js/test/plugins";
-const PLUGIN_NAME = "Rand_Pos.aex"
+const PLUGIN_NAME = "SDK_Noise.aex"
 const instance = new aexlo.PluginInstance (path.resolve(PROJECT_PLUGIN_DIRECTORY, PLUGIN_NAME));
-const instance2 = new aexlo.PluginInstance (path.resolve(PROJECT_PLUGIN_DIRECTORY, "SDK_Noise.aex"));
 
-// loadResources();
+loadResources();
 invokePlugin();
 
 function loadResources() {
@@ -33,14 +33,33 @@ function invokePlugin() {
 	console.log (instance.setupParameters());
 	console.log (instance.getCurrentParameters());
 
-	// console.log ("\n -------- set parameter to \"10\" (default) -------- ")
-	// instance.render();
+	console.log ("\n -------- set parameter to \"10\" (default) -------- ")
+	render (10);
 
-	// console.log ("\n -------- set parameter to \"100\" -------- ")
-	// instance.setParameterById (1, 100);
-	// instance.render();
+	console.log ("\n -------- set parameter to \"20\" -------- ")
+	instance.setParameterById (1, 20);
+	render (20);
+
+	console.log ("\n -------- set parameter to \"50\" -------- ")
+	instance.setParameterById (1, 50);
+	render (50);
+
+	console.log ("\n -------- set parameter to \"100\" -------- ")
+	instance.setParameterById (1, 100);
+	render (100);
 
 	// console.log ("\n -------- set parameter to \"0\" -------- ")
 	// instance.setParameterById (1, 0);
 	// instance.render();
+}
+
+function render (index) {
+	let result = "";
+	let pixels = instance.render();
+
+	for (let i = 0; i < pixels.length; i++) {
+		result += `at pixel ${i} - ( a: ${pixels[i]["alpha"]}, r: ${pixels[i]["red"]}, g: ${pixels[i]["green"]}, b: ${pixels[i]["blue"]} )\n`;
+	}
+
+	fs.writeFileSync (path.resolve(`output_${index}.txt`), result);
 }

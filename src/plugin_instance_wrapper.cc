@@ -176,6 +176,12 @@ Napi::Value PluginInstanceWrapper::Render (const Napi::CallbackInfo &info) {
 		params_raw[i] = params[i];
 	}
 
+	const int WIDTH = in_data_arg.Get ("width").As<Napi::Number>().Int32Value();
+	const int HEIGHT = in_data_arg.Get ("height").As<Napi::Number>().Int32Value();
+
+	this->in_data->width = WIDTH;
+	this->in_data->height = HEIGHT;
+
 	// Invoke
 	int error_code = 0;
 
@@ -185,7 +191,15 @@ Napi::Value PluginInstanceWrapper::Render (const Napi::CallbackInfo &info) {
 		throw Napi::Error::New (env, exception.what());
 	}
 
-	return Napi::Number::New (env, error_code);
+	Napi::Array result = Napi::Array::New (env);
+
+	for (int i = 0; i < WIDTH * HEIGHT; i++) {
+		AE_Pixel pixel = this->layer->data[i];
+
+		result[i] = this->CreatePixelObject (env, pixel);
+	}
+
+	return result;
 }
 
 Napi::Value PluginInstanceWrapper::SmartPreRender (const Napi::CallbackInfo &info) {
@@ -351,10 +365,10 @@ Napi::Value PluginInstanceWrapper::GetParameters (const Napi::CallbackInfo &info
 Napi::Object PluginInstanceWrapper::CreatePixelObject (Napi::Env env, AE_Pixel pixel) {
 	Napi::Object result = Napi::Object::New (env);
 
-	result.Set ("alpha", Napi::Number::New (env, pixel.a));
-	result.Set ("red", Napi::Number::New (env, pixel.r));
-	result.Set ("green", Napi::Number::New (env, pixel.g));
-	result.Set ("blue", Napi::Number::New (env, pixel.b));
+	result.Set ("alpha", Napi::Number::New (env, pixel.alpha));
+	result.Set ("red", Napi::Number::New (env, pixel.red));
+	result.Set ("green", Napi::Number::New (env, pixel.green));
+	result.Set ("blue", Napi::Number::New (env, pixel.blue));
 
 	return result;
 }

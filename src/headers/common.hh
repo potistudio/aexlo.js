@@ -104,7 +104,7 @@ typedef int AE_TransferMode;
 typedef AE_TransferMode AE_XferMode;
 
 struct AE_Pixel {
-	unsigned char r, g, b, a;
+	unsigned char alpha, red, green, blue;
 };
 
 typedef AE_Pixel AE_Pixel8;
