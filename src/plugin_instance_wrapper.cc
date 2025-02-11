@@ -176,8 +176,8 @@ Napi::Value PluginInstanceWrapper::Render (const Napi::CallbackInfo &info) {
 		params_raw[i] = params[i];
 	}
 
-	const int WIDTH = 128;
-	const int HEIGHT = 128;
+	const int WIDTH = in_data_arg.Get ("width").As<Napi::Number>().Int32Value();
+	const int HEIGHT = in_data_arg.Get ("height").As<Napi::Number>().Int32Value();
 
 	this->in_data->width = WIDTH;
 	this->in_data->height = HEIGHT;

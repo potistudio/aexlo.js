@@ -59,7 +59,7 @@ function render (index) {
 	let pixels = instance.render();
 
 	for (let i = 0; i < pixels.length; i++) {
-		result += `( a: ${pixels[i]["alpha"]}, r: ${pixels[i]["red"]}, g: ${pixels[i]["green"]}, b: ${pixels[i]["blue"]} )\n`;
+		result += `at pixel ${i} - ( a: ${pixels[i]["alpha"]}, r: ${pixels[i]["red"]}, g: ${pixels[i]["green"]}, b: ${pixels[i]["blue"]} )\n`;
 	}
 
 	fs.writeFileSync (path.resolve(`output_${index}.txt`), result);
