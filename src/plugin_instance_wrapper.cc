@@ -191,6 +191,7 @@ Napi::Value PluginInstanceWrapper::Render (const Napi::CallbackInfo &info) {
 		throw Napi::Error::New (env, exception.what());
 	}
 
+	//FIXME: ↓ Conversion overhead
 	Napi::Array result = Napi::Array::New (env);
 
 	for (int i = 0; i < WIDTH * HEIGHT; i++) {
@@ -198,6 +199,7 @@ Napi::Value PluginInstanceWrapper::Render (const Napi::CallbackInfo &info) {
 
 		result[i] = this->CreatePixelObject (env, pixel);
 	}
+	//FIXME: ↑ Conversion overhead
 
 	return result;
 }
