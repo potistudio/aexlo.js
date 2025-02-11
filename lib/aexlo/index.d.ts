@@ -40,4 +40,7 @@ export class PluginInstance {
 	getCurrentParameters(): parameter[];
 	setParameterById (id: number, value: number): void;
 	setParameterByName (name: string, value: number): void;
+	setResolution (width: number, height: number): void;
+
+	resolution: ReadonlySet<{ width: number; height: number }>
 };

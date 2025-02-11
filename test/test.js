@@ -37,6 +37,8 @@ function invokePlugin() {
 	console.log (instance.setupParameters());
 	console.log (instance.getCurrentParameters());
 
+	instance.setResolution (WIDTH, HEIGHT);
+
 	console.log ("\n -------- set parameter to \"10\" (default) -------- ")
 	render (10);
 
