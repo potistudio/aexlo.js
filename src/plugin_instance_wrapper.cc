@@ -140,20 +140,17 @@ Napi::Value PluginInstanceWrapper::SetupParameters (const Napi::CallbackInfo &in
 Napi::Value PluginInstanceWrapper::Render (const Napi::CallbackInfo &info) {
 	Napi::Env env = info.Env();
 
-	// Argument validation
-	if (info.Length() < 2) {
+	//* Argument validation
+	if (info.Length() < 2)
 		throw Napi::TypeError::New (env, "Too few arguments");
-	}
 
-	if (!info[0].IsObject() || !info[1].IsArray()) {
+	if (!info[0].IsObject() || !info[1].IsArray())
 		throw Napi::TypeError::New (env, "Wrong argument type");
-	}
 
-	if (info.Length() > 2) {
+	if (info.Length() > 2)
 		throw Napi::TypeError::New (env, "Too many arguments");
-	}
 
-	// Parse arguments
+	//* Argument parsing
 	Napi::Object in_data_arg = info[0].As<Napi::Object>();
 	Napi::Array params_arg = info[1].As<Napi::Array>();
 
@@ -163,9 +160,8 @@ Napi::Value PluginInstanceWrapper::Render (const Napi::CallbackInfo &info) {
 	for (uint32_t i = 0; i < params_arg.Length(); i++) {
 		Napi::Object param = params_arg.Get(i).As<Napi::Object>();
 
-		if (!param.IsObject()) {
+		if (!param.IsObject())
 			throw Napi::TypeError::New (env, "Wrong argument type");
-		}
 
 		params.push_back (ParamParser::ParseParam(param, ParamManager::GetParamsByRef((AE_ProgressInfoPtr)this->plugin->entry)));
 	}
@@ -182,7 +178,7 @@ Napi::Value PluginInstanceWrapper::Render (const Napi::CallbackInfo &info) {
 	this->in_data->width = WIDTH;
 	this->in_data->height = HEIGHT;
 
-	// Invoke
+	//* Invoke
 	int error_code = 0;
 
 	try {
@@ -191,7 +187,7 @@ Napi::Value PluginInstanceWrapper::Render (const Napi::CallbackInfo &info) {
 		throw Napi::Error::New (env, exception.what());
 	}
 
-	// Data Conversion
+	//* Data Conversion
 	Napi::Uint8Array result = Napi::Uint8Array::New (env, WIDTH * HEIGHT * sizeof(AE_Pixel));
 
 	for (int i = 0; i < WIDTH * HEIGHT; i++) {

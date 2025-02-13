@@ -4,6 +4,7 @@
 #include <string>
 #include <iostream>
 #include <math.h>
+#include <chrono>
 
 #include "./headers/common.hh"
 #include "./headers/uncommon.hh"

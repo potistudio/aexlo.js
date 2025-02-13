@@ -244,14 +244,17 @@ AE_Error PluginInstance::ExecuteParamsSetup (AE_InData *in_data, AE_OutData *out
 }
 
 AE_Error PluginInstance::ExecuteRender (AE_InData *in_data, AE_OutData *out_data, AE_ParamDef *params[], AE_LayerParam *layer) {
-	LOG_INFO ("-------- begin Render --------");
+	LOG_INFO ("-------- START CORE THREAD [Render] --------");
+	std::chrono::system_clock::time_point start = std::chrono::system_clock::now();
 
-	const AE_Command CMD = AE_Command::RENDER;
 	AE_Error error = AE_Error::NONE;
 
-	error = this->Execute (CMD, in_data, out_data, params, layer, NULL);
+	error = this->Execute (AE_Command::RENDER, in_data, out_data, params, layer, NULL);
 
-	LOG_INFO ("-------- end Render --------");
+	std::chrono::system_clock::time_point end = std::chrono::system_clock::now();
+	std::chrono::duration<double> elapsed_seconds = end - start;
+	LOG_INFO ("-------- END CORE THREAD [Render] --------");
+	LOG_INFO ("--> Time: " << elapsed_seconds.count() * 1000 << "ms");
 
 	return error;
 }

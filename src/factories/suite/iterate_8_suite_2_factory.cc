@@ -1,5 +1,6 @@
 #pragma once
 
+#include <ppl.h>
 #include "../../../lib/nameof/nameof.hpp"
 
 #include "../../headers/common.hh"
@@ -31,7 +32,7 @@ class Iterate8Suite2Factory {
 
 				AE_Pixel *output_pixels = new AE_Pixel[width * height];
 
-				for (int i = 0; i < width * height; i++) {
+				Concurrency::parallel_for (0, width * height, 1, [&](int i) -> void {
 					int x = i % (width);
 					int y = i / (width);
 
@@ -40,7 +41,7 @@ class Iterate8Suite2Factory {
 
 					pix_fn (controller, x, y, &inPixel, &outPixel);
 					output_pixels[i] = outPixel;
-				}
+				});
 
 				dts->data = output_pixels;
 
