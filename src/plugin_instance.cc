@@ -166,103 +166,75 @@ AE_Error PluginInstance::Execute (AE_Command cmd, AE_InData *in_data, AE_OutData
 	in_data->utils = (new UtilityCallbackFactory())->Create();
 	in_data->inter = (new InteractCallbackFactory())->Create();
 
+	LOG_INFO ("-------- START CORE THREAD [" << NAMEOF_ENUM(cmd) << "] --------");
+	std::chrono::system_clock::time_point start = std::chrono::system_clock::now();
+
 	err = this->entry (cmd, in_data, outData, params, layer, extra);
+
+	std::chrono::system_clock::time_point end = std::chrono::system_clock::now();
+	std::chrono::duration<double> elapsed_seconds = end - start;
+
+	LOG_INFO ("-------- END CORE THREAD [" << NAMEOF_ENUM(cmd) << "] --------");
+	LOG_INFO ("--> Time: " << elapsed_seconds.count() * 1000 << "ms");
 
 	return err;
 }
 
 AE_Error PluginInstance::ExecuteAbout (AE_InData *in_data, AE_OutData *out_data, AE_ParamDef *params[], AE_LayerParam *layer) {
-	LOG_INFO ("-------- begin About --------");
-
-	const AE_Command CMD = AE_Command::ABOUT;
 	AE_Error error = AE_Error::NONE;
 
 	try {
-		error = this->Execute (CMD, in_data, out_data, params, layer, NULL);
+		error = this->Execute (AE_Command::ABOUT, in_data, out_data, params, layer, NULL);
 		LOG_INFO ("  ==> Message: \"" << out_data->return_msg << "\"");
 	} catch (std::exception &e) {
 		LOG_CRITICAL (e.what());
 		throw std::runtime_error (e.what());
 	}
 
-	LOG_INFO ("-------- end About --------");
-
 	return error;
 }
 
 AE_Error PluginInstance::ExecuteGlobalSetup (AE_InData *in_data, AE_OutData *out_data, AE_ParamDef *params[], AE_LayerParam *layer) {
-	LOG_INFO ("-------- begin Global Setup --------");
-
 	AE_Error error = AE_Error::NONE;
-	const AE_Command CMD = AE_Command::GLOBAL_SETUP;
 
-	LOG_DEBUG ("Execute Plugin with Code: " << NAMEOF_ENUM(CMD));
-	error = this->Execute (CMD, in_data, out_data, params, layer, NULL);
-	LOG_DEBUG ("Execute Successful\n");
+	error = this->Execute (AE_Command::GLOBAL_SETUP, in_data, out_data, params, layer, NULL);
 
 	LOG_INFO ("  ==> Version: " << out_data->my_version);
 	LOG_INFO ("  ==> Flags: " << NAMEOF_ENUM_FLAG(out_data->out_flags));
 	LOG_INFO ("  ==> Flags2: " << NAMEOF_ENUM_FLAG(out_data->out_flags2));
-
-	LOG_INFO ("-------- end Global Setup --------");
 
 	return error;
 }
 
 AE_Error PluginInstance::ExecuteSequenceSetup (AE_InData *in_data, AE_OutData *out_data, AE_ParamDef *params[], AE_LayerParam *layer) {
-	LOG_INFO ("-------- begin Global Setup --------");
-
 	AE_Error error = AE_Error::NONE;
-	const AE_Command CMD = AE_Command::SEQUENCE_SETUP;
 
-	LOG_DEBUG ("Execute Plugin with Code: " << NAMEOF_ENUM(CMD));
-	error = this->Execute (CMD, in_data, out_data, params, layer, NULL);
-	LOG_DEBUG ("Execute Successful\n");
+	error = this->Execute (AE_Command::SEQUENCE_SETUP, in_data, out_data, params, layer, NULL);
 
 	LOG_INFO ("  ==> Version: " << out_data->my_version);
 	LOG_INFO ("  ==> Flags: " << NAMEOF_ENUM_FLAG(out_data->out_flags));
 	LOG_INFO ("  ==> Flags2: " << NAMEOF_ENUM_FLAG(out_data->out_flags2));
 
-	LOG_INFO ("-------- end Global Setup --------");
-
 	return error;
 }
 
 AE_Error PluginInstance::ExecuteParamsSetup (AE_InData *in_data, AE_OutData *out_data, AE_ParamDef *params[], AE_LayerParam *layer) {
-	LOG_INFO ("-------- begin Parameters Setup --------");
-
-	const AE_Command CMD = AE_Command::PARAMS_SETUP;
 	AE_Error error = AE_Error::NONE;
 
-	/* Execute */
-	error = this->Execute (CMD, in_data, out_data, params, layer, NULL);
-
-	LOG_INFO ("  ==> Parameters: " << out_data->num_params);
-	LOG_INFO ("-------- end Parameters Setup --------");
+	error = this->Execute (AE_Command::PARAMS_SETUP, in_data, out_data, params, layer, NULL);
 
 	return error;
 }
 
 AE_Error PluginInstance::ExecuteRender (AE_InData *in_data, AE_OutData *out_data, AE_ParamDef *params[], AE_LayerParam *layer) {
-	LOG_INFO ("-------- START CORE THREAD [Render] --------");
-	std::chrono::system_clock::time_point start = std::chrono::system_clock::now();
-
 	AE_Error error = AE_Error::NONE;
 
 	error = this->Execute (AE_Command::RENDER, in_data, out_data, params, layer, NULL);
-
-	std::chrono::system_clock::time_point end = std::chrono::system_clock::now();
-	std::chrono::duration<double> elapsed_seconds = end - start;
-	LOG_INFO ("-------- END CORE THREAD [Render] --------");
-	LOG_INFO ("--> Time: " << elapsed_seconds.count() * 1000 << "ms");
 
 	return error;
 }
 
 AE_PreRenderOutput PluginInstance::ExecuteSmartPreRender (AE_InData *in_data, AE_OutData *out_data, AE_ParamDef *params[], AE_LayerParam *layer) {
-	LOG_INFO ("-------- begin Smart PreRender --------");
-
-	const AE_Command CMD = AE_Command::SMART_PRE_RENDER;
 	AE_Error error = AE_Error::NONE;
 
 	AE_PreRenderExtra *extra = new AE_PreRenderExtra();
@@ -328,22 +300,17 @@ AE_PreRenderOutput PluginInstance::ExecuteSmartPreRender (AE_InData *in_data, AE
 		return 0;
 	};
 
-	error = this->Execute (CMD, in_data, out_data, params, layer, extra);
+	error = this->Execute (AE_Command::SMART_PRE_RENDER, in_data, out_data, params, layer, extra);
 
-	LOG_INFO ("-------- end Smart Pre Render --------");
 	return *extra->output;
 }
 
 AE_Error PluginInstance::ExecuteSmartRender (AE_InData *in_data, AE_OutData *out_data, AE_ParamDef *params[], AE_LayerParam *layer) {
-	LOG_INFO ("-------- begin Smart Render --------");
-
-	const AE_Command CMD = AE_Command::SMART_RENDER;
 	AE_Error error = AE_Error::NONE;
 
 	AE_SmartRenderExtra *extra = new AE_SmartRenderExtra();
 	extra->input = new AE_SmartRenderInput();
 	extra->callbacks = new AE_SmartRenderCallbacks();
-
 
 	extra->input->bitdepth = 8;
 	extra->input->device_index = 4294967295;
@@ -373,8 +340,7 @@ AE_Error PluginInstance::ExecuteSmartRender (AE_InData *in_data, AE_OutData *out
 		return 0;
 	};
 
-	error = this->Execute (CMD, in_data, out_data, params, layer, extra);
+	error = this->Execute (AE_Command::SMART_RENDER, in_data, out_data, params, layer, extra);
 
-	LOG_INFO ("-------- end Smart Render --------");
 	return error;
 }
