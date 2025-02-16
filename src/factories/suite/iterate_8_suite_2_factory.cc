@@ -29,18 +29,18 @@ class Iterate8Suite2Factory {
 
 				int width = in_data->width;
 				int height = in_data->height;
+				const int pixel_count = width * height;
 
-				AE_Pixel *output_pixels = new AE_Pixel[width * height];
+				AE_Pixel *output_pixels = new AE_Pixel[pixel_count];
 
-				Concurrency::parallel_for (0, width * height, 1, [&](int i) -> void {
-					int x = i % (width);
-					int y = i / (width);
+				Concurrency::parallel_for (0, height, 1, [&](int y) -> void {
+					for (int x = 0; x < width; x++) {
+						AE_Pixel inPixel { 255, 0, 0, 0 };
+						AE_Pixel outPixel;
 
-					AE_Pixel inPixel { 255, 0, 0, 0 };
-					AE_Pixel outPixel;
-
-					pix_fn (controller, x, y, &inPixel, &outPixel);
-					output_pixels[i] = outPixel;
+						pix_fn (controller, x, y, &inPixel, &outPixel);
+						output_pixels[x + y * width] = outPixel;
+					}
 				});
 
 				dts->data = output_pixels;

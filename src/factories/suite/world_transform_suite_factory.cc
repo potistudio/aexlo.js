@@ -23,6 +23,12 @@ class WorldTransformSuiteFactory {
 			) -> AE_Error {
 				AE_Error error = AE_Error::NONE;
 
+				const int pixel_count = src->width * src->height;
+
+				for (int i = 0; i < pixel_count; i++) {
+					dst->data[i] = src->data[i];
+				}
+
 				LOG_DEBUG ("Called: AE_WorldTransformSuite1::Copy (");
 				LOG_DEBUG ("     from: 0x" << effect_ref);
 				LOG_DEBUG ("      src: 0x" << src);
