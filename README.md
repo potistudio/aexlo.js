@@ -6,7 +6,13 @@
 
 Load and Host "After Effects Effect Plugin (.aex)"
 
-# Why
+# Announcement
+
+The development of aexlo.js has stopped and **we have moved to development using Rust called [aexlo-rs](https://github.com/potistudio/aexlo-rs) instead.**  
+Node.js support has been abandoned in terms of performance due to the overhead of data conversion between JS and C++.  
+Therefore, we have decided to continue developing the product in the future for limited use as an embedded library for Rust. (Because the compiled library can be applied to any language)
+
+## Why
 
 "Adobe After Effects (AE)" is currently the most widely used Video Editor in the world.  
 There are many plugins for AE available on the internet.  
@@ -17,9 +23,3 @@ So I wondered if I could make these work on another platform.
 What I ended up doing was **creating a emulator for the AE Plugin SDK.**
 
 (These may run into some kind of copyright issue.)
-
-### WIP
-
-**Work in Progress...**  
-Please Wait 😎  
-(I'm still a Beginner in C++, so development will take some time.)
